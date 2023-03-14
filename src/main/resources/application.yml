@@ -1,0 +1,23 @@
+spring:
+  mvc:
+    throw-exception-if-no-handler-found: 'true'
+  #--- Postgres datasource ---
+  datasource:
+    url: jdbc:postgresql://localhost:5432/parallel
+    username: parallel
+    password: parallel
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: false
+
+#--- JWT constraints ---
+jwt:
+  secret: 2A462D4A614E645266556A586E3272357538782F413F4428472B4B6250655368
+  expires-in-millis: 259200000  # 72 hours in millis: 72h * 60 min * 60 s * 1000 ==> 259.200.000 ms

@@ -1,0 +1,8 @@
+,------.  ,---.  ,------.   ,---.  ,--.   ,--.   ,------.,--.
+|  .--. '/  O  \ |  .--. ' /  O  \ |  |   |  |   |  .---'|  |
+|  '--' |  .-.  ||  '--'.'|  .-.  ||  |   |  |   |  `--, |  |
+|  | --'|  | |  ||  |\  \ |  | |  ||  '--.|  '--.|  `---.|  '--.
+`--'    `--' `--'`--' '--'`--' `--'`-----'`-----'`------'`-----'  ... ${build.version}
+
+### Management for enhanced coworking spaces: palestre relazionali
+Powered by Spring Boot ${spring-boot.version}
