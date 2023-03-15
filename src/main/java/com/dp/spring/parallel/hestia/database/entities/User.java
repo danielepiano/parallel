@@ -1,13 +1,12 @@
 package com.dp.spring.parallel.hestia.database.entities;
 
-import com.dp.spring.parallel.hestia.database.enums.Role;
+import com.dp.spring.parallel.hestia.database.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
@@ -28,7 +27,7 @@ public class User implements UserDetails {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private UserRole role;
 
 
     @OneToMany(mappedBy = "user")
@@ -37,7 +36,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of( new SimpleGrantedAuthority( this.role.name() ));
+        return this.role.getGrantedAuthorities();
     }
 
     @Override

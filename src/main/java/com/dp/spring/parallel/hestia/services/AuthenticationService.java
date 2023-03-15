@@ -5,8 +5,8 @@ import com.dp.spring.parallel.hestia.api.dtos.ExampleRegistrationDTO;
 import com.dp.spring.parallel.hestia.api.dtos.LoginDTO;
 import com.dp.spring.parallel.hestia.api.dtos.UserDTO;
 import com.dp.spring.parallel.hestia.database.entities.User;
-import com.dp.spring.parallel.hestia.database.enums.Role;
 import com.dp.spring.parallel.hestia.database.enums.TokenType;
+import com.dp.spring.parallel.hestia.database.enums.UserRole;
 import com.dp.spring.parallel.hestia.database.repositories.UserRepository;
 import com.dp.spring.parallel.hestia.exceptions.EmailNotFoundException;
 import com.dp.spring.parallel.hestia.exceptions.WrongCredentialsException;
@@ -41,7 +41,7 @@ public class AuthenticationService {
                 .lastName( toRegister.getLastName() )
                 .email( toRegister.getEmail() )
                 .password( this.passwordEncoder.encode( toRegister.getPassword() ) )
-                .role( Role.USER )
+                .role( UserRole.ADMIN )
                 .build();
         this.userRepository.save(user);
     }
@@ -82,7 +82,7 @@ public class AuthenticationService {
                 .id(user.getId())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
-                .role(user.getRole().name())
+                .role(user.getRole().getRole())
                 .build();
 
         return this.objectMapper.convertValue(extraClaims, new TypeReference<Map<String, Object>>() {});
