@@ -1,10 +1,10 @@
 package com.dp.spring.parallel.hestia.database.repositories;
 
 import com.dp.spring.parallel.hestia.database.entities.User;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.dp.spring.springcore.database.repositories.SoftDeleteJpaRepository;
 
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<User, Integer > {
-    Optional<User> findByEmail(String email);
+public interface UserRepository<T extends User> extends SoftDeleteJpaRepository<T, Integer> {
+    Optional<T> findByEmail(String email);
 }

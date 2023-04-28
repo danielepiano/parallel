@@ -1,37 +1,77 @@
 package com.dp.spring.parallel.hestia.database.entities;
 
 import com.dp.spring.parallel.hestia.database.enums.UserRole;
+import com.dp.spring.parallel.talos.database.entities.TokenDetails;
+import com.dp.spring.springcore.database.annotations.ActiveEntities;
+import com.dp.spring.springcore.database.entities.SoftDeletableAuditedEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
-@Data @Builder
-@NoArgsConstructor @AllArgsConstructor
+@Data
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 @Entity
+@ActiveEntities
+@Inheritance
+@DiscriminatorColumn(name = "role")
 @Table(name = "user_details")
-public class User implements UserDetails {
-    @Id @GeneratedValue
-    private Integer id;
+public class User extends SoftDeletableAuditedEntity<Integer> implements UserDetails {
+    // #--- PERSONAL DETAILS ---------------------------------------------------------
+    @Column(nullable = false)
+    protected String firstName;
 
-    private String firstName;
-    private String lastName;
+    @Column(nullable = false)
+    protected String lastName;
 
-    private String email;
-    private String password;
+    @Column(nullable = false)
+    protected LocalDate birthDate;
 
+    // # --- CONTACTS ----------------------------------------------------------------
+    @Column(nullable = false)
+    protected String phoneNumber;
+
+    @Column(nullable = false)
+    protected String city;
+
+    @Column(nullable = false)
+    protected String address;
+
+    /*// #--- COMPANY DETAILS (case: COMPANY_MANAGER, EMPLOYEE, RECEPTIONIST) ----------
+    @ManyToOne
+    @JoinColumn(name = "company_id")
+    protected Company company;
+
+    protected String jobPosition;
+
+    @ManyToOne
+    @JoinColumn(name = "headquarters_id")
+    private Headquarters headquarters;*/
+
+    // #--- ACCOUNT DETAILS ----------------------------------------------------------
+    // profilePicture ?
+    @Column(nullable = false, unique = true)
+    protected String email;
+
+    @Column(nullable = false)
+    protected String password;
+
+    @Column(nullable = false, insertable = false, updatable = false)
     @Enumerated(EnumType.STRING)
-    private UserRole role;
+    protected UserRole role;
 
 
-    @OneToMany(mappedBy = "user")
-    private List<TokenDetails> tokensDetails;
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    protected List<TokenDetails> tokensDetails;
 
 
     @Override
@@ -61,6 +101,6 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return super.active;
     }
 }
