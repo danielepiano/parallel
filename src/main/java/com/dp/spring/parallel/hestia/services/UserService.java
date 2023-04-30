@@ -25,7 +25,7 @@ public class UserService extends BusinessService {
     public void registerAdmin(
             final RegistrationRequestDTO toRegister
     ) {
-        this.callRegisterService(toRegister, adminRegistrationStrategy);
+        this.callRegistrationService(toRegister, adminRegistrationStrategy);
     }
 
     public void registerCompanyManager(
@@ -34,7 +34,7 @@ public class UserService extends BusinessService {
     ) {
         checkCompanyExistenceOrThrow(companyId);
         checkPrincipalScopeOrThrow(companyId);
-        this.callRegisterService(companyId, toRegister, companyManagerRegistrationStrategy);
+        this.callRegistrationService(companyId, toRegister, companyManagerRegistrationStrategy);
     }
 
     public void registerHeadquartersReceptionist(
@@ -44,7 +44,7 @@ public class UserService extends BusinessService {
     ) {
         checkHeadquartersExistenceOrThrow(headquartersId, companyId);
         checkPrincipalScopeOrThrow(companyId);
-        this.callRegisterService(companyId, toRegister, headquartersReceptionistRegistrationStrategy);
+        this.callRegistrationService(companyId, toRegister, headquartersReceptionistRegistrationStrategy);
     }
 
     public void registerEmployee(
@@ -53,23 +53,23 @@ public class UserService extends BusinessService {
     ) {
         checkCompanyExistenceOrThrow(companyId);
         checkPrincipalScopeOrThrow(companyId);
-        this.callRegisterService(companyId, toRegister, employeeRegistrationStrategy);
+        this.callRegistrationService(companyId, toRegister, employeeRegistrationStrategy);
     }
 
 
     /**
      * User creation when no resource scope id is defined.<br>
-     * Read also {@link #callRegisterService(Integer, RegistrationRequestDTO, RegistrationService)}.
+     * Read also {@link #callRegistrationService(Integer, RegistrationRequestDTO, RegistrationService)}.
      *
      * @param toRegister          the user to register
      * @param registrationService the strategy to use for registration
      * @param <U>                 the type of the user to register, related to its role
      */
-    private <U extends User> void callRegisterService(
+    private <U extends User> void callRegistrationService(
             final RegistrationRequestDTO toRegister,
             final RegistrationService<U> registrationService
     ) {
-        this.callRegisterService(null, toRegister, registrationService);
+        this.callRegistrationService(null, toRegister, registrationService);
     }
 
     /**
@@ -80,7 +80,7 @@ public class UserService extends BusinessService {
      * @param registrationService the strategy to use for registration
      * @param <U>                 the type of the user to register, related to its role
      */
-    private <U extends User> void callRegisterService(
+    private <U extends User> void callRegistrationService(
             final Integer scopeId,
             final RegistrationRequestDTO toRegister,
             final RegistrationService<U> registrationService

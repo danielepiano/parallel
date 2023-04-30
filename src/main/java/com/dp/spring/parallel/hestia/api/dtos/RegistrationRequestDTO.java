@@ -1,18 +1,20 @@
 package com.dp.spring.parallel.hestia.api.dtos;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
-import lombok.RequiredArgsConstructor;
 import lombok.Value;
+import lombok.extern.jackson.Jacksonized;
 import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDate;
 
+@Jacksonized
 @Builder
 @Value
-@RequiredArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class RegistrationRequestDTO {
     @NotBlank @Length(min = 1, max = 30)
     String firstName;

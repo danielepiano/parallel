@@ -15,7 +15,27 @@ spring:
     properties:
       hibernate:
         format_sql: true
-    show-sql: true
+    show-sql: false
+
+  #--- MailDev properties ---
+  # (this is an email test environment: email are not really sent! check http://localhost:1080 for viewing them )
+  mail:
+    host: localhost
+    port: 1025
+    username: parallel-ms
+    password: parallel-ms
+
+    properties:
+      mail:
+        smtp:
+          ssl:
+            trust: "*"
+          auth: true
+          starttls:
+            enable: true
+          connectiontimeout: 5000
+          timeout: 3000
+          writetimeout: 5000
 
 #--- JWT constraints ---
 jwt:

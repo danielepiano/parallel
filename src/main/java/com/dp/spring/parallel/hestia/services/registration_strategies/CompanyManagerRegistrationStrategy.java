@@ -5,32 +5,22 @@ import com.dp.spring.parallel.hephaestus.database.entities.Company;
 import com.dp.spring.parallel.hephaestus.database.repositories.CompanyRepository;
 import com.dp.spring.parallel.hestia.api.dtos.RegistrationRequestDTO;
 import com.dp.spring.parallel.hestia.database.entities.CompanyManagerUser;
-import com.dp.spring.parallel.hestia.database.entities.User;
-import com.dp.spring.parallel.hestia.database.repositories.UserRepository;
 import com.dp.spring.parallel.hestia.services.RegistrationService;
-import com.dp.spring.parallel.mnemosyne.services.email.EmailService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 /**
  * Implementation of {@link CompanyManagerUser} registration, following {@link RegistrationService} pattern.
  */
 @Service
+@RequiredArgsConstructor
 public class CompanyManagerRegistrationStrategy extends RegistrationService<CompanyManagerUser> {
     private final CompanyRepository companyRepository;
 
-    public CompanyManagerRegistrationStrategy(
-            final UserRepository<User> userRepository,
-            final UserRepository<CompanyManagerUser> companyManagerUserRepository,
-            final EmailService emailService,
-            final CompanyRepository companyRepository
-    ) {
-        super(userRepository, companyManagerUserRepository, emailService);
-        this.companyRepository = companyRepository;
-    }
 
     @Override
     protected CompanyManagerUser buildUser(
-            final String generatedPassword,
+            final String encodedPassword,
             final Integer scopeId,
             final RegistrationRequestDTO dto
     ) {
@@ -45,7 +35,7 @@ public class CompanyManagerRegistrationStrategy extends RegistrationService<Comp
                 .city(dto.getCity())
                 .address(dto.getAddress())
                 .email(dto.getEmail())
-                .password(generatedPassword)
+                .password(encodedPassword)
                 // following: company manager fields
                 .company(company)
                 .jobPosition(dto.getJobPosition())

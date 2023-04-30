@@ -5,32 +5,22 @@ import com.dp.spring.parallel.hephaestus.database.entities.Headquarters;
 import com.dp.spring.parallel.hephaestus.database.repositories.HeadquartersRepository;
 import com.dp.spring.parallel.hestia.api.dtos.RegistrationRequestDTO;
 import com.dp.spring.parallel.hestia.database.entities.HeadquartersReceptionistUser;
-import com.dp.spring.parallel.hestia.database.entities.User;
-import com.dp.spring.parallel.hestia.database.repositories.UserRepository;
 import com.dp.spring.parallel.hestia.services.RegistrationService;
-import com.dp.spring.parallel.mnemosyne.services.email.EmailService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 /**
  * Implementation of {@link HeadquartersReceptionistUser} registration, following {@link RegistrationService} pattern.
  */
 @Service
+@RequiredArgsConstructor
 public class HeadquartersReceptionistRegistrationStrategy extends RegistrationService<HeadquartersReceptionistUser> {
     private final HeadquartersRepository headquartersRepository;
 
-    public HeadquartersReceptionistRegistrationStrategy(
-            final UserRepository<User> userRepository,
-            final UserRepository<HeadquartersReceptionistUser> headquartersReceptionistUserRepository,
-            final EmailService emailService,
-            final HeadquartersRepository headquartersRepository
-    ) {
-        super(userRepository, headquartersReceptionistUserRepository, emailService);
-        this.headquartersRepository = headquartersRepository;
-    }
 
     @Override
     protected HeadquartersReceptionistUser buildUser(
-            final String generatedPassword,
+            final String encodedPassword,
             final Integer scopeId,
             final RegistrationRequestDTO dto
     ) {
@@ -45,7 +35,7 @@ public class HeadquartersReceptionistRegistrationStrategy extends RegistrationSe
                 .city(dto.getCity())
                 .address(dto.getAddress())
                 .email(dto.getEmail())
-                .password(generatedPassword)
+                .password(encodedPassword)
                 // following: headquarters receptionist fields
                 .headquarters(headquarters)
                 .build();

@@ -14,7 +14,7 @@ import static com.dp.spring.parallel.talos.utils.JWTUtils.BEARER_PREFIX;
 @Service
 @RequiredArgsConstructor
 public class LogoutService implements LogoutHandler {
-    public final static String LOGOUT_URL = "/api/hestia/v1/auth/logout";
+    public final static String LOGOUT_URL = "/api/talos/v1/auth/logout";
 
     private final TokenDetailsRepository tokenDetailsRepository;
 

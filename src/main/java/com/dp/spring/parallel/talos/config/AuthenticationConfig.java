@@ -40,19 +40,8 @@ public class AuthenticationConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return username -> {
-            final User authenticated = this.userRepository.findByEmail(username)
-                    .orElseThrow(() -> new EmailNotFoundException(username));
-
-            return switch (authenticated.getRole()) {
-                case ADMIN -> this.adminUserRepository.getReferenceById(authenticated.getId());
-                case COMPANY_MANAGER -> this.companyManagerUserRepository.getReferenceById(authenticated.getId());
-                case HEADQUARTERS_RECEPTIONIST ->
-                        this.headquartersReceptionistUserRepository.getReferenceById(authenticated.getId());
-                case EMPLOYEE -> this.employeeUserRepository.getReferenceById(authenticated.getId());
-                default -> authenticated;
-            };
-        };
+        return username -> this.userRepository.findByEmail(username)
+                .orElseThrow(() -> new EmailNotFoundException(username));
     }
 
     @Bean

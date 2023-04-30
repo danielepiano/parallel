@@ -5,7 +5,10 @@ import com.dp.spring.parallel.talos.database.entities.TokenDetails;
 import com.dp.spring.springcore.database.annotations.ActiveEntities;
 import com.dp.spring.springcore.database.entities.SoftDeletableAuditedEntity;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,7 +22,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
 @Entity
 @ActiveEntities
 @Inheritance
@@ -102,5 +104,26 @@ public class User extends SoftDeletableAuditedEntity<Integer> implements UserDet
     @Override
     public boolean isEnabled() {
         return super.active;
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" +
+                "id = " + id + ", " +
+                "firstName = " + firstName + ", " +
+                "lastName = " + lastName + ", " +
+                "birthDate = " + birthDate + ", " +
+                "phoneNumber = " + phoneNumber + ", " +
+                "city = " + city + ", " +
+                "address = " + address + ", " +
+                "email = " + email + ", " +
+                "password = " + password + ", " +
+                "role = " + role + ", " +
+                "createdBy = " + createdBy + ", " +
+                "createdDate = " + createdDate + ", " +
+                "lastModifiedBy = " + lastModifiedBy + ", " +
+                "lastModifiedDate = " + lastModifiedDate + ", " +
+                "active = " + active +
+                ")";
     }
 }

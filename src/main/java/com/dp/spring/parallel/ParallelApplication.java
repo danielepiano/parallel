@@ -7,13 +7,15 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication(scanBasePackages = "com.dp.spring")
 @EnableFeignClients(basePackages = "com.dp.spring")
 @EntityScan("com.dp.spring")
 @EnableJpaRepositories("com.dp.spring")
 @EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
-@EnableAsync
+@EnableTransactionManagement
+@EnableAsync(proxyTargetClass = true)
 public class ParallelApplication {
     public static void main(String[] args) {
         final String version = ParallelApplication.class.getPackage().getImplementationVersion();

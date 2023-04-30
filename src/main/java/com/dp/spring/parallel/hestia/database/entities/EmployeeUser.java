@@ -6,15 +6,15 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @Data
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
 @Entity
 @DiscriminatorValue(UserRole.Constants.EMPLOYEE_VALUE)
 public class EmployeeUser extends User {
@@ -23,4 +23,28 @@ public class EmployeeUser extends User {
     private Company company;
 
     private String jobPosition;
+
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" +
+                "id = " + id + ", " +
+                "firstName = " + firstName + ", " +
+                "lastName = " + lastName + ", " +
+                "birthDate = " + birthDate + ", " +
+                "phoneNumber = " + phoneNumber + ", " +
+                "city = " + city + ", " +
+                "address = " + address + ", " +
+                "email = " + email + ", " +
+                "password = " + password + ", " +
+                "role = " + role + ", " +
+                "company = " + role + ", " +
+                "jobPosition = " + jobPosition + ", " +
+                "createdBy = " + createdBy + ", " +
+                "createdDate = " + createdDate + ", " +
+                "lastModifiedBy = " + lastModifiedBy + ", " +
+                "lastModifiedDate = " + lastModifiedDate + ", " +
+                "active = " + active +
+                ")";
+    }
 }

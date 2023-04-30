@@ -4,11 +4,11 @@ import com.dp.spring.parallel.common.exceptions.EmailNotFoundException;
 import com.dp.spring.parallel.common.exceptions.WrongCredentialsException;
 import com.dp.spring.parallel.hestia.database.entities.*;
 import com.dp.spring.parallel.hestia.database.repositories.UserRepository;
-import com.dp.spring.parallel.talos.services.JWTService;
 import com.dp.spring.parallel.talos.api.dtos.AccessTokenDTO;
 import com.dp.spring.parallel.talos.api.dtos.LoginRequestDTO;
 import com.dp.spring.parallel.talos.api.dtos.UserToken;
 import com.dp.spring.parallel.talos.database.enums.TokenType;
+import com.dp.spring.parallel.talos.services.JWTService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -16,11 +16,13 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
