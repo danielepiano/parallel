@@ -1,10 +1,10 @@
 package com.dp.spring.parallel.hestia.api.controllers;
 
 import com.dp.spring.parallel.common.utils.ResourcesUtils;
+import com.dp.spring.parallel.hermes.utils.EmailMessageParser;
 import com.dp.spring.parallel.hestia.database.entities.User;
 import com.dp.spring.parallel.hestia.database.enums.UserRole;
 import com.dp.spring.parallel.hestia.database.repositories.UserRepository;
-import com.dp.spring.parallel.mnemosyne.utils.EmailMessageParser;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;

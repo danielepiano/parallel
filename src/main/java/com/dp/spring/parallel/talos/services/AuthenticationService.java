@@ -8,7 +8,6 @@ import com.dp.spring.parallel.talos.api.dtos.AccessTokenDTO;
 import com.dp.spring.parallel.talos.api.dtos.LoginRequestDTO;
 import com.dp.spring.parallel.talos.api.dtos.UserToken;
 import com.dp.spring.parallel.talos.database.enums.TokenType;
-import com.dp.spring.parallel.talos.services.JWTService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;

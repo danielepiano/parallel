@@ -1,7 +1,7 @@
-package com.dp.spring.parallel.mnemosyne.services.notification;
+package com.dp.spring.parallel.hermes.services.notification;
 
-import com.dp.spring.parallel.mnemosyne.config.EmailConfig;
-import com.dp.spring.parallel.mnemosyne.exceptions.FailureSendingEmail;
+import com.dp.spring.parallel.hermes.config.EmailConfig;
+import com.dp.spring.parallel.hermes.exceptions.FailureSendingEmail;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;

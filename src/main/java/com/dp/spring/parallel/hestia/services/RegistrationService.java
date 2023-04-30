@@ -2,19 +2,19 @@ package com.dp.spring.parallel.hestia.services;
 
 import com.dp.spring.parallel.common.exceptions.EmailAlreadyExistsException;
 import com.dp.spring.parallel.common.utils.ResourcesUtils;
+import com.dp.spring.parallel.hermes.services.notification.EmailNotificationService;
+import com.dp.spring.parallel.hermes.utils.EmailMessageParser;
 import com.dp.spring.parallel.hestia.api.dtos.RegistrationRequestDTO;
 import com.dp.spring.parallel.hestia.database.entities.User;
 import com.dp.spring.parallel.hestia.database.repositories.UserRepository;
 import com.dp.spring.parallel.hestia.utils.RandomPasswordUtils;
-import com.dp.spring.parallel.mnemosyne.services.notification.EmailNotificationService;
-import com.dp.spring.parallel.mnemosyne.utils.EmailMessageParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
-import static com.dp.spring.parallel.mnemosyne.utils.EmailMessageParser.Keyword.*;
+import static com.dp.spring.parallel.hermes.utils.EmailMessageParser.Keyword.*;
 
 /**
  * Template pattern for the registration service, that should be implemented in different strategies.

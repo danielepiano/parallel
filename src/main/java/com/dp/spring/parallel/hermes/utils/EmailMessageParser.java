@@ -1,4 +1,4 @@
-package com.dp.spring.parallel.mnemosyne.utils;
+package com.dp.spring.parallel.hermes.utils;
 
 import com.dp.spring.springcore.exceptions.UnsupportedCallToPrivateConstructor;
 import lombok.AllArgsConstructor;

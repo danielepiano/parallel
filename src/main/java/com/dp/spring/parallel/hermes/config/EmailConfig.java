@@ -1,4 +1,4 @@
-package com.dp.spring.parallel.mnemosyne.config;
+package com.dp.spring.parallel.hermes.config;
 
 import org.springframework.context.annotation.Configuration;
 

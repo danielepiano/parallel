@@ -1,4 +1,4 @@
-package com.dp.spring.parallel.mnemosyne.exceptions;
+package com.dp.spring.parallel.hermes.exceptions;
 
 import com.dp.spring.parallel.common.exceptions.ExceptionConstants;
 import com.dp.spring.springcore.exceptions.InternalServerErrorException;

@@ -1,4 +1,4 @@
-package com.dp.spring.parallel.mnemosyne.services.notification;
+package com.dp.spring.parallel.hermes.services.notification;
 
 /**
  * Generic behaviour a generic notification service should have.
