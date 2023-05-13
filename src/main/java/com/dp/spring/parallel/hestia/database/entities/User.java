@@ -1,29 +1,27 @@
 package com.dp.spring.parallel.hestia.database.entities;
 
 import com.dp.spring.parallel.hestia.database.enums.UserRole;
-import com.dp.spring.parallel.talos.database.entities.TokenDetails;
-import com.dp.spring.springcore.database.annotations.ActiveEntities;
 import com.dp.spring.springcore.database.entities.SoftDeletableAuditedEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.Where;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.List;
+
+import static com.dp.spring.springcore.database.entities.SoftDeletableAuditedEntity.SOFT_DELETE_CLAUSE;
 
 @Data
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
+@Setter(AccessLevel.PROTECTED)
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@ActiveEntities
+@Where(clause = SOFT_DELETE_CLAUSE)
 @Inheritance
 @DiscriminatorColumn(name = "role")
 @Table(name = "user_details")
@@ -48,17 +46,6 @@ public class User extends SoftDeletableAuditedEntity<Integer> implements UserDet
     @Column(nullable = false)
     protected String address;
 
-    /*// #--- COMPANY DETAILS (case: COMPANY_MANAGER, EMPLOYEE, RECEPTIONIST) ----------
-    @ManyToOne
-    @JoinColumn(name = "company_id")
-    protected Company company;
-
-    protected String jobPosition;
-
-    @ManyToOne
-    @JoinColumn(name = "headquarters_id")
-    private Headquarters headquarters;*/
-
     // #--- ACCOUNT DETAILS ----------------------------------------------------------
     // profilePicture ?
     @Column(nullable = false, unique = true)
@@ -70,10 +57,6 @@ public class User extends SoftDeletableAuditedEntity<Integer> implements UserDet
     @Column(nullable = false, insertable = false, updatable = false)
     @Enumerated(EnumType.STRING)
     protected UserRole role;
-
-
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    protected List<TokenDetails> tokensDetails;
 
 
     @Override

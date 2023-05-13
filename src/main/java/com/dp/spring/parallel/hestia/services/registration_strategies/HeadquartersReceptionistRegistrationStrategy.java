@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 public class HeadquartersReceptionistRegistrationStrategy extends RegistrationService<HeadquartersReceptionistUser> {
     private final HeadquartersRepository headquartersRepository;
 
+    private static final String NOTIFICATION_MESSAGE_PATH = "email/headquarters-receptionist-first-access-credentials-template.html";
+
 
     @Override
     protected HeadquartersReceptionistUser buildUser(
@@ -39,5 +41,10 @@ public class HeadquartersReceptionistRegistrationStrategy extends RegistrationSe
                 // following: headquarters receptionist fields
                 .headquarters(headquarters)
                 .build();
+    }
+
+    @Override
+    protected String buildNotificationMessage(final String generatedPassword, final HeadquartersReceptionistUser user) {
+        return super.buildEmailNotificationMessageFromTemplate(NOTIFICATION_MESSAGE_PATH, generatedPassword, user);
     }
 }

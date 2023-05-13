@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import static com.dp.spring.parallel.hestia.database.enums.UserRole.Constants.ROLE_ADMIN_VALUE;
 import static com.dp.spring.parallel.hestia.database.enums.UserRole.Constants.ROLE_COMPANY_MANAGER_VALUE;
 
-@RequestMapping("/api/hestia/v1/companies/{companyId}/employees")
+@RequestMapping("/api/v1/companies/{companyId}/employees")
 public interface EmployeeController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -20,4 +20,11 @@ public interface EmployeeController {
             @RequestBody RegistrationRequestDTO toRegister
     );
 
+    @DeleteMapping(path = "/{userId}")
+    @Secured({ROLE_ADMIN_VALUE, ROLE_COMPANY_MANAGER_VALUE})
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void disable(
+            @PathVariable("companyId") Integer companyId,
+            @PathVariable("userId") Integer userId
+    );
 }

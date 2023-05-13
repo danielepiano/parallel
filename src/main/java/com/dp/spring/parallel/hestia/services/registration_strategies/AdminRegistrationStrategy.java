@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class AdminRegistrationStrategy extends RegistrationService<AdminUser> {
+    private static final String NOTIFICATION_MESSAGE_PATH = "email/admin-first-access-credentials-template.html";
+
     @Override
     protected AdminUser buildUser(final String encodedPassword, final Integer scopeId, final RegistrationRequestDTO dto) {
         return AdminUser.builder()
@@ -22,5 +24,10 @@ public class AdminRegistrationStrategy extends RegistrationService<AdminUser> {
                 .email(dto.getEmail())
                 .password(encodedPassword)
                 .build();
+    }
+
+    @Override
+    protected String buildNotificationMessage(final String generatedPassword, final AdminUser user) {
+        return super.buildEmailNotificationMessageFromTemplate(NOTIFICATION_MESSAGE_PATH, generatedPassword, user);
     }
 }

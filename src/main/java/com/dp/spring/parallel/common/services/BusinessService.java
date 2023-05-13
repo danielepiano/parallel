@@ -122,24 +122,24 @@ public abstract class BusinessService {
     }
 
     /**
-     * Checking if a given id matches the id of the resource attached to the principal (e.g. company id for an employee, etc.).
+     * Checking if a given company id matches the id of the company attached to the principal.
      *
-     * @param scopeId the id of the resource attached to the user (e.g. company id, headquarters id, etc.)
+     * @param companyId the id of the company to check
      */
-    public void checkPrincipalScopeOrThrow(Integer scopeId) {
+    public void checkPrincipalScopeOrThrow(Integer companyId) {
         User principal = getPrincipalOrThrow();
 
         switch (principal.getRole()) {
             case ADMIN:
                 break;
             case COMPANY_MANAGER:
-                checkCompanyManagerPrincipalScopeOrThrow(scopeId, (CompanyManagerUser) principal);
+                this.checkCompanyManagerPrincipalScopeOrThrow(companyId, (CompanyManagerUser) principal);
                 break;
             case HEADQUARTERS_RECEPTIONIST:
-                checkHeadquartersReceptionistPrincipalScopeOrThrow(scopeId, (HeadquartersReceptionistUser) principal);
+                this.checkHeadquartersReceptionistPrincipalScopeOrThrow(companyId, (HeadquartersReceptionistUser) principal);
                 break;
             case EMPLOYEE:
-                checkEmployeePrincipalScopeOrThrow(scopeId, (EmployeeUser) principal);
+                this.checkEmployeePrincipalScopeOrThrow(companyId, (EmployeeUser) principal);
                 break;
             default:
                 throw new AccessDeniedException(BaseExceptionConstants.ACCESS_DENIED.getDetail());
@@ -152,8 +152,9 @@ public abstract class BusinessService {
         }
     }
 
-    public void checkHeadquartersReceptionistPrincipalScopeOrThrow(Integer headquartersId, HeadquartersReceptionistUser principal) {
-        if (!Objects.equals(headquartersId, principal.getHeadquarters().getId())) {
+    // @todo company in realtà???
+    public void checkHeadquartersReceptionistPrincipalScopeOrThrow(Integer companyId, HeadquartersReceptionistUser principal) {
+        if (!Objects.equals(companyId, principal.getHeadquarters().getCompany().getId())) {
             throw new AccessDeniedException(BaseExceptionConstants.ACCESS_DENIED.getDetail());
         }
     }

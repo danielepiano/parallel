@@ -5,6 +5,8 @@ import com.dp.spring.springcore.database.repositories.SoftDeleteJpaRepository;
 
 import java.util.Optional;
 
-public interface UserRepository<T extends User> extends SoftDeleteJpaRepository<T, Integer> {
-    Optional<T> findByEmail(String email);
+public interface UserRepository extends SoftDeleteJpaRepository<User, Integer> {
+
+    Optional<User> findByEmail(String email);
+
 }

@@ -6,18 +6,18 @@ import com.dp.spring.springcore.model.error.Error;
 public class CompanyNotFoundException extends ResourceNotFoundException {
     public CompanyNotFoundException(final Integer id) {
         super(new Error(
-                        ExceptionConstants.COMPANY_NOT_FOUND.getCode(),
-                        ExceptionConstants.COMPANY_NOT_FOUND.getTitle(),
-                        String.format(ExceptionConstants.COMPANY_NOT_FOUND.getDetail(), id)
+                        _ExceptionConstants.COMPANY_NOT_FOUND.getCode(),
+                        _ExceptionConstants.COMPANY_NOT_FOUND.getTitle(),
+                        String.format(_ExceptionConstants.COMPANY_NOT_FOUND.getDetail(), id)
                 )
         );
     }
 
     public CompanyNotFoundException(final Integer id, final Throwable cause) {
         super(new Error(
-                        ExceptionConstants.COMPANY_NOT_FOUND.getCode(),
-                        ExceptionConstants.COMPANY_NOT_FOUND.getTitle(),
-                        String.format(ExceptionConstants.COMPANY_NOT_FOUND.getDetail(), id)
+                        _ExceptionConstants.COMPANY_NOT_FOUND.getCode(),
+                        _ExceptionConstants.COMPANY_NOT_FOUND.getTitle(),
+                        String.format(_ExceptionConstants.COMPANY_NOT_FOUND.getDetail(), id)
                 ), cause
         );
     }

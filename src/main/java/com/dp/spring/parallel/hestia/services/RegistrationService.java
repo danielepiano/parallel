@@ -11,6 +11,7 @@ import com.dp.spring.parallel.hestia.utils.RandomPasswordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 
@@ -22,20 +23,19 @@ import static com.dp.spring.parallel.hermes.utils.EmailMessageParser.Keyword.*;
  * @param <T> a subclass of {@link User}
  */
 @Service
+@Transactional
 public abstract class RegistrationService<T extends User> {
     @Autowired
     protected EmailNotificationService emailNotificationService;
 
     @Autowired
-    protected UserRepository<User> userRepository;
-    @Autowired
-    protected UserRepository<T> scopedUserRepository; // @todo is it necessary??
+    protected UserRepository userRepository;
 
     @Autowired
     protected PasswordEncoder passwordEncoder;
 
     private static final String DEFAULT_NOTIFICATION_TITLE = "Benvenuto in Parallel, " + FIRST_NAME.getTemplate() + "!";
-    private static final String DEFAULT_NOTIFICATION_MESSAGE_PATH = "email/first-access-credentials-template.html";
+    private static final String DEFAULT_NOTIFICATION_MESSAGE_PATH = "email/default-first-access-credentials-template.html";
 
 
     /**
@@ -82,7 +82,11 @@ public abstract class RegistrationService<T extends User> {
      * @param dto             the data of the user to be registered
      * @return the details of the user to be registered
      */
-    protected abstract T buildUser(final String encodedPassword, final Integer scopeId, final RegistrationRequestDTO dto);
+    protected abstract T buildUser(
+            final String encodedPassword,
+            final Integer scopeId,
+            final RegistrationRequestDTO dto
+    );
 
 
     /**
@@ -93,8 +97,8 @@ public abstract class RegistrationService<T extends User> {
      *
      * @param user the user to be saved in the database
      */
-    protected void save(final T user) {
-        this.scopedUserRepository.save(user);
+    protected void save(final User user) {
+        this.userRepository.save(user);
     }
 
 
@@ -104,12 +108,28 @@ public abstract class RegistrationService<T extends User> {
      * <br>
      * The step is overridable.
      *
-     * @param generatedPassword the encoded password generated in the 1st step
+     * @param generatedPassword the password as generated in the 1st step
      * @param user              the user saved in the database
+     * @return the notification message
      */
     protected String buildNotificationMessage(final String generatedPassword, final T user) {
+        return this.buildEmailNotificationMessageFromTemplate(DEFAULT_NOTIFICATION_MESSAGE_PATH, generatedPassword, user);
+    }
+
+    /**
+     * Common method for building an email notification message based on a template file in resources.
+     *
+     * @param templatePath      the path of the message template file
+     * @param generatedPassword the password as generated in the 1st step
+     * @param user              the user saved in the database
+     * @return the notification message
+     */
+    protected final String buildEmailNotificationMessageFromTemplate(
+            final String templatePath,
+            final String generatedPassword,
+            final T user) {
         // Reading email message and http template from file
-        String rawMessage = ResourcesUtils.readFileAsString(DEFAULT_NOTIFICATION_MESSAGE_PATH);
+        String rawMessage = ResourcesUtils.readFileAsString(templatePath);
 
         // Parsing the message, replacing keywords in curly brackets with proper values
         return EmailMessageParser.parse(
@@ -133,6 +153,16 @@ public abstract class RegistrationService<T extends User> {
      * @param user    the user saved in the database
      */
     protected void sendNotification(final String message, final T user) {
+        this.sendEmailNotification(message, user);
+    }
+
+    /**
+     * Common method for sending an email notification.
+     *
+     * @param message the notification message to be sent
+     * @param user    the user saved in the database
+     */
+    protected final void sendEmailNotification(final String message, final T user) {
         this.emailNotificationService.notify(
                 user.getEmail(),
                 EmailMessageParser.parse(DEFAULT_NOTIFICATION_TITLE, Map.of(FIRST_NAME, user.getFirstName())),

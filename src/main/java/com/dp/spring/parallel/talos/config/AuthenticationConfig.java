@@ -1,7 +1,6 @@
 package com.dp.spring.parallel.talos.config;
 
 import com.dp.spring.parallel.common.exceptions.EmailNotFoundException;
-import com.dp.spring.parallel.hestia.database.entities.*;
 import com.dp.spring.parallel.hestia.database.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -19,11 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class AuthenticationConfig {
-    private final UserRepository<User> userRepository;
-    private final UserRepository<AdminUser> adminUserRepository;
-    private final UserRepository<CompanyManagerUser> companyManagerUserRepository;
-    private final UserRepository<HeadquartersReceptionistUser> headquartersReceptionistUserRepository;
-    private final UserRepository<EmployeeUser> employeeUserRepository;
+    private final UserRepository userRepository;
+
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {

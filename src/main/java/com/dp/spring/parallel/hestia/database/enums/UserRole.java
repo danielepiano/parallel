@@ -13,7 +13,8 @@ public enum UserRole {
     HEADQUARTERS_RECEPTIONIST(Constants.ROLE_HEADQUARTERS_RECEPTIONIST_VALUE),
     EMPLOYEE(Constants.ROLE_EMPLOYEE_VALUE),
 
-    UNSET(Constants.ROLE_UNSET_VALUE);
+    UNSET(Constants.UNSET_VALUE),
+    ANY(Constants.ANY_VALUE);
 
 
     private final String role;
@@ -42,11 +43,11 @@ public enum UserRole {
         public static final String EMPLOYEE_VALUE = "EMPLOYEE";
 
         public static final String UNSET_VALUE = "UNSET";
+        public static final String ANY_VALUE = "ANY";
 
         public static final String ROLE_ADMIN_VALUE = ROLE_PREFIX + ADMIN_VALUE;
         public static final String ROLE_COMPANY_MANAGER_VALUE = ROLE_PREFIX + COMPANY_MANAGER_VALUE;
         public static final String ROLE_HEADQUARTERS_RECEPTIONIST_VALUE = ROLE_PREFIX + HEADQUARTERS_RECEPTIONIST_VALUE;
         public static final String ROLE_EMPLOYEE_VALUE = ROLE_PREFIX + EMPLOYEE_VALUE;
-        public static final String ROLE_UNSET_VALUE = ROLE_PREFIX + UNSET_VALUE;
     }
 }

@@ -15,7 +15,7 @@ import org.hibernate.annotations.ColumnDefault;
 @ToString(callSuper = true)
 @Entity
 public class TokenDetails extends BaseEntity<Integer> {
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, columnDefinition = "text")
     private String token;
 
     @Builder.Default

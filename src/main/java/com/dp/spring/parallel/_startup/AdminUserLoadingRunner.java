@@ -18,7 +18,7 @@ public class AdminUserLoadingRunner implements CommandLineRunner {
     private static final String ADMIN_USERNAME = "admin";
     private static final String ADMIN_PASSWORD = "admin";
 
-    private final UserRepository<AdminUser> userRepository;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override

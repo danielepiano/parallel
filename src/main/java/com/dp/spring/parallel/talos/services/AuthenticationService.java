@@ -2,7 +2,7 @@ package com.dp.spring.parallel.talos.services;
 
 import com.dp.spring.parallel.common.exceptions.EmailNotFoundException;
 import com.dp.spring.parallel.common.exceptions.WrongCredentialsException;
-import com.dp.spring.parallel.hestia.database.entities.*;
+import com.dp.spring.parallel.hestia.database.entities.User;
 import com.dp.spring.parallel.hestia.database.repositories.UserRepository;
 import com.dp.spring.parallel.talos.api.dtos.AccessTokenDTO;
 import com.dp.spring.parallel.talos.api.dtos.LoginRequestDTO;
@@ -28,11 +28,7 @@ public class AuthenticationService {
     private final TokenDetailsService tokenDetailsService;
     private final JWTService jwtService;
 
-    private final UserRepository<User> userRepository;
-    private final UserRepository<AdminUser> adminUserRepository;
-    private final UserRepository<CompanyManagerUser> companyManagerUserRepository;
-    private final UserRepository<HeadquartersReceptionistUser> headquartersReceptionistUserRepository;
-    private final UserRepository<EmployeeUser> employeeUserRepository;
+    private final UserRepository userRepository;
 
     private final ObjectMapper objectMapper;
 
@@ -71,16 +67,8 @@ public class AuthenticationService {
 
 
     private Map<String, Object> extractExtraClaimsFromUser(final User user) {
-        final UserToken userToken = switch (user.getRole()) {
-            case ADMIN -> UserToken.of(adminUserRepository.getReferenceById(user.getId()));
-            case COMPANY_MANAGER -> UserToken.of(companyManagerUserRepository.getReferenceById(user.getId()));
-            case HEADQUARTERS_RECEPTIONIST ->
-                    UserToken.of(headquartersReceptionistUserRepository.getReferenceById(user.getId()));
-            case EMPLOYEE -> UserToken.of(employeeUserRepository.getReferenceById(user.getId()));
-            default -> UserToken.of(user);
-        };
-
-        return this.objectMapper.convertValue(userToken, new TypeReference<Map<String, Object>>() {
+        final UserToken userToken = UserToken.of(user);
+        return this.objectMapper.convertValue(userToken, new TypeReference<>() {
         });
     }
 }

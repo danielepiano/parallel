@@ -1,75 +1,38 @@
 package com.dp.spring.parallel.hestia.services;
 
+import com.dp.spring.parallel.common.exceptions.UserNotFoundException;
 import com.dp.spring.parallel.common.services.BusinessService;
 import com.dp.spring.parallel.hestia.api.dtos.RegistrationRequestDTO;
 import com.dp.spring.parallel.hestia.database.entities.User;
-import com.dp.spring.parallel.hestia.services.registration_strategies.AdminRegistrationStrategy;
-import com.dp.spring.parallel.hestia.services.registration_strategies.CompanyManagerRegistrationStrategy;
-import com.dp.spring.parallel.hestia.services.registration_strategies.EmployeeRegistrationStrategy;
-import com.dp.spring.parallel.hestia.services.registration_strategies.HeadquartersReceptionistRegistrationStrategy;
+import com.dp.spring.parallel.hestia.database.enums.UserRole;
+import com.dp.spring.parallel.hestia.database.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Generic {@link User} services.
  */
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class UserService extends BusinessService {
-    private final AdminRegistrationStrategy adminRegistrationStrategy;
-    private final CompanyManagerRegistrationStrategy companyManagerRegistrationStrategy;
-    private final HeadquartersReceptionistRegistrationStrategy headquartersReceptionistRegistrationStrategy;
-    private final EmployeeRegistrationStrategy employeeRegistrationStrategy;
-
-
-    public void registerAdmin(
-            final RegistrationRequestDTO toRegister
-    ) {
-        this.callRegistrationService(toRegister, adminRegistrationStrategy);
-    }
-
-    public void registerCompanyManager(
-            final Integer companyId,
-            final RegistrationRequestDTO toRegister
-    ) {
-        checkCompanyExistenceOrThrow(companyId);
-        checkPrincipalScopeOrThrow(companyId);
-        this.callRegistrationService(companyId, toRegister, companyManagerRegistrationStrategy);
-    }
-
-    public void registerHeadquartersReceptionist(
-            final Integer companyId,
-            final Integer headquartersId,
-            final RegistrationRequestDTO toRegister
-    ) {
-        checkHeadquartersExistenceOrThrow(headquartersId, companyId);
-        checkPrincipalScopeOrThrow(companyId);
-        this.callRegistrationService(companyId, toRegister, headquartersReceptionistRegistrationStrategy);
-    }
-
-    public void registerEmployee(
-            final Integer companyId,
-            final RegistrationRequestDTO toRegister
-    ) {
-        checkCompanyExistenceOrThrow(companyId);
-        checkPrincipalScopeOrThrow(companyId);
-        this.callRegistrationService(companyId, toRegister, employeeRegistrationStrategy);
-    }
+    protected UserRepository userRepository;
 
 
     /**
      * User creation when no resource scope id is defined.<br>
-     * Read also {@link #callRegistrationService(Integer, RegistrationRequestDTO, RegistrationService)}.
+     * Read also {@link #register(Integer, RegistrationRequestDTO, RegistrationService)}.
      *
      * @param toRegister          the user to register
      * @param registrationService the strategy to use for registration
      * @param <U>                 the type of the user to register, related to its role
      */
-    private <U extends User> void callRegistrationService(
+    protected <U extends User> void register(
             final RegistrationRequestDTO toRegister,
             final RegistrationService<U> registrationService
     ) {
-        this.callRegistrationService(null, toRegister, registrationService);
+        this.register(null, toRegister, registrationService);
     }
 
     /**
@@ -80,7 +43,7 @@ public class UserService extends BusinessService {
      * @param registrationService the strategy to use for registration
      * @param <U>                 the type of the user to register, related to its role
      */
-    private <U extends User> void callRegistrationService(
+    protected <U extends User> void register(
             final Integer scopeId,
             final RegistrationRequestDTO toRegister,
             final RegistrationService<U> registrationService
@@ -88,4 +51,9 @@ public class UserService extends BusinessService {
         registrationService.register(scopeId, toRegister);
     }
 
+
+    public User user(final Integer id) {
+        return this.userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(UserRole.ANY.getRole(), id));
+    }
 }

@@ -6,18 +6,18 @@ import com.dp.spring.springcore.model.error.Error;
 public class HeadquartersNotFoundException extends ResourceNotFoundException {
     public HeadquartersNotFoundException(final Integer id) {
         super(new Error(
-                        ExceptionConstants.HEADQUARTERS_NOT_FOUND.getCode(),
-                        ExceptionConstants.HEADQUARTERS_NOT_FOUND.getTitle(),
-                        String.format(ExceptionConstants.HEADQUARTERS_NOT_FOUND.getDetail(), id)
+                        _ExceptionConstants.HEADQUARTERS_NOT_FOUND.getCode(),
+                        _ExceptionConstants.HEADQUARTERS_NOT_FOUND.getTitle(),
+                        String.format(_ExceptionConstants.HEADQUARTERS_NOT_FOUND.getDetail(), id)
                 )
         );
     }
 
     public HeadquartersNotFoundException(final Integer id, final Throwable cause) {
         super(new Error(
-                        ExceptionConstants.HEADQUARTERS_NOT_FOUND.getCode(),
-                        ExceptionConstants.HEADQUARTERS_NOT_FOUND.getTitle(),
-                        String.format(ExceptionConstants.HEADQUARTERS_NOT_FOUND.getDetail(), id)
+                        _ExceptionConstants.HEADQUARTERS_NOT_FOUND.getCode(),
+                        _ExceptionConstants.HEADQUARTERS_NOT_FOUND.getTitle(),
+                        String.format(_ExceptionConstants.HEADQUARTERS_NOT_FOUND.getDetail(), id)
                 ), cause
         );
     }
