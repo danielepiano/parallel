@@ -20,7 +20,7 @@
 
     <properties>
         <java.version>17</java.version>
-        <dp.spring-core.version>0.1.4-SNAPSHOT</dp.spring-core.version>
+        <dp.spring-core.version>0.1.5-SNAPSHOT</dp.spring-core.version>
         <spring-boot.version>3.0.4</spring-boot.version>
         <spring-cloud.version>2022.0.1</spring-cloud.version>
         <org.projectlombok.version>1.18.26</org.projectlombok.version>

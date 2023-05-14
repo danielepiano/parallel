@@ -123,7 +123,6 @@ public class UserService extends BusinessService {
                 CHANGE_PASSWORD_NOTIFICATION_TITLE,
                 message
         );
-        // @todo send email: Password changed
     }
 
 }

@@ -37,7 +37,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Maven: com.dp.spring:spring-core:0.1.4-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: com.dp.spring:spring-core:0.1.5-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter:3.0.4" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot:3.0.4" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-context:6.0.6" level="project" />
