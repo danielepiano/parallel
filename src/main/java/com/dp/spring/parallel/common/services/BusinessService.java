@@ -152,7 +152,6 @@ public abstract class BusinessService {
         }
     }
 
-    // @todo company in realtà???
     public void checkHeadquartersReceptionistPrincipalScopeOrThrow(Integer companyId, HeadquartersReceptionistUser principal) {
         if (!Objects.equals(companyId, principal.getHeadquarters().getCompany().getId())) {
             throw new AccessDeniedException(BaseExceptionConstants.ACCESS_DENIED.getDetail());

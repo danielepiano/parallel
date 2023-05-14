@@ -7,7 +7,7 @@ import org.apache.commons.lang3.RandomStringUtils;
  * Utility class for random password generation matching either custom or default regex and length.
  */
 public class RandomPasswordUtils {
-    private static final String DEFAULT_PASSWORD_REGEX = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@#$%^&+=!]).{8,}$";
+    public static final String DEFAULT_PASSWORD_REGEX = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@#$%^&+=!]).{8,}$";
     private static final int DEFAULT_MIN_PASSWORD_LENGTH = 8;
     private static final int DEFAULT_PASSWORD_LENGTH = 16;
 

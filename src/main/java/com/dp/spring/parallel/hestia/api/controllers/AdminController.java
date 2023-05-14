@@ -13,6 +13,7 @@ public interface AdminController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @Secured(ROLE_ADMIN_VALUE)
+    @ResponseStatus(HttpStatus.CREATED)
     void register(
             @RequestBody RegistrationRequestDTO adminToRegister
     );

@@ -1,7 +1,6 @@
 package com.dp.spring.parallel.hestia.services;
 
 import com.dp.spring.parallel.common.exceptions.EmailAlreadyExistsException;
-import com.dp.spring.parallel.common.utils.ResourcesUtils;
 import com.dp.spring.parallel.hermes.services.notification.EmailNotificationService;
 import com.dp.spring.parallel.hermes.utils.EmailMessageParser;
 import com.dp.spring.parallel.hestia.api.dtos.RegistrationRequestDTO;
@@ -127,13 +126,10 @@ public abstract class RegistrationService<T extends User> {
     protected final String buildEmailNotificationMessageFromTemplate(
             final String templatePath,
             final String generatedPassword,
-            final T user) {
-        // Reading email message and http template from file
-        String rawMessage = ResourcesUtils.readFileAsString(templatePath);
-
-        // Parsing the message, replacing keywords in curly brackets with proper values
-        return EmailMessageParser.parse(
-                rawMessage,
+            final T user
+    ) {
+        return this.emailNotificationService.buildMessage(
+                templatePath,
                 Map.of(
                         FIRST_NAME, user.getFirstName(),
                         LAST_NAME, user.getLastName(),

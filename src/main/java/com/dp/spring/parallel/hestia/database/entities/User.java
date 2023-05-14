@@ -3,7 +3,10 @@ package com.dp.spring.parallel.hestia.database.entities;
 import com.dp.spring.parallel.hestia.database.enums.UserRole;
 import com.dp.spring.springcore.database.entities.SoftDeletableAuditedEntity;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Where;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,7 +21,6 @@ import static com.dp.spring.springcore.database.entities.SoftDeletableAuditedEnt
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter(AccessLevel.PROTECTED)
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Where(clause = SOFT_DELETE_CLAUSE)

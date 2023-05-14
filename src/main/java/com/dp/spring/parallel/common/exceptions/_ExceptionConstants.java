@@ -13,6 +13,7 @@ public enum _ExceptionConstants {
     HEADQUARTERS_NOT_DELETABLE("BAD-110", "HEADQUARTERS NOT DELETABLE", "Couldn't complete the operation: some resource is still attached to the headquarters %s."),
     COMPANY_NOT_DELETABLE("BAD-111", "COMPANY NOT DELETABLE", "Couldn't complete the operation: some resource is still attached to the company %s."),
     USER_NOT_DELETABLE("BAD-112", "USER NOT DELETABLE", "Couldn't complete the operation%s."),
+    WRONG_PASSWORD("BAD-113", "VALIDATION ERROR", "Couldn't complete the operation: wrong current password."),
 
 
     FAILURE_SENDING_EMAIL("ISE-101", "FAILURE SENDING EMAIL", "The email has not been sent due to some error."),

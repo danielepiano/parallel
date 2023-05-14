@@ -1,13 +1,17 @@
 package com.dp.spring.parallel.hermes.services.notification;
 
+import com.dp.spring.parallel.common.utils.ResourcesUtils;
 import com.dp.spring.parallel.hermes.config.EmailConfig;
 import com.dp.spring.parallel.hermes.exceptions.FailureSendingEmail;
+import com.dp.spring.parallel.hermes.utils.EmailMessageParser;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 /**
  * {@link NotificationService} implementation for email notification.<br>
@@ -44,5 +48,23 @@ public class EmailNotificationService implements NotificationService {
             e.printStackTrace();
             throw new FailureSendingEmail(e);
         }
+    }
+
+    /**
+     * Building an email notification message out of a template file in resources.
+     *
+     * @param templatePath  the path for the template
+     * @param parsingParams parameters to be parsed on the raw message
+     * @return the parsed and ready to send message
+     */
+    public String buildMessage(
+            final String templatePath,
+            final Map<EmailMessageParser.Keyword, String> parsingParams
+    ) {
+        // Reading email message and http template from file
+        final String rawMessage = ResourcesUtils.readFileAsString(templatePath);
+
+        // Parsing the message, replacing keywords in curly brackets with proper values
+        return EmailMessageParser.parse(rawMessage, parsingParams);
     }
 }
