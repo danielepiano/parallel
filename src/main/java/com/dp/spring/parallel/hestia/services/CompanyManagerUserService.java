@@ -3,46 +3,42 @@ package com.dp.spring.parallel.hestia.services;
 import com.dp.spring.parallel.hephaestus.database.entities.Company;
 import com.dp.spring.parallel.hestia.api.dtos.RegistrationRequestDTO;
 import com.dp.spring.parallel.hestia.database.entities.CompanyManagerUser;
-import com.dp.spring.parallel.hestia.database.entities.User;
-import com.dp.spring.parallel.hestia.database.repositories.CompanyManagerUserRepository;
-import com.dp.spring.parallel.hestia.services.registration_strategies.CompanyManagerRegistrationStrategy;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 
 /**
- * Generic {@link User} services.
+ * {@link CompanyManagerUser} operations.
  */
-@Service
-@RequiredArgsConstructor
-@Transactional
-public class CompanyManagerUserService extends UserService {
-    private final CompanyManagerRegistrationStrategy companyManagerRegistrationStrategy;
-    private final CompanyManagerUserRepository companyManagerUserRepository;
+public interface CompanyManagerUserService {
 
-
-    public void register(
+    /**
+     * Registration of a company manager.
+     *
+     * @param companyId  the company of the company manager to register
+     * @param toRegister the registration request
+     */
+    void register(
             final Integer companyId,
             final RegistrationRequestDTO toRegister
-    ) {
-        checkCompanyExistenceOrThrow(companyId);
-        checkPrincipalScopeOrThrow(companyId);
-        super.register(companyId, toRegister, companyManagerRegistrationStrategy);
-    }
+    );
 
-    public Set<CompanyManagerUser> companyManagersFor(final Company company) {
-        return this.companyManagerUserRepository.findAllByCompany(company);
-    }
+    /**
+     * Retrieval of all company managers of a given company.
+     *
+     * @param company the company
+     * @return the company managers of the given company
+     */
+    Set<CompanyManagerUser> companyManagersFor(final Company company);
 
-
-    public void disable(
+    /**
+     * Deactivation of a company manager.
+     *
+     * @param companyId        the company of the company manager to register
+     * @param companyManagerId the id of the company manager to disable
+     */
+    void disable(
             final Integer companyId,
-            final Integer userId
-    ) {
-        checkCompanyExistenceOrThrow(companyId);
-        checkPrincipalScopeOrThrow(companyId);
-        this.companyManagerUserRepository.softDeleteById(userId);
-    }
+            final Integer companyManagerId
+    );
+
 }

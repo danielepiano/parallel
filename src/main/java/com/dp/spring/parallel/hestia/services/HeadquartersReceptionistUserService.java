@@ -3,47 +3,46 @@ package com.dp.spring.parallel.hestia.services;
 import com.dp.spring.parallel.hephaestus.database.entities.Headquarters;
 import com.dp.spring.parallel.hestia.api.dtos.RegistrationRequestDTO;
 import com.dp.spring.parallel.hestia.database.entities.HeadquartersReceptionistUser;
-import com.dp.spring.parallel.hestia.database.entities.User;
-import com.dp.spring.parallel.hestia.database.repositories.HeadquartersReceptionistUserRepository;
-import com.dp.spring.parallel.hestia.services.registration_strategies.HeadquartersReceptionistRegistrationStrategy;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 
 /**
- * Generic {@link User} services.
+ * {@link HeadquartersReceptionistUser} operations.
  */
-@Service
-@RequiredArgsConstructor
-@Transactional
-public class HeadquartersReceptionistUserService extends UserService {
-    private final HeadquartersReceptionistRegistrationStrategy headquartersReceptionistRegistrationStrategy;
-    private final HeadquartersReceptionistUserRepository headquartersReceptionistUserRepository;
+public interface HeadquartersReceptionistUserService {
 
-
-    public void register(
+    /**
+     * Registration of a headquarters receptionist.
+     *
+     * @param companyId      the company of the headquarters
+     * @param headquartersId the headquarters of the headquarters receptionist to register
+     * @param toRegister     the registration request
+     */
+    void register(
             final Integer companyId,
             final Integer headquartersId,
             final RegistrationRequestDTO toRegister
-    ) {
-        checkHeadquartersExistenceOrThrow(headquartersId, companyId);
-        checkPrincipalScopeOrThrow(companyId);
-        super.register(headquartersId, toRegister, headquartersReceptionistRegistrationStrategy);
-    }
+    );
 
-    public Set<HeadquartersReceptionistUser> headquartersReceptionistsFor(final Headquarters headquarters) {
-        return this.headquartersReceptionistUserRepository.findAllByHeadquarters(headquarters);
-    }
+    /**
+     * Retrieval of all headquarters receptionist of a given company.
+     *
+     * @param headquarters the headquarters
+     * @return the headquarters receptionists of the given headquarters
+     */
+    Set<HeadquartersReceptionistUser> headquartersReceptionistsFor(final Headquarters headquarters);
 
-    public void disable(
+    /**
+     * Deactivation of a headquarters receptionist.
+     *
+     * @param companyId        the company of the headquarters
+     * @param headquartersId   the headquarters of the headquarters receptionist to register
+     * @param companyManagerId the id of the headquarters receptionist to disable
+     */
+    void disable(
             final Integer companyId,
             final Integer headquartersId,
-            final Integer userId
-    ) {
-        checkHeadquartersExistenceOrThrow(headquartersId, companyId);
-        checkPrincipalScopeOrThrow(companyId);
-        this.headquartersReceptionistUserRepository.softDeleteById(userId);
-    }
+            final Integer companyManagerId
+    );
+
 }
