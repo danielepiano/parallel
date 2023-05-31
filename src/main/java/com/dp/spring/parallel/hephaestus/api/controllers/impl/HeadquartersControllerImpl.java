@@ -15,8 +15,8 @@ public class HeadquartersControllerImpl implements HeadquartersController {
 
 
     @Override
-    public HeadquartersResponseDTO headquarters(Integer id) {
-        return this.headquartersService.headquarters(id);
+    public HeadquartersResponseDTO headquarters(Integer headquartersId) {
+        return this.headquartersService.headquarters(headquartersId);
     }
 
     @Override

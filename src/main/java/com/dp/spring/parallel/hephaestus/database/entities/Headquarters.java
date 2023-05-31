@@ -40,6 +40,9 @@ public class Headquarters extends SoftDeletableAuditedEntity<Integer> {
     @OneToMany(mappedBy = "headquarters", fetch = FetchType.LAZY)
     private Set<HeadquartersReceptionistUser> receptionists;
 
+    @OneToMany(mappedBy = "headquarters", fetch = FetchType.LAZY)
+    private Set<Workspace> workspaces;
+
 
     @Override
     public String toString() {

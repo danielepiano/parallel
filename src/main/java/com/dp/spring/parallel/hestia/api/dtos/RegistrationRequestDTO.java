@@ -31,7 +31,6 @@ public class RegistrationRequestDTO {
     // custom
     String address;
 
-    // group rule?
     String jobPosition;
 
     @NotBlank @Email

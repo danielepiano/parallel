@@ -14,9 +14,9 @@ import static com.dp.spring.parallel.hestia.database.enums.UserRole.Constants.*;
 @RequestMapping("/api/v1/headquarters")
 public interface HeadquartersController {
 
-    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/{headquartersId}", produces = MediaType.APPLICATION_JSON_VALUE)
     HeadquartersResponseDTO headquarters(
-            @PathVariable("id") Integer id
+            @PathVariable("headquartersId") Integer headquartersId
     );
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
