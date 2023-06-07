@@ -26,12 +26,20 @@ public class WorkspaceServiceImpl extends BusinessService implements WorkspaceSe
 
     private final WorkspaceRepository workspaceRepository;
 
+
     public WorkspaceServiceImpl(@Lazy WorkplaceService workplaceService, WorkspaceRepository workspaceRepository) {
         this.workplaceService = workplaceService;
         this.workspaceRepository = workspaceRepository;
     }
 
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param headquartersId the id of the headquarters to link the workspace to
+     * @param createRequest  the workspace creation request
+     * @return the created workspace
+     */
     @Override
     public Workspace add(Integer headquartersId, CreateWorkspaceRequestDTO createRequest) {
         final Headquarters headquarters = this.getAndCheckHeadquartersOrThrow(headquartersId);
@@ -48,6 +56,13 @@ public class WorkspaceServiceImpl extends BusinessService implements WorkspaceSe
         return this.workspaceRepository.save(toAdd);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param headquartersId the id of the headquarters
+     * @param workspaceId    the id of the workspace
+     * @return the workspace
+     */
     @Override
     public Workspace workspace(Integer headquartersId, Integer workspaceId) {
         final Headquarters headquarters = this.getAndCheckHeadquartersOrThrow(headquartersId);
@@ -55,12 +70,26 @@ public class WorkspaceServiceImpl extends BusinessService implements WorkspaceSe
                 .orElseThrow(() -> new WorkspaceNotFoundException(workspaceId, headquartersId));
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param headquartersId the id of the headquarters
+     * @return the workspaces
+     */
     @Override
     public Set<Workspace> workspaces(Integer headquartersId) {
         final Headquarters headquarters = this.getAndCheckHeadquartersOrThrow(headquartersId);
         return this.workspaceRepository.findAllByHeadquarters(headquarters);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param headquartersId the id of the headquarters
+     * @param workspaceId    the id of the workspace to update
+     * @param updateRequest  the workspace update request
+     * @return the updated workspace
+     */
     @Override
     public Workspace update(Integer headquartersId, Integer workspaceId, UpdateWorkspaceRequestDTO updateRequest) {
         final Headquarters headquarters = this.getAndCheckHeadquartersOrThrow(headquartersId);
@@ -77,6 +106,12 @@ public class WorkspaceServiceImpl extends BusinessService implements WorkspaceSe
         return this.workspaceRepository.save(toUpdate);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param headquartersId the id of the headquarters
+     * @param workspaceId    the id of the workspace to delete
+     */
     @Override
     public void remove(Integer headquartersId, Integer workspaceId) {
         final Headquarters headquarters = this.getAndCheckHeadquartersOrThrow(headquartersId);
@@ -84,6 +119,11 @@ public class WorkspaceServiceImpl extends BusinessService implements WorkspaceSe
                 .ifPresent(this::softDelete);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param headquarters the headquarters of which delete the workspaces
+     */
     @Override
     public void removeAll(Headquarters headquarters) {
         // Get all the workspaces for the headquarters, and soft delete each of them

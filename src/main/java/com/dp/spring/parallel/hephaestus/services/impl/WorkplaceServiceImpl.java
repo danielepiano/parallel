@@ -28,6 +28,14 @@ public class WorkplaceServiceImpl extends BusinessService implements WorkplaceSe
     private final WorkplaceRepository workplaceRepository;
 
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param headquartersId the id of the headquarters of the workspace
+     * @param workspaceId    the id of the workspace to link the workplace to
+     * @param createRequest  the workplace creation request
+     * @return the created workplace
+     */
     @Override
     public Workplace add(Integer headquartersId, Integer workspaceId, CreateWorkplaceRequestDTO createRequest) {
         // All permission checks are included
@@ -43,6 +51,14 @@ public class WorkplaceServiceImpl extends BusinessService implements WorkplaceSe
         return this.workplaceRepository.save(toAdd);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param headquartersId the id of the headquarters of the workspace
+     * @param workspaceId    the id of the workspace
+     * @param workplaceId    the id of the workplace
+     * @return the workplace
+     */
     @Override
     public Workplace workplace(Integer headquartersId, Integer workspaceId, Integer workplaceId) {
         // All permission checks are included
@@ -51,6 +67,13 @@ public class WorkplaceServiceImpl extends BusinessService implements WorkplaceSe
                 .orElseThrow(() -> new WorkplaceNotFoundException(workplaceId, workspaceId));
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param headquartersId the id of the headquarters of the workspace
+     * @param workspaceId    the id of the workspace
+     * @return the workplaces
+     */
     @Override
     public Set<Workplace> workplaces(Integer headquartersId, Integer workspaceId) {
         // All permission checks are included
@@ -58,6 +81,15 @@ public class WorkplaceServiceImpl extends BusinessService implements WorkplaceSe
         return this.workplaceRepository.findAllByWorkspace(workspace);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param headquartersId the id of the headquarters of the workspace
+     * @param workspaceId    the id of the workspace
+     * @param workplaceId    the id of the workplace to update
+     * @param updateRequest  the workspace update request
+     * @return the updated workplace
+     */
     @Override
     public Workplace update(Integer headquartersId, Integer workspaceId, Integer workplaceId, UpdateWorkplaceRequestDTO updateRequest) {
         // All permission checks are included
@@ -73,6 +105,13 @@ public class WorkplaceServiceImpl extends BusinessService implements WorkplaceSe
         return this.workplaceRepository.save(toUpdate);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param headquartersId the id of the headquarters of the workspace
+     * @param workspaceId    the id of the workspace
+     * @param workplaceId    the id of the workplace to delete
+     */
     @Override
     public void remove(Integer headquartersId, Integer workspaceId, Integer workplaceId) {
         // All permission checks are included
@@ -81,6 +120,11 @@ public class WorkplaceServiceImpl extends BusinessService implements WorkplaceSe
                 .ifPresent(this::softDelete);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param workspace the workspace of which delete the workplaces
+     */
     @Override
     public void removeAll(Workspace workspace) {
         // Get all the workplaces for the workspace, and soft delete each of them

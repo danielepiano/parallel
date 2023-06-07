@@ -2,12 +2,16 @@ package com.dp.spring.parallel.hephaestus.api.controllers.impl;
 
 import com.dp.spring.parallel.hephaestus.api.controllers.CompanyController;
 import com.dp.spring.parallel.hephaestus.api.dtos.*;
+import com.dp.spring.parallel.hephaestus.database.entities.Company;
+import com.dp.spring.parallel.hephaestus.database.entities.Headquarters;
 import com.dp.spring.parallel.hephaestus.services.CompanyService;
 import com.dp.spring.parallel.hephaestus.services.HeadquartersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Set;
+
+import static java.util.stream.Collectors.toSet;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,23 +21,28 @@ public class CompanyControllerImpl implements CompanyController {
 
 
     @Override
-    public void add(CreateCompanyRequestDTO toAddData) {
-        this.companyService.add(toAddData);
+    public CompanyResponseDTO add(CreateCompanyRequestDTO toAddData) {
+        final Company company = this.companyService.add(toAddData);
+        return CompanyResponseDTO.of(company);
     }
 
     @Override
     public CompanyResponseDTO company(Integer companyId) {
-        return this.companyService.company(companyId);
+        final Company company = this.companyService.company(companyId);
+        return CompanyResponseDTO.of(company);
     }
 
     @Override
     public Set<CompanyResponseDTO> companies() {
-        return this.companyService.companies();
+        return this.companyService.companies().stream()
+                .map(CompanyResponseDTO::of)
+                .collect(toSet());
     }
 
     @Override
-    public void update(Integer companyId, UpdateCompanyRequestDTO updatedData) {
-        this.companyService.update(companyId, updatedData);
+    public CompanyResponseDTO update(Integer companyId, UpdateCompanyRequestDTO updatedData) {
+        final Company company = this.companyService.update(companyId, updatedData);
+        return CompanyResponseDTO.of(company);
     }
 
     @Override
@@ -43,22 +52,26 @@ public class CompanyControllerImpl implements CompanyController {
 
 
     @Override
-    public void addHeadquarters(Integer companyId, CreateHeadquartersRequestDTO toAddData) {
-        this.headquartersService.add(companyId, toAddData);
+    public CompanyHeadquartersResponseDTO addHeadquarters(Integer companyId, CreateHeadquartersRequestDTO toAddData) {
+        final Headquarters headquarters = this.headquartersService.add(companyId, toAddData);
+        return CompanyHeadquartersResponseDTO.of(headquarters);
     }
 
     @Override
     public Set<CompanyHeadquartersResponseDTO> headquarters(Integer companyId) {
-        return this.headquartersService.companyHeadquarters(companyId);
+        return this.headquartersService.companyHeadquarters(companyId).stream()
+                .map(CompanyHeadquartersResponseDTO::of)
+                .collect(toSet());
     }
 
     @Override
-    public void update(
+    public CompanyHeadquartersResponseDTO update(
             final Integer companyId,
             final Integer headquartersId,
             final UpdateHeadquartersRequestDTO updatedData
     ) {
-        this.headquartersService.update(companyId, headquartersId, updatedData);
+        final Headquarters headquarters = this.headquartersService.update(companyId, headquartersId, updatedData);
+        return CompanyHeadquartersResponseDTO.of(headquarters);
     }
 
     @Override

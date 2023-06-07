@@ -4,9 +4,7 @@ import com.dp.spring.parallel.common.exceptions.HeadquartersAlreadyExistsExcepti
 import com.dp.spring.parallel.common.exceptions.HeadquartersNotDeletableException;
 import com.dp.spring.parallel.common.exceptions.HeadquartersNotFoundException;
 import com.dp.spring.parallel.common.services.BusinessService;
-import com.dp.spring.parallel.hephaestus.api.dtos.CompanyHeadquartersResponseDTO;
 import com.dp.spring.parallel.hephaestus.api.dtos.CreateHeadquartersRequestDTO;
-import com.dp.spring.parallel.hephaestus.api.dtos.HeadquartersResponseDTO;
 import com.dp.spring.parallel.hephaestus.api.dtos.UpdateHeadquartersRequestDTO;
 import com.dp.spring.parallel.hephaestus.database.entities.Company;
 import com.dp.spring.parallel.hephaestus.database.entities.Headquarters;
@@ -18,10 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Objects;
 import java.util.Set;
-
-import static java.util.stream.Collectors.toSet;
 
 /**
  * Headquarters operations service implementation.
@@ -35,13 +30,14 @@ public class HeadquartersServiceImpl extends BusinessService implements Headquar
 
 
     /**
-     * Adding a headquarters.
+     * {@inheritDoc}
      *
      * @param companyId the id of the company of the headquarters to add
      * @param toAddData the data of the headquarters to add
+     * @return the created headquarters
      */
     @Override
-    public void add(Integer companyId, CreateHeadquartersRequestDTO toAddData) {
+    public Headquarters add(Integer companyId, CreateHeadquartersRequestDTO toAddData) {
         final Company company = super.getCompanyOrThrow(companyId);
         super.checkPrincipalScopeOrThrow(companyId);
 
@@ -54,61 +50,55 @@ public class HeadquartersServiceImpl extends BusinessService implements Headquar
                 .setFeDescription(toAddData.getFeDescription())
                 .setCompany(company);
 
-        super.headquartersRepository.save(toAdd);
+        return super.headquartersRepository.save(toAdd);
     }
 
     /**
-     * Retrieving a headquarters given its id.
+     * {@inheritDoc}
      *
      * @param headquartersId the id of the headquarters to retrieve
      * @return the headquarters
      */
     @Override
-    public HeadquartersResponseDTO headquarters(Integer headquartersId) {
-        final Headquarters headquarters = super.getResourceOrThrow(
+    public Headquarters headquarters(Integer headquartersId) {
+        return super.getResourceOrThrow(
                 headquartersId,
                 super.headquartersRepository,
                 new HeadquartersNotFoundException(headquartersId)
         );
-        return HeadquartersResponseDTO.of(headquarters);
     }
 
     /**
-     * Retrieving any headquarters of any company.
+     * {@inheritDoc}
      *
      * @return the headquarters
      */
     @Override
-    public Set<HeadquartersResponseDTO> headquarters() {
-        return super.headquartersRepository.findAll().stream()
-                .map(HeadquartersResponseDTO::of)
-                .filter(Objects::nonNull)
-                .collect(toSet());
+    public Set<Headquarters> headquarters() {
+        return Set.copyOf(super.headquartersRepository.findAll());
     }
 
     /**
-     * Retrieving the headquarters of a given company.
+     * {@inheritDoc}
      *
      * @param companyId the id of the company
      * @return the headquarters of the company
      */
     @Override
-    public Set<CompanyHeadquartersResponseDTO> companyHeadquarters(Integer companyId) {
-        return super.headquartersRepository.findAllByCompany(super.getCompanyOrThrow(companyId)).stream()
-                .map(CompanyHeadquartersResponseDTO::of)
-                .filter(Objects::nonNull)
-                .collect(toSet());
+    public Set<Headquarters> companyHeadquarters(Integer companyId) {
+        return super.headquartersRepository.findAllByCompany(super.getCompanyOrThrow(companyId));
     }
 
     /**
-     * Updating a headquarters.
+     * {@inheritDoc}
      *
      * @param companyId      the id of the company of the headquarters to update
      * @param headquartersId the id of the headquarters to update
      * @param updatedData    the new data of the headquarters to update
+     * @return the updated headquarters
      */
     @Override
-    public void update(Integer companyId, Integer headquartersId, UpdateHeadquartersRequestDTO updatedData) {
+    public Headquarters update(Integer companyId, Integer headquartersId, UpdateHeadquartersRequestDTO updatedData) {
         final Headquarters toUpdate = super.getHeadquartersOrThrow(headquartersId, companyId);
         super.checkPrincipalScopeOrThrow(companyId);
 
@@ -119,11 +109,11 @@ public class HeadquartersServiceImpl extends BusinessService implements Headquar
         toUpdate.setPhoneNumber(updatedData.getPhoneNumber());
         toUpdate.setFeDescription(updatedData.getFeDescription());
 
-        super.headquartersRepository.save(toUpdate);
+        return super.headquartersRepository.save(toUpdate);
     }
 
     /**
-     * Removing a headquarters.<br>
+     * {@inheritDoc}
      *
      * @param companyId      the id of the company of the headquarters to delete
      * @param headquartersId the id of the headquarters to delete
@@ -137,7 +127,7 @@ public class HeadquartersServiceImpl extends BusinessService implements Headquar
     }
 
     /**
-     * Removing any headquarters for a given company.<br>
+     * {@inheritDoc}
      *
      * @param company the company to delete the headquarters of
      */

@@ -1,19 +1,50 @@
 package com.dp.spring.parallel.hephaestus.services;
 
-import com.dp.spring.parallel.hephaestus.api.dtos.CompanyResponseDTO;
 import com.dp.spring.parallel.hephaestus.api.dtos.CreateCompanyRequestDTO;
 import com.dp.spring.parallel.hephaestus.api.dtos.UpdateCompanyRequestDTO;
+import com.dp.spring.parallel.hephaestus.database.entities.Company;
 
 import java.util.Set;
 
 public interface CompanyService {
-    void add(CreateCompanyRequestDTO toAddData);
 
-    CompanyResponseDTO company(Integer companyId);
+    /**
+     * Adding a company.
+     *
+     * @param toAddData the data of the company to add
+     * @return the created company
+     */
+    Company add(CreateCompanyRequestDTO toAddData);
 
-    Set<CompanyResponseDTO> companies();
+    /**
+     * Retrieving a company given its id.
+     *
+     * @param companyId the id of the headquarters to retrieve
+     * @return the company
+     */
+    Company company(Integer companyId);
 
-    void update(Integer companyId, UpdateCompanyRequestDTO updatedData);
+    /**
+     * Retrieving any company.
+     *
+     * @return the companies
+     */
+    Set<Company> companies();
 
+    /**
+     * Updating a company.
+     *
+     * @param companyId   the id of the company to update
+     * @param updatedData the new data of the company to update
+     * @return the updated company
+     */
+    Company update(Integer companyId, UpdateCompanyRequestDTO updatedData);
+
+
+    /**
+     * Removing a company.
+     *
+     * @param companyId the id of the company to delete
+     */
     void remove(Integer companyId);
 }

@@ -14,6 +14,7 @@ public interface WorkspaceRepository extends SoftDeleteJpaRepository<Workspace, 
     Set<Workspace> findAllByHeadquarters(Headquarters headquarters);
 
     boolean existsByNameAndHeadquarters(String name, Headquarters headquarters);
+
     boolean existsByIdNotAndNameAndHeadquarters(Integer id, String name, Headquarters headquarters);
 
 }

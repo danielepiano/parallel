@@ -3,7 +3,6 @@ package com.dp.spring.parallel.hephaestus.services.impl;
 import com.dp.spring.parallel.common.exceptions.CompanyAlreadyExistsException;
 import com.dp.spring.parallel.common.exceptions.CompanyNotDeletableException;
 import com.dp.spring.parallel.common.services.BusinessService;
-import com.dp.spring.parallel.hephaestus.api.dtos.CompanyResponseDTO;
 import com.dp.spring.parallel.hephaestus.api.dtos.CreateCompanyRequestDTO;
 import com.dp.spring.parallel.hephaestus.api.dtos.UpdateCompanyRequestDTO;
 import com.dp.spring.parallel.hephaestus.database.entities.Company;
@@ -16,10 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Objects;
 import java.util.Set;
-
-import static java.util.stream.Collectors.toSet;
 
 /**
  * Company operations service implementation.
@@ -34,12 +30,13 @@ public class CompanyServiceImpl extends BusinessService implements CompanyServic
 
 
     /**
-     * Adding a company.
+     * {@inheritDoc}
      *
      * @param toAddData the data of the company to add
+     * @return the created company
      */
     @Override
-    public void add(CreateCompanyRequestDTO toAddData) {
+    public Company add(CreateCompanyRequestDTO toAddData) {
         this.checkCompanyUniquenessOrThrow(toAddData.getName(), toAddData.getCity(), toAddData.getAddress());
 
         final Company toAdd = new Company()
@@ -50,41 +47,39 @@ public class CompanyServiceImpl extends BusinessService implements CompanyServic
                 .setFeDescription(toAddData.getFeDescription())
                 .setWebsiteUrl(toAddData.getWebsiteUrl());
 
-        super.companyRepository.save(toAdd);
+        return super.companyRepository.save(toAdd);
     }
 
     /**
-     * Retrieving a company given its id.
+     * {@inheritDoc}
      *
      * @param companyId the id of the headquarters to retrieve
      * @return the company
      */
     @Override
-    public CompanyResponseDTO company(Integer companyId) {
-        return CompanyResponseDTO.of(super.getCompanyOrThrow(companyId));
+    public Company company(Integer companyId) {
+        return super.getCompanyOrThrow(companyId);
     }
 
     /**
-     * Retrieving any company.
+     * {@inheritDoc}
      *
      * @return the companies
      */
     @Override
-    public Set<CompanyResponseDTO> companies() {
-        return super.companyRepository.findAll().stream()
-                .map(CompanyResponseDTO::of)
-                .filter(Objects::nonNull)
-                .collect(toSet());
+    public Set<Company> companies() {
+        return Set.copyOf(super.companyRepository.findAll());
     }
 
     /**
-     * Updating a company.
+     * {@inheritDoc}
      *
      * @param companyId   the id of the company to update
      * @param updatedData the new data of the company to update
+     * @return the updated company
      */
     @Override
-    public void update(Integer companyId, UpdateCompanyRequestDTO updatedData) {
+    public Company update(Integer companyId, UpdateCompanyRequestDTO updatedData) {
         final Company toUpdate = super.getCompanyOrThrow(companyId);
         super.checkPrincipalScopeOrThrow(companyId);
 
@@ -97,11 +92,11 @@ public class CompanyServiceImpl extends BusinessService implements CompanyServic
         toUpdate.setFeDescription(updatedData.getFeDescription());
         toUpdate.setWebsiteUrl(updatedData.getWebsiteUrl());
 
-        super.companyRepository.save(toUpdate);
+        return super.companyRepository.save(toUpdate);
     }
 
     /**
-     * Removing a company.<br>
+     * {@inheritDoc}<br>
      * If any {@link CompanyManagerUser} still exists for the company, it will not be deleted.<br>
      * Before removing the company, deleting all related headquarters and employees.
      *

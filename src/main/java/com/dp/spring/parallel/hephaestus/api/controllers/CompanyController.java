@@ -16,7 +16,7 @@ public interface CompanyController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @Secured(ROLE_ADMIN_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    void add(
+    CompanyResponseDTO add(
             @RequestBody CreateCompanyRequestDTO toAddData
     );
 
@@ -34,8 +34,7 @@ public interface CompanyController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     @Secured({ROLE_ADMIN_VALUE, ROLE_COMPANY_MANAGER_VALUE})
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    void update(
+    CompanyResponseDTO update(
             @PathVariable("companyId") Integer companyId,
             @RequestBody UpdateCompanyRequestDTO updatedData
     );
@@ -51,7 +50,7 @@ public interface CompanyController {
     @PostMapping(path = "/{companyId}/headquarters", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Secured({ROLE_ADMIN_VALUE, ROLE_COMPANY_MANAGER_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
-    void addHeadquarters(
+    CompanyHeadquartersResponseDTO addHeadquarters(
             @PathVariable("companyId") Integer companyId,
             @RequestBody CreateHeadquartersRequestDTO toAddData
     );
@@ -69,7 +68,7 @@ public interface CompanyController {
     )
     @Secured({ROLE_ADMIN_VALUE, ROLE_COMPANY_MANAGER_VALUE})
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    void update(
+    CompanyHeadquartersResponseDTO update(
             @PathVariable("companyId") Integer companyId,
             @PathVariable("headquartersId") Integer headquartersId,
             @RequestBody UpdateHeadquartersRequestDTO updatedData
