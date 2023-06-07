@@ -60,6 +60,17 @@ public abstract class BusinessService {
     }
 
     /**
+     * Common {@link #getResourceOrThrow(Object, CrudRepository, ResourceNotFoundException)} implementation for a
+     * {@link Headquarters} resource.
+     *
+     * @param headquartersId the id of the headquarters to get
+     * @return the headquarters
+     */
+    public Headquarters getHeadquartersOrThrow(final Integer headquartersId) {
+        return this.getResourceOrThrow(headquartersId, headquartersRepository, new HeadquartersNotFoundException(headquartersId));
+    }
+
+    /**
      * Common method for getting a {@link Headquarters} resource by its id and the id of the related company,
      * otherwise returning a {@link ResourceNotFoundException}.
      *

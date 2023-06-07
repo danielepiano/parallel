@@ -11,6 +11,7 @@ import com.dp.spring.parallel.hephaestus.api.dtos.UpdateHeadquartersRequestDTO;
 import com.dp.spring.parallel.hephaestus.database.entities.Company;
 import com.dp.spring.parallel.hephaestus.database.entities.Headquarters;
 import com.dp.spring.parallel.hephaestus.services.HeadquartersService;
+import com.dp.spring.parallel.hephaestus.services.WorkspaceService;
 import com.dp.spring.parallel.hestia.database.entities.HeadquartersReceptionistUser;
 import com.dp.spring.parallel.hestia.services.HeadquartersReceptionistUserService;
 import lombok.RequiredArgsConstructor;
@@ -23,13 +24,14 @@ import java.util.Set;
 import static java.util.stream.Collectors.toSet;
 
 /**
- * Company operations service implementation.
+ * Headquarters operations service implementation.
  */
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class HeadquartersServiceImpl extends BusinessService implements HeadquartersService {
     private final HeadquartersReceptionistUserService headquartersReceptionistUserService;
+    private final WorkspaceService workspaceService;
 
 
     /**
@@ -150,7 +152,7 @@ public class HeadquartersServiceImpl extends BusinessService implements Headquar
     /**
      * Internal method to soft delete a headquarters.<br>
      * If any {@link HeadquartersReceptionistUser} still exists for the headquarters, it will not be deleted.<br>
-     * Before removing the headquarters, deleting all related headquarters @todo postazioni, prenotazioni ecc.
+     * Before removing the headquarters, deleting all related workspaces.
      *
      * @param toDelete the resource to be deleted
      */
@@ -159,19 +161,26 @@ public class HeadquartersServiceImpl extends BusinessService implements Headquar
         if (!this.headquartersReceptionistUserService.headquartersReceptionistsFor(toDelete).isEmpty()) {
             throw new HeadquartersNotDeletableException(toDelete.getId());
         }
-
-        // @todo soft delete postazioni, prenotazioni ecc.
-
+        this.workspaceService.removeAll(toDelete);
         super.headquartersRepository.softDelete(toDelete);
     }
 
 
+    /**
+     * On creation, checking the headquarters uniqueness amongst company headquarters.
+     *
+     * @param city    the city of the headquarters
+     * @param address the address of the headquarters
+     * @param company the company of the headquarters
+     */
     private void checkHeadquartersUniquenessOrThrow(final String city, final String address, final Company company) {
-        this.checkHeadquartersUniquenessOrThrow(null, city, address, company);
+        if (this.headquartersRepository.existsByCityAndAddressAndCompany(city, address, company)) {
+            throw new HeadquartersAlreadyExistsException(city, address);
+        }
     }
 
     /**
-     * Checking if database unique constraint for the headquarters to create/update is respected.
+     * On update, checking the headquarters uniqueness amongst company headquarters.
      *
      * @param headquartersId the id of the company to update
      * @param city           the city of the headquarters

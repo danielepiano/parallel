@@ -5,12 +5,14 @@ import com.dp.spring.parallel.hephaestus.database.entities.Workspace;
 import com.dp.spring.parallel.hephaestus.database.enums.WorkplaceType;
 import com.dp.spring.parallel.hephaestus.database.enums.WorkspaceType;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Value;
 
 @Builder
 @Value
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class WorkplaceResponseDTO {
     Integer id;
     String name;
@@ -25,9 +27,19 @@ public class WorkplaceResponseDTO {
                 .name(workplace.getName())
                 .description(workplace.getDescription())
                 .type(workplace.getType())
+                .build();
+    }
+
+    public static WorkplaceResponseDTO withWorkspace(final Workplace workplace) {
+        return WorkplaceResponseDTO.builder()
+                .id(workplace.getId())
+                .name(workplace.getName())
+                .description(workplace.getDescription())
+                .type(workplace.getType())
                 .workspace(WorkspaceResponseDTO.of(workplace.getWorkspace()))
                 .build();
     }
+
 
     @Builder
     @Value

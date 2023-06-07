@@ -15,5 +15,7 @@ public interface HeadquartersRepository extends SoftDeleteJpaRepository<Headquar
 
     boolean existsByIdAndCompanyId(Integer id, Integer companyId);
 
+    boolean existsByCityAndAddressAndCompany(String city, String address, Company company);
+
     boolean existsByIdNotAndCityAndAddressAndCompany(Integer id, String city, String address, Company company);
 }

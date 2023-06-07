@@ -5,16 +5,20 @@ import com.dp.spring.parallel.hephaestus.database.entities.Workspace;
 import com.dp.spring.parallel.hephaestus.database.enums.WorkplaceType;
 import com.dp.spring.parallel.hephaestus.database.enums.WorkspaceType;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Value;
 
+import java.util.Collection;
 import java.util.Set;
 
+import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toSet;
 
 @Builder
 @Value
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class WorkspaceResponseDTO {
     Integer id;
     String name;
@@ -47,7 +51,10 @@ public class WorkspaceResponseDTO {
                 .floor(workspace.getFloor())
                 .maxSeats(workspace.getMaxSeats())
                 .workplaces(
-                        workspace.getWorkplaces().stream().map(WorkplaceResponseDTO::of).collect(toSet())
+                        ofNullable(workspace.getWorkplaces()).stream()
+                                .flatMap(Collection::stream)
+                                .map(WorkplaceResponseDTO::of)
+                                .collect(toSet())
                 )
                 .build();
     }

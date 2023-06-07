@@ -124,12 +124,21 @@ public class CompanyServiceImpl extends BusinessService implements CompanyServic
     }
 
 
+    /**
+     * On creation, checking the company uniqueness amongst all companies.
+     *
+     * @param name    the name of the company
+     * @param city    the city of the company
+     * @param address the address of the company
+     */
     private void checkCompanyUniquenessOrThrow(final String name, final String city, final String address) {
-        this.checkCompanyUniquenessOrThrow(null, name, city, address);
+        if (super.companyRepository.existsByNameAndCityAndAddress(name, city, address)) {
+            throw new CompanyAlreadyExistsException(name, city, address);
+        }
     }
 
     /**
-     * Checking if database unique constraint for the company to create/update is respected.
+     * On update, checking the company uniqueness amongst all companies.
      *
      * @param companyId the id of the company to update
      * @param name      the name of the company

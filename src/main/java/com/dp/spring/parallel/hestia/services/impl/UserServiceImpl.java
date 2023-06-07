@@ -23,7 +23,7 @@ import java.util.Map;
 /**
  * {@link UserService} implementation.
  */
-@Service
+@Service("userService")
 @Transactional
 public class UserServiceImpl extends BusinessService implements UserService {
     @Autowired

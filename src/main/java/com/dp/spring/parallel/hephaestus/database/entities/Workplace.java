@@ -17,7 +17,7 @@ import static com.dp.spring.springcore.database.entities.SoftDeletableAuditedEnt
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"name", "workspace_id"}))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"name", "workspace_id", "is_active"}))
 @Entity
 @Where(clause = SOFT_DELETE_CLAUSE)
 public class Workplace extends SoftDeletableAuditedEntity<Integer> {

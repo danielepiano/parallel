@@ -14,6 +14,10 @@ public enum _ExceptionConstants {
     COMPANY_NOT_DELETABLE("BAD-111", "COMPANY NOT DELETABLE", "Couldn't complete the operation: some resource is still attached to the company %s."),
     USER_NOT_DELETABLE("BAD-112", "USER NOT DELETABLE", "Couldn't complete the operation%s."),
     WRONG_PASSWORD("BAD-113", "VALIDATION ERROR", "Couldn't complete the operation: wrong current password."),
+    WORKSPACE_NAME_ALREADY_EXISTS_IN_HEADQUARTERS("BAD-114", "WORKSPACE NAME ALREADY EXISTS IN HEADQUARTERS", "Couldn't complete the operation: name '%s' is already taken for a workspace in headquarters %s."),
+    WORKSPACE_NOT_FOUND("BAD-115", "WORKSPACE NOT FOUND", "Couldn't find workspace for id %s and headquarters %s."),
+    WORKPLACE_NAME_ALREADY_EXISTS_IN_WORKSPACE("BAD-116", "WORKPLACE NAME ALREADY EXISTS IN WORKSPACE", "Couldn't complete the operation: name '%s' is already taken for a workplace in workspace %s."),
+    WORKPLACE_NOT_FOUND("BAD-117", "WORKPLACE NOT FOUND", "Couldn't find workplace for id %s and workspace %s."),
 
 
     FAILURE_SENDING_EMAIL("ISE-101", "FAILURE SENDING EMAIL", "The email has not been sent due to some error."),
