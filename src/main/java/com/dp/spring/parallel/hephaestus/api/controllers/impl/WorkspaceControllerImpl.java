@@ -27,7 +27,7 @@ public class WorkspaceControllerImpl implements WorkspaceController {
             CreateWorkspaceRequestDTO createRequest
     ) {
         final Workspace workspace = this.workspaceService.add(headquartersId, createRequest);
-        return WorkspaceResponseDTO.withWorkplaces(workspace);
+        return WorkspaceResponseDTO.of(workspace);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class WorkspaceControllerImpl implements WorkspaceController {
             Integer workspaceId
     ) {
         final Workspace workspace = this.workspaceService.workspace(headquartersId, workspaceId);
-        return WorkspaceResponseDTO.withWorkplaces(workspace);
+        return WorkspaceResponseDTO.of(workspace);
     }
 
     @Override
@@ -53,7 +53,7 @@ public class WorkspaceControllerImpl implements WorkspaceController {
             UpdateWorkspaceRequestDTO updateRequest
     ) {
         final Workspace workspace = this.workspaceService.update(headquartersId, workspaceId, updateRequest);
-        return WorkspaceResponseDTO.withWorkplaces(workspace);
+        return WorkspaceResponseDTO.of(workspace);
     }
 
     @Override
