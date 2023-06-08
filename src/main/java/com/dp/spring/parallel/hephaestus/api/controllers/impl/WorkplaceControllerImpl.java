@@ -9,9 +9,7 @@ import com.dp.spring.parallel.hephaestus.services.WorkplaceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Set;
-
-import static java.util.stream.Collectors.toSet;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -39,13 +37,13 @@ public class WorkplaceControllerImpl implements WorkplaceController {
     }
 
     @Override
-    public Set<WorkplaceResponseDTO> workplaces(
+    public List<WorkplaceResponseDTO> workplaces(
             Integer headquartersId,
             Integer workspaceId
     ) {
         return this.workplaceService.workplaces(headquartersId, workspaceId).stream()
                 .map(WorkplaceResponseDTO::of)
-                .collect(toSet());
+                .toList();
     }
 
     @Override

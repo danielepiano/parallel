@@ -11,10 +11,11 @@ import com.dp.spring.parallel.hephaestus.database.repositories.WorkplaceReposito
 import com.dp.spring.parallel.hephaestus.services.WorkplaceService;
 import com.dp.spring.parallel.hephaestus.services.WorkspaceService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * Workspace operations service implementation.
@@ -75,10 +76,10 @@ public class WorkplaceServiceImpl extends BusinessService implements WorkplaceSe
      * @return the workplaces
      */
     @Override
-    public Set<Workplace> workplaces(Integer headquartersId, Integer workspaceId) {
+    public List<Workplace> workplaces(Integer headquartersId, Integer workspaceId) {
         // All permission checks are included
         final Workspace workspace = this.workspaceService.workspace(headquartersId, workspaceId);
-        return this.workplaceRepository.findAllByWorkspace(workspace);
+        return this.workplaceRepository.findAllByWorkspace(workspace, Sort.by(Sort.Direction.ASC, "name"));
     }
 
     /**

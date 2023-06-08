@@ -20,8 +20,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.LinkedList;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -100,7 +100,6 @@ public class ELISLoadingRunner implements CommandLineRunner {
                 .setName("Agorà")
                 .setDescription("Ampio spazio di ritrovo, fornito di una serie di postazioni di lavoro.")
                 .setType(WorkspaceType.OPEN_SPACE)
-                .setMaxSeats(20)
                 .setFloor("PT");
     }
 
@@ -110,7 +109,6 @@ public class ELISLoadingRunner implements CommandLineRunner {
                 .setName("Innovation Hub")
                 .setDescription("Ampio open space: qui ha luogo l'innovazione.")
                 .setType(WorkspaceType.OPEN_SPACE)
-                .setMaxSeats(40)
                 .setFloor("PT");
     }
 
@@ -140,14 +138,15 @@ public class ELISLoadingRunner implements CommandLineRunner {
     }
 
 
-    Set<Workplace> wp(Workspace ws, WorkplaceType type, String prefix, int n) {
-        Set<Workplace> wp = new HashSet<>();
-
-        Workplace base = new Workplace().setWorkspace(ws)
-                .setType(type);
+    List<Workplace> wp(Workspace ws, WorkplaceType type, String prefix, int n) {
+        List<Workplace> wp = new LinkedList<>();
 
         for (int i = 0; i < n; i++) {
-            wp.add(base.setName(prefix + i));
+            wp.add(new Workplace()
+                    .setWorkspace(ws)
+                    .setName(prefix + "-" + i)
+                    .setType(type)
+            );
         }
         return wp;
     }

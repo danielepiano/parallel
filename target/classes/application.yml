@@ -17,7 +17,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
-    show-sql: true
+    show-sql: false
 
   #--- MailDev properties ---
   # (this is an email test environment: email are not really sent! check http://localhost:1080 for viewing them )

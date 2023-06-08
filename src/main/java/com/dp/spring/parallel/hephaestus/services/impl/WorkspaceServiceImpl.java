@@ -11,10 +11,11 @@ import com.dp.spring.parallel.hephaestus.database.repositories.WorkspaceReposito
 import com.dp.spring.parallel.hephaestus.services.WorkplaceService;
 import com.dp.spring.parallel.hephaestus.services.WorkspaceService;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * Workspace operations service implementation.
@@ -50,8 +51,7 @@ public class WorkspaceServiceImpl extends BusinessService implements WorkspaceSe
                 .setName(createRequest.getName())
                 .setDescription(createRequest.getDescription())
                 .setType(createRequest.getType())
-                .setFloor(createRequest.getFloor())
-                .setMaxSeats(createRequest.getMaxSeats());
+                .setFloor(createRequest.getFloor());
 
         return this.workspaceRepository.save(toAdd);
     }
@@ -77,9 +77,9 @@ public class WorkspaceServiceImpl extends BusinessService implements WorkspaceSe
      * @return the workspaces
      */
     @Override
-    public Set<Workspace> workspaces(Integer headquartersId) {
+    public List<Workspace> workspaces(Integer headquartersId) {
         final Headquarters headquarters = this.getAndCheckHeadquartersOrThrow(headquartersId);
-        return this.workspaceRepository.findAllByHeadquarters(headquarters);
+        return this.workspaceRepository.findAllByHeadquarters(headquarters, Sort.by(Sort.Direction.ASC, "floor", "name"));
     }
 
     /**
@@ -100,8 +100,7 @@ public class WorkspaceServiceImpl extends BusinessService implements WorkspaceSe
                 .setName(updateRequest.getName())
                 .setDescription(updateRequest.getDescription())
                 .setType(updateRequest.getType())
-                .setFloor(updateRequest.getFloor())
-                .setMaxSeats(updateRequest.getMaxSeats());
+                .setFloor(updateRequest.getFloor());
 
         return this.workspaceRepository.save(toUpdate);
     }

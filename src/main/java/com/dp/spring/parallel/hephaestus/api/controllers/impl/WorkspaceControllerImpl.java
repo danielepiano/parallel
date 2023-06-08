@@ -10,9 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Set;
-
-import static java.util.stream.Collectors.toSet;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -40,10 +38,10 @@ public class WorkspaceControllerImpl implements WorkspaceController {
     }
 
     @Override
-    public Set<WorkspaceResponseDTO> workspaces(Integer headquartersId) {
+    public List<WorkspaceResponseDTO> workspaces(Integer headquartersId) {
         return this.workspaceService.workspaces(headquartersId).stream()
                 .map(WorkspaceResponseDTO::of)
-                .collect(toSet());
+                .toList();
     }
 
     @Override

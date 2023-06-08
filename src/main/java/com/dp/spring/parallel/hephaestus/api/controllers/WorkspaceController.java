@@ -8,7 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Set;
+import java.util.List;
 
 import static com.dp.spring.parallel.hestia.database.enums.UserRole.Constants.ROLE_ADMIN_VALUE;
 import static com.dp.spring.parallel.hestia.database.enums.UserRole.Constants.ROLE_COMPANY_MANAGER_VALUE;
@@ -32,7 +32,7 @@ public interface WorkspaceController {
     );
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    Set<WorkspaceResponseDTO> workspaces(
+    List<WorkspaceResponseDTO> workspaces(
             @PathVariable("headquartersId") Integer headquartersId
     );
 

@@ -39,8 +39,6 @@ public class Workspace extends SoftDeletableAuditedEntity<Integer> {
 
     private String floor;
 
-    private Integer maxSeats;
-
 
     @OneToMany(mappedBy = "workspace", fetch = FetchType.LAZY)
     private Set<Workplace> workplaces;
@@ -55,7 +53,6 @@ public class Workspace extends SoftDeletableAuditedEntity<Integer> {
                 "description = " + description + ", " +
                 "type = " + type + ", " +
                 "floor = " + floor + ", " +
-                "maxSeats = " + maxSeats +
                 ")";
     }
 }

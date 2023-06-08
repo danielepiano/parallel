@@ -5,7 +5,7 @@ import com.dp.spring.parallel.hephaestus.api.dtos.UpdateWorkspaceRequestDTO;
 import com.dp.spring.parallel.hephaestus.database.entities.Headquarters;
 import com.dp.spring.parallel.hephaestus.database.entities.Workspace;
 
-import java.util.Set;
+import java.util.List;
 
 public interface WorkspaceService {
 
@@ -39,7 +39,7 @@ public interface WorkspaceService {
      * @param headquartersId the id of the headquarters
      * @return the workspaces
      */
-    Set<Workspace> workspaces(
+    List<Workspace> workspaces(
             Integer headquartersId
     );
 

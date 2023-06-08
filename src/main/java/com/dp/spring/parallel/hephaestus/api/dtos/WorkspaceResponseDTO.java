@@ -17,7 +17,9 @@ public class WorkspaceResponseDTO {
     String description;
     WorkspaceType type;
     String floor;
-    Integer maxSeats;
+
+    Integer availableWorkplaces;
+    Integer totalWorkplaces;
 
 
     // Used for mapping of collections
@@ -28,7 +30,7 @@ public class WorkspaceResponseDTO {
                 .description(workspace.getDescription())
                 .type(workspace.getType())
                 .floor(workspace.getFloor())
-                .maxSeats(workspace.getMaxSeats())
+                // @todo calculate (pass) available and total workplaces
                 .build();
     }
 
