@@ -44,7 +44,7 @@ public class CompanyServiceImpl extends BusinessService implements CompanyServic
                 .setCity(toAddData.getCity())
                 .setAddress(toAddData.getAddress())
                 .setPhoneNumber(toAddData.getPhoneNumber())
-                .setFeDescription(toAddData.getFeDescription())
+                .setDescription(toAddData.getDescription())
                 .setWebsiteUrl(toAddData.getWebsiteUrl());
 
         return super.companyRepository.save(toAdd);
@@ -89,7 +89,7 @@ public class CompanyServiceImpl extends BusinessService implements CompanyServic
         toUpdate.setCity(updatedData.getCity());
         toUpdate.setAddress(updatedData.getAddress());
         toUpdate.setPhoneNumber(updatedData.getPhoneNumber());
-        toUpdate.setFeDescription(updatedData.getFeDescription());
+        toUpdate.setDescription(updatedData.getDescription());
         toUpdate.setWebsiteUrl(updatedData.getWebsiteUrl());
 
         return super.companyRepository.save(toUpdate);

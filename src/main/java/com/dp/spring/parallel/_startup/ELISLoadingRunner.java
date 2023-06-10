@@ -76,7 +76,7 @@ public class ELISLoadingRunner implements CommandLineRunner {
                 .setCity("Roma")
                 .setAddress("Via Sandro Sandri, 81")
                 .setPhoneNumber("+39 0645924447")
-                .setFeDescription("L'associazione Centro ELIS è un ente non profit che promuove" +
+                .setDescription("L'associazione Centro ELIS è un ente non profit che promuove" +
                         " sviluppo e innovazione nel mondo della formazione e del lavoro, supporta lo sviluppo di start-up in" +
                         " un ecosistema di open-innovation che coinvolge grandi gruppi industriali, università, centri di ricerca" +
                         " e altre istituzioni")
@@ -88,7 +88,7 @@ public class ELISLoadingRunner implements CommandLineRunner {
                 .setCity("Roma")
                 .setAddress("Via Sandro Sandri, 81")
                 .setPhoneNumber("+39 0645924447")
-                .setFeDescription("Sede operativa di ELIS Innovation Hub, qui si realizzano progetti" +
+                .setDescription("ELIS Innovation Hub: qui si realizzano progetti" +
                         " d'innovazione e consulenza aziendale, creando sinergia tra grandi aziende, start-up, università," +
                         " centri di ricerca e giovani.")
                 .setCompany(elis);

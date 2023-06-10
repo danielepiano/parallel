@@ -47,7 +47,7 @@ public class HeadquartersServiceImpl extends BusinessService implements Headquar
                 .setCity(toAddData.getCity())
                 .setAddress(toAddData.getAddress())
                 .setPhoneNumber(toAddData.getPhoneNumber())
-                .setFeDescription(toAddData.getFeDescription())
+                .setDescription(toAddData.getDescription())
                 .setCompany(company);
 
         return super.headquartersRepository.save(toAdd);
@@ -107,7 +107,7 @@ public class HeadquartersServiceImpl extends BusinessService implements Headquar
         toUpdate.setCity(updatedData.getCity());
         toUpdate.setAddress(updatedData.getAddress());
         toUpdate.setPhoneNumber(updatedData.getPhoneNumber());
-        toUpdate.setFeDescription(updatedData.getFeDescription());
+        toUpdate.setDescription(updatedData.getDescription());
 
         return super.headquartersRepository.save(toUpdate);
     }

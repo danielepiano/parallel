@@ -18,5 +18,5 @@ public class UpdateHeadquartersRequestDTO {
     @NotBlank
     String phoneNumber;
 
-    String feDescription;
+    String description;
 }

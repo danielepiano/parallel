@@ -1,0 +1,51 @@
+package com.dp.spring.parallel.ponos.services;
+
+import com.dp.spring.parallel.ponos.api.dtos.WorkplaceBookingRequestDTO;
+import com.dp.spring.parallel.ponos.database.entities.WorkplaceBooking;
+
+public interface WorkplaceBookingService {
+
+    /**
+     * Book a workplace.
+     *
+     * @param workspaceId the id of the workspace to book
+     * @param workplaceId the id of the workplace to book
+     * @param bookRequest the booking request
+     * @return the created booking
+     */
+    WorkplaceBooking book(
+            Integer workspaceId,
+            Integer workplaceId,
+            WorkplaceBookingRequestDTO bookRequest
+    );
+
+    /**
+     * Set the participation of the principal for the given booking.
+     *
+     * @param workspaceId the id of the workspace booked
+     * @param workplaceId the id of the workplace booked
+     * @param bookingId   the id of the booking to update
+     * @return the updated booking
+     */
+    WorkplaceBooking setParticipation(
+            Integer workspaceId,
+            Integer workplaceId,
+            Integer bookingId
+    );
+
+    /**
+     * Cancel a booking.
+     *
+     * @param workspaceId the id of the workspace booked
+     * @param workplaceId the id of the workplace booked
+     * @param bookingId   the id of the booking to cancel
+     */
+    void cancel(
+            Integer workspaceId,
+            Integer workplaceId,
+            Integer bookingId
+    );
+
+
+    // @todo cancelAll ( workplace ) ??
+}

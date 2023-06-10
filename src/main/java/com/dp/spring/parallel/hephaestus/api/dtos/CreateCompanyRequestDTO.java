@@ -21,6 +21,6 @@ public class CreateCompanyRequestDTO {
     @NotBlank
     String phoneNumber;
 
-    String feDescription;
+    String description;
     String websiteUrl;
 }

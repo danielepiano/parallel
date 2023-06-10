@@ -36,9 +36,6 @@ public class Workplace extends SoftDeletableAuditedEntity<Integer> {
     private WorkplaceType type;
 
 
-    // @todo set of workplace bookings
-
-
     @Override
     public String toString() {
         return getClass().getSimpleName() + "(" +

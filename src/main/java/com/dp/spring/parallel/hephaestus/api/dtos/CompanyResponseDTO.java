@@ -16,7 +16,7 @@ public class CompanyResponseDTO {
     String address;
     String phoneNumber;
 
-    String feDescription;
+    String description;
     String websiteUrl;
 
 
@@ -27,7 +27,7 @@ public class CompanyResponseDTO {
                 .city(company.getCity())
                 .address(company.getAddress())
                 .phoneNumber(company.getPhoneNumber())
-                .feDescription(company.getFeDescription())
+                .description(company.getDescription())
                 .websiteUrl(company.getWebsiteUrl())
                 .build();
     }

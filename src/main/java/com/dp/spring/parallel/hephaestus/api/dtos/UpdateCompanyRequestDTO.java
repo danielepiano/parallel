@@ -21,6 +21,6 @@ public class UpdateCompanyRequestDTO {
     @NotBlank
     String phoneNumber;
 
-    String feDescription;
+    String description;
     String websiteUrl;
 }

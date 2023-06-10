@@ -31,7 +31,7 @@ public class Headquarters extends SoftDeletableAuditedEntity<Integer> {
     private String phoneNumber;
 
     @Column(columnDefinition = "text")
-    private String feDescription;
+    private String description;
 
     @ManyToOne
     @JoinColumn(name = "company_id", nullable = false)
@@ -51,7 +51,7 @@ public class Headquarters extends SoftDeletableAuditedEntity<Integer> {
                 "city = " + city + ", " +
                 "address = " + address + ", " +
                 "phoneNumber = " + phoneNumber + ", " +
-                "feDescription = " + feDescription + ", " +
+                "description = " + description + ", " +
                 "companyId = " + company.getId() +
                 ")";
     }

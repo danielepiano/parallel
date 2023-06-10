@@ -35,7 +35,7 @@ public class Company extends SoftDeletableAuditedEntity<Integer> {
     private String phoneNumber;
 
     @Column(columnDefinition = "text")
-    private String feDescription;
+    private String description;
 
     private String websiteUrl;
 
@@ -57,7 +57,7 @@ public class Company extends SoftDeletableAuditedEntity<Integer> {
                 "city = " + city + ", " +
                 "address = " + address + ", " +
                 "phoneNumber = " + phoneNumber + ", " +
-                "feDescription = " + feDescription +
+                "description = " + description +
                 ")";
     }
 }

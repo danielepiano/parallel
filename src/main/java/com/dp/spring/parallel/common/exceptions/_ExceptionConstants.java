@@ -18,6 +18,11 @@ public enum _ExceptionConstants {
     WORKSPACE_NOT_FOUND("BAD-115", "WORKSPACE NOT FOUND", "Couldn't find workspace for id %s and headquarters %s."),
     WORKPLACE_NAME_ALREADY_EXISTS_IN_WORKSPACE("BAD-116", "WORKPLACE NAME ALREADY EXISTS IN WORKSPACE", "Couldn't complete the operation: name '%s' is already taken for a workplace in workspace %s."),
     WORKPLACE_NOT_FOUND("BAD-117", "WORKPLACE NOT FOUND", "Couldn't find workplace for id %s and workspace %s."),
+    WORKPLACE_BOOKING_NOT_FOUND("BAD-118", "WORKPLACE BOOKING NOT FOUND", "Couldn't find booking for id %s and workplace %s."),
+    WORKPLACE_NOT_AVAILABLE_FOR_BOOKING("BAD-119", "WORKPLACE NOT AVAILABLE FOR BOOKING", "Couldn't complete the operation: workplace %s is already reserved on date %s."),
+    WORKPLACE_BOOKING_ALREADY_EXISTS_FOR_WORKER("BAD-120", "WORKPLACE BOOKING ALREADY EXIST FOR WORKER", "Couldn't complete the operation: worker %s has already booked a workplace on date %s."),
+    WORKPLACE_BOOKING_PARTICIPATION_NOT_SETTABLE("BAD-121", "WORKPLACE BOOKING PARTICIPATION NOT SETTABLE", "Couldn't complete the operation: participation only settable on booking date %s."),
+    WORKPLACE_BOOKING_CANCELLATION_NOT_VALID("BAD-122", "WORKPLACE BOOKING CANCELLATION NOT VALID", "Couldn't complete the operation: cancellation only possible before booking date %s."),
 
 
     FAILURE_SENDING_EMAIL("ISE-101", "FAILURE SENDING EMAIL", "The email has not been sent due to some error."),

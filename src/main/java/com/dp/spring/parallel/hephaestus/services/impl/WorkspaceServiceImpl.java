@@ -80,6 +80,7 @@ public class WorkspaceServiceImpl extends BusinessService implements WorkspaceSe
     public List<Workspace> workspaces(Integer headquartersId) {
         final Headquarters headquarters = this.getAndCheckHeadquartersOrThrow(headquartersId);
         return this.workspaceRepository.findAllByHeadquarters(headquarters, Sort.by(Sort.Direction.ASC, "floor", "name"));
+        // @todo calculate available and total workplaces (anche per gli altri metodi qui) : metodo da workplaceService -> Pair.(av, tot)
     }
 
     /**
@@ -114,6 +115,7 @@ public class WorkspaceServiceImpl extends BusinessService implements WorkspaceSe
     @Override
     public void remove(Integer headquartersId, Integer workspaceId) {
         final Headquarters headquarters = this.getAndCheckHeadquartersOrThrow(headquartersId);
+        super.checkPrincipalScopeOrThrow(headquarters.getCompany().getId());
         this.workspaceRepository.findByIdAndHeadquarters(workspaceId, headquarters)
                 .ifPresent(this::softDelete);
     }

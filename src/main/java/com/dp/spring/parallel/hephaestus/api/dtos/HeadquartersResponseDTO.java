@@ -16,7 +16,7 @@ public class HeadquartersResponseDTO {
     String address;
     String phoneNumber;
 
-    String feDescription;
+    String description;
 
 
     public static HeadquartersResponseDTO of(final Headquarters headquarters) {
@@ -26,7 +26,7 @@ public class HeadquartersResponseDTO {
                 .city(headquarters.getCity())
                 .address(headquarters.getAddress())
                 .phoneNumber(headquarters.getPhoneNumber())
-                .feDescription(headquarters.getFeDescription())
+                .description(headquarters.getDescription())
                 .build();
     }
 }
