@@ -1,5 +1,6 @@
 package com.dp.spring.parallel.hephaestus.database.repositories;
 
+import com.dp.spring.parallel.hephaestus.database.entities.Headquarters;
 import com.dp.spring.parallel.hephaestus.database.entities.Workplace;
 import com.dp.spring.parallel.hephaestus.database.entities.Workspace;
 import com.dp.spring.springcore.database.repositories.SoftDeleteJpaRepository;
@@ -20,5 +21,7 @@ public interface WorkplaceRepository extends SoftDeleteJpaRepository<Workplace, 
     boolean existsByNameAndWorkspace(String name, Workspace workspace);
 
     boolean existsByIdNotAndNameAndWorkspace(Integer id, String name, Workspace workspace);
+
+    long countByWorkspaceHeadquarters(Headquarters headquarters);
 
 }

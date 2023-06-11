@@ -2,6 +2,7 @@ package com.dp.spring.parallel.hephaestus.services;
 
 import com.dp.spring.parallel.hephaestus.api.dtos.CreateWorkplaceRequestDTO;
 import com.dp.spring.parallel.hephaestus.api.dtos.UpdateWorkplaceRequestDTO;
+import com.dp.spring.parallel.hephaestus.database.entities.Headquarters;
 import com.dp.spring.parallel.hephaestus.database.entities.Workplace;
 import com.dp.spring.parallel.hephaestus.database.entities.Workspace;
 
@@ -86,5 +87,14 @@ public interface WorkplaceService {
     void removeAll(
             Workspace workspace
     );
+
+
+    /**
+     * Counting the number of workplaces for a given headquarters.
+     *
+     * @param headquarters the headquarters to count the workplaces of
+     * @return the number of workplaces
+     */
+    long countForHeadquarters(Headquarters headquarters);
 
 }

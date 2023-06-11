@@ -6,8 +6,6 @@ import com.dp.spring.parallel.hephaestus.database.entities.Workplace;
 import com.dp.spring.parallel.hephaestus.database.entities.Workspace;
 import com.dp.spring.parallel.hephaestus.database.repositories.WorkplaceRepository;
 import com.dp.spring.parallel.hephaestus.database.repositories.WorkspaceRepository;
-import com.dp.spring.parallel.hephaestus.services.WorkplaceService;
-import com.dp.spring.parallel.hephaestus.services.WorkspaceService;
 import com.dp.spring.parallel.hestia.database.entities.HeadquartersReceptionistUser;
 import com.dp.spring.parallel.hestia.database.entities.User;
 import com.dp.spring.parallel.ponos.api.dtos.WorkplaceBookingRequestDTO;
@@ -31,8 +29,6 @@ import java.util.Objects;
 @Transactional
 @RequiredArgsConstructor
 public class WorkplaceBookingServiceImpl extends BusinessService implements WorkplaceBookingService {
-    private final WorkspaceService workspaceService;
-    private final WorkplaceService workplaceService;
 
     private final WorkspaceRepository workspaceRepository;
     private final WorkplaceRepository workplaceRepository;
@@ -121,7 +117,16 @@ public class WorkplaceBookingServiceImpl extends BusinessService implements Work
     }
 
 
-    // @todo cancelAllFutureBookings
+    /**
+     * {@inheritDoc}
+     *
+     * @param workplace the workplace to cancel the booking of
+     */
+    public void cancelAll(Workplace workplace) {
+        // Get all the bookings for the workplace, and soft delete each of them
+        this.workplaceBookingRepository.findAllByWorkplace(workplace)
+                .forEach(workplaceBookingRepository::softDelete);
+    }
 
 
     /**
@@ -174,30 +179,6 @@ public class WorkplaceBookingServiceImpl extends BusinessService implements Work
         if (!LocalDate.now().isBefore(booking.getBookingDate())) {
             throw new WorkplaceBookingCancellationNotValidException(booking.getBookingDate());
         }
-    }
-
-
-    /**
-     * {@inheritDoc}
-     *
-     * @param workspace the workspace of which delete the workplaces
-     */
-    public void removeAll(Workspace workspace) {
-        // Get all the workplaces for the workspace, and soft delete each of them
-        this.workplaceRepository.findAllByWorkspace(workspace)
-                .forEach(this::softDelete);
-    }
-
-    /**
-     * Internal method to soft delete a workspace.<br>
-     * Before removing the workplace, removing all the related future bookings.
-     *
-     * @param toDelete the workplace to be deleted
-     */
-    private void softDelete(final Workplace toDelete) {
-        // @todo soft delete booking - removeAllFuture(workplace)
-
-        this.workplaceRepository.softDelete(toDelete);
     }
 
 }

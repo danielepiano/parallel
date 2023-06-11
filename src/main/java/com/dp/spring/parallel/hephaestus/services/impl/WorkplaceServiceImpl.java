@@ -5,11 +5,13 @@ import com.dp.spring.parallel.common.exceptions.WorkplaceNotFoundException;
 import com.dp.spring.parallel.common.services.BusinessService;
 import com.dp.spring.parallel.hephaestus.api.dtos.CreateWorkplaceRequestDTO;
 import com.dp.spring.parallel.hephaestus.api.dtos.UpdateWorkplaceRequestDTO;
+import com.dp.spring.parallel.hephaestus.database.entities.Headquarters;
 import com.dp.spring.parallel.hephaestus.database.entities.Workplace;
 import com.dp.spring.parallel.hephaestus.database.entities.Workspace;
 import com.dp.spring.parallel.hephaestus.database.repositories.WorkplaceRepository;
 import com.dp.spring.parallel.hephaestus.services.WorkplaceService;
 import com.dp.spring.parallel.hephaestus.services.WorkspaceService;
+import com.dp.spring.parallel.ponos.services.WorkplaceBookingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WorkplaceServiceImpl extends BusinessService implements WorkplaceService {
     private final WorkspaceService workspaceService;
+    private final WorkplaceBookingService workplaceBookingService;
 
     private final WorkplaceRepository workplaceRepository;
 
@@ -135,6 +138,17 @@ public class WorkplaceServiceImpl extends BusinessService implements WorkplaceSe
 
 
     /**
+     * {@inheritDoc}
+     *
+     * @param headquarters the headquarters to count the workplaces of
+     * @return the number of workplaces
+     */
+    @Override
+    public long countForHeadquarters(Headquarters headquarters) {
+        return this.workplaceRepository.countByWorkspaceHeadquarters(headquarters);
+    }
+
+    /**
      * On creation, checking the workplace name uniqueness amongst workspace workplaces.
      *
      * @param name      the name of the workplace to check
@@ -162,14 +176,13 @@ public class WorkplaceServiceImpl extends BusinessService implements WorkplaceSe
 
 
     /**
-     * Internal method to soft delete a workspace.<br>
-     * Before removing the workplace, removing all the related future bookings.
+     * Internal method to soft delete a workplace.<br>
+     * Before removing the workplace, removing all the related bookings.
      *
      * @param toDelete the workplace to be deleted
      */
     private void softDelete(final Workplace toDelete) {
-        // @todo soft delete booking - removeAllFuture(workplace)
-
+        this.workplaceBookingService.cancelAll(toDelete);
         this.workplaceRepository.softDelete(toDelete);
     }
 

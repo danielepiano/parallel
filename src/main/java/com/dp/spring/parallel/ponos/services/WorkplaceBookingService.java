@@ -1,12 +1,13 @@
 package com.dp.spring.parallel.ponos.services;
 
+import com.dp.spring.parallel.hephaestus.database.entities.Workplace;
 import com.dp.spring.parallel.ponos.api.dtos.WorkplaceBookingRequestDTO;
 import com.dp.spring.parallel.ponos.database.entities.WorkplaceBooking;
 
 public interface WorkplaceBookingService {
 
     /**
-     * Book a workplace.
+     * Booking a workplace.
      *
      * @param workspaceId the id of the workspace to book
      * @param workplaceId the id of the workplace to book
@@ -20,7 +21,7 @@ public interface WorkplaceBookingService {
     );
 
     /**
-     * Set the participation of the principal for the given booking.
+     * Setting the participation of the principal for the given booking.
      *
      * @param workspaceId the id of the workspace booked
      * @param workplaceId the id of the workplace booked
@@ -34,7 +35,7 @@ public interface WorkplaceBookingService {
     );
 
     /**
-     * Cancel a booking.
+     * Cancelling a booking.
      *
      * @param workspaceId the id of the workspace booked
      * @param workplaceId the id of the workplace booked
@@ -47,5 +48,10 @@ public interface WorkplaceBookingService {
     );
 
 
-    // @todo cancelAll ( workplace ) ??
+    /**
+     * Cancelling all bookings for a given workplace.
+     *
+     * @param workplace the workplace to cancel the booking of
+     */
+    void cancelAll(Workplace workplace);
 }

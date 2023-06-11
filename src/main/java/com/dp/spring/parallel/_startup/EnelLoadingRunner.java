@@ -69,7 +69,7 @@ public class EnelLoadingRunner implements CommandLineRunner {
     Headquarters enelmilano(Company enel) {
         return new Headquarters()
                 .setCity("Milano")
-                .setAddress("Via Giosué Carducci Sandri, 1")
+                .setAddress("Via Giosué Carducci, 1")
                 .setPhoneNumber("+39 0664511012")
                 .setDescription("Enel Milano Carducci è uno spazio accogliente, moderno, informale." +
                         " Un posto in cui sentirti libero di esporre idee e creatività, far conoscere il tuo lavoro e" +

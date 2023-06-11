@@ -7,10 +7,13 @@ import com.dp.spring.springcore.database.repositories.SoftDeleteJpaRepository;
 
 import java.time.LocalDate;
 import java.util.Optional;
+import java.util.Set;
 
 public interface WorkplaceBookingRepository extends SoftDeleteJpaRepository<WorkplaceBooking, Integer> {
 
     Optional<WorkplaceBooking> findByIdAndWorkplace(Integer id, Workplace workplace);
+
+    Set<WorkplaceBooking> findAllByWorkplace(Workplace workplace);
 
     long countAllByWorkerAndBookingDate(User worker, LocalDate bookingDate);
 

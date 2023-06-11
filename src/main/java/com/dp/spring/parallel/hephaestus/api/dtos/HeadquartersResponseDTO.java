@@ -18,8 +18,10 @@ public class HeadquartersResponseDTO {
 
     String description;
 
+    long totalWorkplaces;
 
-    public static HeadquartersResponseDTO of(final Headquarters headquarters) {
+
+    public static HeadquartersResponseDTO of(final long totalWorkplaces, final Headquarters headquarters) {
         return HeadquartersResponseDTO.builder()
                 .id(headquarters.getId())
                 .company(CompanyResponseDTO.of(headquarters.getCompany()))
@@ -27,6 +29,7 @@ public class HeadquartersResponseDTO {
                 .address(headquarters.getAddress())
                 .phoneNumber(headquarters.getPhoneNumber())
                 .description(headquarters.getDescription())
+                .totalWorkplaces(totalWorkplaces)
                 .build();
     }
 }

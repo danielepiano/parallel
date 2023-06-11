@@ -47,22 +47,18 @@ public class ELISLoadingRunner implements CommandLineRunner {
         var eih = this.headquartersRepository.save(eih(elis));
 
         var agora = this.workspaceRepository.save(ws_agora(eih));
-        this.workplaceRepository.saveAll(wp(agora, WorkplaceType.BOX, "BOX", 4));
-        this.workplaceRepository.saveAll(wp(agora, WorkplaceType.DESK, "D", 10));
+        this.workplaceRepository.saveAll(wp(agora, WorkplaceType.BOX, "BOX", 3));
+        this.workplaceRepository.saveAll(wp(agora, WorkplaceType.DESK, "D", 4));
         this.workplaceRepository.saveAll(wp(agora, WorkplaceType.DESK, "SD", 1));
 
-        var innovationhub = this.workspaceRepository.save(ws_innovationhub(eih));
-        this.workplaceRepository.saveAll(wp(innovationhub, WorkplaceType.DESK, "D", 40));
+        var palestra = this.workspaceRepository.save(ws_palestra(eih));
+        this.workplaceRepository.saveAll(wp(palestra, WorkplaceType.DESK, "D", 20));
 
         var ciscomeetingroom = this.workspaceRepository.save(ws_ciscomeetingroom(eih));
-        this.workplaceRepository.saveAll(wp(ciscomeetingroom, WorkplaceType.DESK, "P", 8));
+        this.workplaceRepository.saveAll(wp(ciscomeetingroom, WorkplaceType.DESK, "P", 4));
 
         var ufficioA = this.workspaceRepository.save(ws_ufficioA(eih));
-        this.workplaceRepository.saveAll(wp(ufficioA, WorkplaceType.DESK, "P", 3));
-
-        var ufficioB = this.workspaceRepository.save(ws_ufficioB(eih));
-        this.workplaceRepository.saveAll(wp(ufficioB, WorkplaceType.DESK, "P", 6));
-
+        this.workplaceRepository.saveAll(wp(ufficioA, WorkplaceType.DESK, "P", 2));
 
         // User definition
         var cm1 = this.userRepository.save(cm1(elis));
@@ -88,9 +84,11 @@ public class ELISLoadingRunner implements CommandLineRunner {
                 .setCity("Roma")
                 .setAddress("Via Sandro Sandri, 81")
                 .setPhoneNumber("+39 0645924447")
-                .setDescription("ELIS Innovation Hub: qui si realizzano progetti" +
-                        " d'innovazione e consulenza aziendale, creando sinergia tra grandi aziende, start-up, università," +
-                        " centri di ricerca e giovani.")
+                .setDescription("ELIS è l’agorà che mette insieme persone ispirate da ideali quali" +
+                        " Innovazione Sociale, Benessere e Sostenibilità. Concepiamo il lavoro come emancipazione" +
+                        " personale, progetto di vita e opportunità per mettersi al servizio degli altri." +
+                        "Ci rivolgiamo ai giovani, professionisti e imprese con l’obiettivo di costruire insieme" +
+                        " progetti di innovazione e attività di sviluppo sostenibile.")
                 .setCompany(elis);
     }
 
@@ -103,7 +101,7 @@ public class ELISLoadingRunner implements CommandLineRunner {
                 .setFloor("PT");
     }
 
-    Workspace ws_innovationhub(Headquarters eih) {
+    Workspace ws_palestra(Headquarters eih) {
         return new Workspace()
                 .setHeadquarters(eih)
                 .setName("Innovation Hub")
@@ -126,15 +124,7 @@ public class ELISLoadingRunner implements CommandLineRunner {
                 .setHeadquarters(eih)
                 .setName("Ufficio A")
                 .setType(WorkspaceType.PRIVATE_OFFICE)
-                .setFloor("P1");
-    }
-
-    Workspace ws_ufficioB(Headquarters eih) {
-        return new Workspace()
-                .setHeadquarters(eih)
-                .setName("Ufficio B")
-                .setType(WorkspaceType.PRIVATE_OFFICE)
-                .setFloor("P1");
+                .setFloor("PT");
     }
 
 

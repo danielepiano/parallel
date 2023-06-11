@@ -6,7 +6,9 @@ import com.dp.spring.parallel.hephaestus.database.entities.Company;
 import com.dp.spring.parallel.hephaestus.database.entities.Headquarters;
 import com.dp.spring.parallel.hephaestus.services.CompanyService;
 import com.dp.spring.parallel.hephaestus.services.HeadquartersService;
+import com.dp.spring.parallel.hephaestus.services.WorkplaceService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Set;
@@ -15,9 +17,11 @@ import static java.util.stream.Collectors.toSet;
 
 @RestController
 @RequiredArgsConstructor
+@Transactional
 public class CompanyControllerImpl implements CompanyController {
     private final CompanyService companyService;
     private final HeadquartersService headquartersService;
+    private final WorkplaceService workplaceService;
 
 
     @Override
@@ -54,13 +58,17 @@ public class CompanyControllerImpl implements CompanyController {
     @Override
     public CompanyHeadquartersResponseDTO addHeadquarters(Integer companyId, CreateHeadquartersRequestDTO toAddData) {
         final Headquarters headquarters = this.headquartersService.add(companyId, toAddData);
-        return CompanyHeadquartersResponseDTO.of(headquarters);
+        final long totalWorkplaces = this.workplaceService.countForHeadquarters(headquarters);
+        return CompanyHeadquartersResponseDTO.of(totalWorkplaces, headquarters);
     }
 
     @Override
     public Set<CompanyHeadquartersResponseDTO> headquarters(Integer companyId) {
         return this.headquartersService.companyHeadquarters(companyId).stream()
-                .map(CompanyHeadquartersResponseDTO::of)
+                .map(headquarters -> {
+                    long totalWorkplaces = this.workplaceService.countForHeadquarters(headquarters);
+                    return CompanyHeadquartersResponseDTO.of(totalWorkplaces, headquarters);
+                })
                 .collect(toSet());
     }
 
@@ -71,7 +79,8 @@ public class CompanyControllerImpl implements CompanyController {
             final UpdateHeadquartersRequestDTO updatedData
     ) {
         final Headquarters headquarters = this.headquartersService.update(companyId, headquartersId, updatedData);
-        return CompanyHeadquartersResponseDTO.of(headquarters);
+        final long totalWorkplaces = this.workplaceService.countForHeadquarters(headquarters);
+        return CompanyHeadquartersResponseDTO.of(totalWorkplaces, headquarters);
     }
 
     @Override
