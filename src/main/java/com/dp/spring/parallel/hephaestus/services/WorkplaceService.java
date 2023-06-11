@@ -5,7 +5,9 @@ import com.dp.spring.parallel.hephaestus.api.dtos.UpdateWorkplaceRequestDTO;
 import com.dp.spring.parallel.hephaestus.database.entities.Headquarters;
 import com.dp.spring.parallel.hephaestus.database.entities.Workplace;
 import com.dp.spring.parallel.hephaestus.database.entities.Workspace;
+import org.springframework.data.util.Pair;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface WorkplaceService {
@@ -96,5 +98,15 @@ public interface WorkplaceService {
      * @return the number of workplaces
      */
     long countForHeadquarters(Headquarters headquarters);
+
+
+    /**
+     * Counting available and total workplaces for a given workspace.
+     *
+     * @param workspace the workspace to count available and total workplaces
+     * @param date the date to check availability on
+     * @return the number of available workplaces and the number of total workplaces
+     */
+    Pair<Long, Long> countAvailableOnTotal(Workspace workspace, LocalDate date);
 
 }

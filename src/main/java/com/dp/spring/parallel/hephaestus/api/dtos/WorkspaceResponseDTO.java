@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Value;
+import org.springframework.data.util.Pair;
 
 @Builder
 @Value
@@ -18,11 +19,10 @@ public class WorkspaceResponseDTO {
     WorkspaceType type;
     String floor;
 
-    Integer availableWorkplaces;
-    Integer totalWorkplaces;
+    Long availableWorkplaces;
+    Long totalWorkplaces;
 
 
-    // Used for mapping of collections
     public static WorkspaceResponseDTO of(final Workspace workspace) {
         return WorkspaceResponseDTO.builder()
                 .id(workspace.getId())
@@ -30,7 +30,21 @@ public class WorkspaceResponseDTO {
                 .description(workspace.getDescription())
                 .type(workspace.getType())
                 .floor(workspace.getFloor())
-                // @todo calculate (pass) available and total workplaces
+                .build();
+    }
+
+    public static WorkspaceResponseDTO of(
+            final Workspace workspace,
+            final Pair<Long, Long> availableOnTotalWorkplaces
+    ) {
+        return WorkspaceResponseDTO.builder()
+                .id(workspace.getId())
+                .name(workspace.getName())
+                .description(workspace.getDescription())
+                .type(workspace.getType())
+                .floor(workspace.getFloor())
+                .availableWorkplaces(availableOnTotalWorkplaces.getFirst())
+                .totalWorkplaces(availableOnTotalWorkplaces.getSecond())
                 .build();
     }
 

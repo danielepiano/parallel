@@ -54,4 +54,5 @@ public interface WorkplaceBookingService {
      * @param workplace the workplace to cancel the booking of
      */
     void cancelAll(Workplace workplace);
+
 }

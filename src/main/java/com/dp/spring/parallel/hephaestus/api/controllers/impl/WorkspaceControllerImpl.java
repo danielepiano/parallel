@@ -5,11 +5,14 @@ import com.dp.spring.parallel.hephaestus.api.dtos.CreateWorkspaceRequestDTO;
 import com.dp.spring.parallel.hephaestus.api.dtos.UpdateWorkspaceRequestDTO;
 import com.dp.spring.parallel.hephaestus.api.dtos.WorkspaceResponseDTO;
 import com.dp.spring.parallel.hephaestus.database.entities.Workspace;
+import com.dp.spring.parallel.hephaestus.services.WorkplaceService;
 import com.dp.spring.parallel.hephaestus.services.WorkspaceService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.util.Pair;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -17,6 +20,7 @@ import java.util.List;
 @Transactional
 public class WorkspaceControllerImpl implements WorkspaceController {
     private final WorkspaceService workspaceService;
+    private final WorkplaceService workplaceService;
 
 
     @Override
@@ -38,9 +42,13 @@ public class WorkspaceControllerImpl implements WorkspaceController {
     }
 
     @Override
-    public List<WorkspaceResponseDTO> workspaces(Integer headquartersId) {
+    public List<WorkspaceResponseDTO> workspaces(Integer headquartersId, LocalDate bookingDate) {
         return this.workspaceService.workspaces(headquartersId).stream()
-                .map(WorkspaceResponseDTO::of)
+                .map(workspace -> {
+                    Pair<Long, Long> availableOnTotalWorkplaces = this.workplaceService
+                            .countAvailableOnTotal(workspace, bookingDate);
+                    return WorkspaceResponseDTO.of(workspace, availableOnTotalWorkplaces);
+                })
                 .toList();
     }
 

@@ -5,7 +5,9 @@ import com.dp.spring.parallel.hephaestus.database.entities.Workplace;
 import com.dp.spring.parallel.hephaestus.database.entities.Workspace;
 import com.dp.spring.springcore.database.repositories.SoftDeleteJpaRepository;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -23,5 +25,11 @@ public interface WorkplaceRepository extends SoftDeleteJpaRepository<Workplace, 
     boolean existsByIdNotAndNameAndWorkspace(Integer id, String name, Workspace workspace);
 
     long countByWorkspaceHeadquarters(Headquarters headquarters);
+
+    long countByWorkspace(Workspace workspace);
+
+    @Query("select count(wp) from Workplace wp join WorkplaceBooking b on b.workplace = wp" +
+            " where b.bookingDate = ?2 and wp.workspace = ?1")
+    long countNotAvailableByWorkspaceAndBookingDate(Workspace workspace, LocalDate bookingDate);
 
 }

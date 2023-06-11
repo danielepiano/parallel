@@ -65,7 +65,7 @@ public class WorkspaceServiceImpl extends BusinessService implements WorkspaceSe
      */
     @Override
     public Workspace workspace(Integer headquartersId, Integer workspaceId) {
-        final Headquarters headquarters = this.getAndCheckHeadquartersOrThrow(headquartersId);
+        final Headquarters headquarters = super.getHeadquartersOrThrow(headquartersId);
         return this.workspaceRepository.findByIdAndHeadquarters(workspaceId, headquarters)
                 .orElseThrow(() -> new WorkspaceNotFoundException(workspaceId, headquartersId));
     }
@@ -78,9 +78,8 @@ public class WorkspaceServiceImpl extends BusinessService implements WorkspaceSe
      */
     @Override
     public List<Workspace> workspaces(Integer headquartersId) {
-        final Headquarters headquarters = this.getAndCheckHeadquartersOrThrow(headquartersId);
+        final Headquarters headquarters = super.getHeadquartersOrThrow(headquartersId);
         return this.workspaceRepository.findAllByHeadquarters(headquarters, Sort.by(Sort.Direction.ASC, "floor", "name"));
-        // @todo calculate available and total workplaces (anche per gli altri metodi qui) : metodo da workplaceService -> Pair.(av, tot)
     }
 
     /**

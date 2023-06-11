@@ -14,9 +14,11 @@ import com.dp.spring.parallel.hephaestus.services.WorkspaceService;
 import com.dp.spring.parallel.ponos.services.WorkplaceBookingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -147,6 +149,22 @@ public class WorkplaceServiceImpl extends BusinessService implements WorkplaceSe
     public long countForHeadquarters(Headquarters headquarters) {
         return this.workplaceRepository.countByWorkspaceHeadquarters(headquarters);
     }
+
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param workspace the workspace to count available and total workplaces of
+     * @param date      the date to check availability on
+     * @return the number of available workplaces and the number of total workplaces
+     */
+    @Override
+    public Pair<Long, Long> countAvailableOnTotal(Workspace workspace, LocalDate date) {
+        final long bookedWorkplaces = this.workplaceRepository.countNotAvailableByWorkspaceAndBookingDate(workspace, date);
+        final long totalWorkplaces = this.workplaceRepository.countByWorkspace(workspace);
+        return Pair.of(totalWorkplaces - bookedWorkplaces, totalWorkplaces);
+    }
+
 
     /**
      * On creation, checking the workplace name uniqueness amongst workspace workplaces.
