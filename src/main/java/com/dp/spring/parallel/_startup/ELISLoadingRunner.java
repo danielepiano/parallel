@@ -11,6 +11,7 @@ import com.dp.spring.parallel.hephaestus.database.repositories.HeadquartersRepos
 import com.dp.spring.parallel.hephaestus.database.repositories.WorkplaceRepository;
 import com.dp.spring.parallel.hephaestus.database.repositories.WorkspaceRepository;
 import com.dp.spring.parallel.hestia.database.entities.CompanyManagerUser;
+import com.dp.spring.parallel.hestia.database.entities.EmployeeUser;
 import com.dp.spring.parallel.hestia.database.entities.HeadquartersReceptionistUser;
 import com.dp.spring.parallel.hestia.database.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -63,6 +64,7 @@ public class ELISLoadingRunner implements CommandLineRunner {
         // User definition
         var cm1 = this.userRepository.save(cm1(elis));
         var hqr1 = this.userRepository.save(hqr1(eih));
+        var dev = this.userRepository.save(dev(elis));
     }
 
 
@@ -167,6 +169,21 @@ public class ELISLoadingRunner implements CommandLineRunner {
                 .email("m.rossi@elis.org")
                 .password(this.passwordEncoder.encode("receptionist"))
                 .headquarters(eih)
+                .build();
+    }
+
+    EmployeeUser dev(Company elis) {
+        return EmployeeUser.builder()
+                .firstName("Developer")
+                .lastName("Dev")
+                .birthDate(LocalDate.of(2001, 1, 1))
+                .phoneNumber("+39 6969696969")
+                .city("Roma")
+                .address("Via Sandro Sandri, 71")
+                .email("dev")
+                .password(this.passwordEncoder.encode("dev"))
+                .company(elis)
+                .jobPosition("Laurendo in Ing. Informatica")
                 .build();
     }
 
