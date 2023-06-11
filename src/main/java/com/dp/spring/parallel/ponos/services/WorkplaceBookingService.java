@@ -4,7 +4,18 @@ import com.dp.spring.parallel.hephaestus.database.entities.Workplace;
 import com.dp.spring.parallel.ponos.api.dtos.WorkplaceBookingRequestDTO;
 import com.dp.spring.parallel.ponos.database.entities.WorkplaceBooking;
 
+import java.time.LocalDate;
+import java.util.List;
+
 public interface WorkplaceBookingService {
+
+    /**
+     * Retrieving the principal bookings from a given date.
+     *
+     * @param fromDate the date from which get the user bookings
+     * @return the user workplaces from the given date
+     */
+    List<WorkplaceBooking> workplaceBookingsFromDate(LocalDate fromDate);
 
     /**
      * Booking a workplace.

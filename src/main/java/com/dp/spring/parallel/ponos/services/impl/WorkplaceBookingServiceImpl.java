@@ -17,11 +17,13 @@ import com.dp.spring.parallel.ponos.services.WorkplaceBookingService;
 import com.dp.spring.springcore.exceptions.BaseExceptionConstants;
 import com.dp.spring.springcore.exceptions.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -42,6 +44,18 @@ public class WorkplaceBookingServiceImpl extends BusinessService implements Work
     private static final String WORKPLACE_BOOKING_NOTIFICATION_TITLE = "Prenotazione effettuata con successo!";
     private static final String WORKPLACE_BOOKING_NOTIFICATION_MESSAGE_PATH = "email/workplace-booking-template.html";
 
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param fromDate the date from which get the user bookings
+     * @return the user workplaces from the given date
+     */
+    @Override
+    public List<WorkplaceBooking> workplaceBookingsFromDate(LocalDate fromDate) {
+        final User worker = super.getPrincipalOrThrow();
+        return this.workplaceBookingRepository.findAllByWorkerAndBookingDateGreaterThanEqual(worker, fromDate, Sort.by(Sort.Direction.ASC, "bookingDate"));
+    }
 
     /**
      * {@inheritDoc} <br>
