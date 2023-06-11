@@ -6,6 +6,8 @@ import com.dp.spring.parallel.hephaestus.database.entities.Workplace;
 import com.dp.spring.parallel.hephaestus.database.entities.Workspace;
 import com.dp.spring.parallel.hephaestus.database.repositories.WorkplaceRepository;
 import com.dp.spring.parallel.hephaestus.database.repositories.WorkspaceRepository;
+import com.dp.spring.parallel.hermes.services.notification.EmailNotificationService;
+import com.dp.spring.parallel.hermes.utils.EmailMessageParser;
 import com.dp.spring.parallel.hestia.database.entities.HeadquartersReceptionistUser;
 import com.dp.spring.parallel.hestia.database.entities.User;
 import com.dp.spring.parallel.ponos.api.dtos.WorkplaceBookingRequestDTO;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -29,10 +32,15 @@ import java.util.Objects;
 @Transactional
 @RequiredArgsConstructor
 public class WorkplaceBookingServiceImpl extends BusinessService implements WorkplaceBookingService {
+    private final EmailNotificationService emailNotificationService;
 
     private final WorkspaceRepository workspaceRepository;
     private final WorkplaceRepository workplaceRepository;
     private final WorkplaceBookingRepository workplaceBookingRepository;
+
+
+    private static final String WORKPLACE_BOOKING_NOTIFICATION_TITLE = "Prenotazione effettuata con successo!";
+    private static final String WORKPLACE_BOOKING_NOTIFICATION_MESSAGE_PATH = "email/workplace-booking-template.html";
 
 
     /**
@@ -55,11 +63,15 @@ public class WorkplaceBookingServiceImpl extends BusinessService implements Work
 
         this.checkBookingDateConflicts(bookRequest.getBookingDate(), worker, workplace);
 
-        final WorkplaceBooking booking = new WorkplaceBooking()
+        WorkplaceBooking booking = new WorkplaceBooking()
                 .setWorker(worker)
                 .setWorkplace(workplace)
                 .setBookingDate(bookRequest.getBookingDate());
-        return this.workplaceBookingRepository.save(booking);
+        booking = this.workplaceBookingRepository.save(booking);
+
+        this.buildAndSendNotification(worker, booking);
+
+        return booking;
     }
 
     /**
@@ -172,6 +184,13 @@ public class WorkplaceBookingServiceImpl extends BusinessService implements Work
         }
     }
 
+    /**
+     * Checking if workplace booking cancellation is possible: worker should only be able to cancel his own bookings,
+     * and can't cancel a past (or current date) booking.
+     *
+     * @param worker
+     * @param booking
+     */
     private void checkCancellationPerformableOrThrow(final User worker, final WorkplaceBooking booking) {
         if (!Objects.equals(worker.getId(), booking.getWorker().getId())) {
             throw new AccessDeniedException(BaseExceptionConstants.ACCESS_DENIED.getDetail());
@@ -179,6 +198,33 @@ public class WorkplaceBookingServiceImpl extends BusinessService implements Work
         if (!LocalDate.now().isBefore(booking.getBookingDate())) {
             throw new WorkplaceBookingCancellationNotValidException(booking.getBookingDate());
         }
+    }
+
+    /**
+     * Building and sending notification message to confirm booking has been successful.
+     */
+    private void buildAndSendNotification(final User worker, final WorkplaceBooking booking) {
+        // Building message to confirm password changing
+        final String message = this.emailNotificationService.buildMessage(
+                WORKPLACE_BOOKING_NOTIFICATION_MESSAGE_PATH,
+                Map.of(
+                        EmailMessageParser.Keyword.FIRST_NAME, worker.getFirstName(),
+                        EmailMessageParser.Keyword.LAST_NAME, worker.getLastName(),
+                        EmailMessageParser.Keyword.COMPANY_NAME, booking.getWorkplace().getWorkspace().getHeadquarters().getCompany().getName(),
+                        EmailMessageParser.Keyword.HEADQUARTERS_CITY, booking.getWorkplace().getWorkspace().getHeadquarters().getCity(),
+                        EmailMessageParser.Keyword.HEADQUARTERS_ADDRESS, booking.getWorkplace().getWorkspace().getHeadquarters().getAddress(),
+                        EmailMessageParser.Keyword.BOOKING_DATE, booking.getBookingDate().toString(),
+                        EmailMessageParser.Keyword.WORKSPACE_NAME, booking.getWorkplace().getWorkspace().getName(),
+                        EmailMessageParser.Keyword.WORKSPACE_FLOOR, booking.getWorkplace().getWorkspace().getFloor(),
+                        EmailMessageParser.Keyword.WORKPLACE_NAME, booking.getWorkplace().getName()
+                )
+        );
+        // Sending email
+        this.emailNotificationService.notify(
+                worker.getEmail(),
+                WORKPLACE_BOOKING_NOTIFICATION_TITLE,
+                message
+        );
     }
 
 }

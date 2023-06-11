@@ -11,7 +11,16 @@ public class EmailMessageParser {
         FIRST_NAME("firstName"),
         LAST_NAME("lastName"),
         EMAIL("email"),
-        PASSWORD("password");
+        PASSWORD("password"),
+
+        COMPANY_NAME("companyName"),
+        HEADQUARTERS_CITY("headquartersCity"),
+        HEADQUARTERS_ADDRESS("headquartersAddress"),
+        BOOKING_DATE("bookingDate"),
+        WORKSPACE_NAME("workspaceName"),
+        WORKSPACE_FLOOR("workspaceFloor"),
+        WORKPLACE_NAME("workplaceName");
+
 
         private final String keyword;
 
