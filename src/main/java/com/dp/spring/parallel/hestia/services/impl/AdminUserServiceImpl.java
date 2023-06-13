@@ -5,9 +5,9 @@ import com.dp.spring.parallel.hestia.api.dtos.RegistrationRequestDTO;
 import com.dp.spring.parallel.hestia.database.repositories.AdminUserRepository;
 import com.dp.spring.parallel.hestia.services.AdminUserService;
 import com.dp.spring.parallel.hestia.services.registration_strategies.AdminRegistrationStrategy;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import static com.dp.spring.parallel.common.exceptions.UserNotDeletableException.AT_LEAST_ONE_ADMIN_CONFLICT;
 

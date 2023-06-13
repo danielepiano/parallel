@@ -11,10 +11,13 @@ import com.dp.spring.parallel.hephaestus.database.entities.Headquarters;
 import com.dp.spring.parallel.hephaestus.services.HeadquartersService;
 import com.dp.spring.parallel.hephaestus.services.WorkspaceService;
 import com.dp.spring.parallel.hestia.database.entities.HeadquartersReceptionistUser;
+import com.dp.spring.parallel.hestia.database.entities.User;
 import com.dp.spring.parallel.hestia.services.HeadquartersReceptionistUserService;
+import com.dp.spring.springcore.observer.ObserverService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 
@@ -24,6 +27,7 @@ import java.util.Set;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class HeadquartersServiceImpl extends BusinessService implements HeadquartersService {
     private final HeadquartersReceptionistUserService headquartersReceptionistUserService;
     private final WorkspaceService workspaceService;
@@ -138,6 +142,66 @@ public class HeadquartersServiceImpl extends BusinessService implements Headquar
                 .forEach(this::softDelete);
     }
 
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param headquartersId the id of the headquarters to subscribe/unsubscribe the principal to/from
+     */
+    @Override
+    public void toggleFavouriteHeadquarters(Integer headquartersId) {
+        final Headquarters headquarters = super.getHeadquartersOrThrow(headquartersId);
+        final User worker = super.getPrincipalOrThrow();
+
+        if (headquarters.getObservers().stream().anyMatch(worker::equals)) {
+            this.removeObserver(worker, headquarters);
+        } else {
+            this.addObserver(worker, headquarters);
+        }
+    }
+
+    /**
+     * Subscribing a given observer (worker) to the given publisher (headquarters).
+     *
+     * @param worker       the observer to subscribe
+     * @param headquarters the publisher to subscribe the observer to
+     */
+    @Override
+    public void addObserver(User worker, Headquarters headquarters) {
+        headquarters.getObservers().add(worker);
+        this.headquartersRepository.save(headquarters);
+    }
+
+    /**
+     * Unsubscribing a given observer (worker) from the given publisher (headquarters).
+     *
+     * @param worker       the observer to unsubscribe
+     * @param headquarters the publisher to unsubscribe the observer from
+     */
+    @Override
+    public void removeObserver(User worker, Headquarters headquarters) {
+        headquarters.getObservers().remove(worker);
+        this.headquartersRepository.save(headquarters);
+    }
+
+    /**
+     * Notifying each observer to react to a headquarters event, according to the given reaction strategy.
+     *
+     * @param headquarters    the publisher triggering the event
+     * @param observerService the strategy defining the reaction for each observer to call
+     * @param context         the context to consider for observer to react properly
+     * @param <C>             the type of the context to consider for observer to react properly
+     * @param <OS>            an observer service strategy to call for triggering the reaction of each observer
+     */
+    @Override
+    public <C, OS extends ObserverService<User, Headquarters, C>>
+    void notifyObservers(Headquarters headquarters, OS observerService, C context) {
+        log.info("Notifying observers of headquarters {}...", headquarters.getId());
+
+        headquarters.getObservers().forEach(
+                observer -> observerService.react(observer, headquarters, context)
+        );
+    }
 
     /**
      * Internal method to soft delete a headquarters.<br>

@@ -1,16 +1,19 @@
 package com.dp.spring.parallel.ponos.services;
 
+import com.dp.spring.parallel.hephaestus.database.entities.Headquarters;
 import com.dp.spring.parallel.hephaestus.database.entities.Workplace;
+import com.dp.spring.parallel.hestia.database.entities.User;
 import com.dp.spring.parallel.ponos.api.dtos.WorkplaceBookingRequestDTO;
 import com.dp.spring.parallel.ponos.database.entities.WorkplaceBooking;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 public interface WorkplaceBookingService {
 
     /**
-     * Retrieving the principal bookings from a given date.
+     * Retrieving the logged user bookings from a given date.
      *
      * @param fromDate the date from which get the user bookings
      * @return the user workplaces from the given date
@@ -32,7 +35,16 @@ public interface WorkplaceBookingService {
     );
 
     /**
-     * Setting the participation of the principal for the given booking.
+     * Retrieving the workers already booked on given date and headquarters.
+     *
+     * @param date         the date
+     * @param headquarters the headquarters
+     * @return the workers already booked on the given date and headquarters
+     */
+    Set<User> workersOn(LocalDate date, Headquarters headquarters);
+
+    /**
+     * Setting the participation of the logged user for the given booking.
      *
      * @param workspaceId the id of the workspace booked
      * @param workplaceId the id of the workplace booked

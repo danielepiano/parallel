@@ -42,3 +42,8 @@ spring:
 jwt:
   secret: 2A462D4A614E645266556A586E3272357538782F413F4428472B4B6250655368
   expires-in-millis: 259200000  # 72 hours in millis: 72h * 60 min * 60 s * 1000 ==> 259.200.000 ms
+
+#--- Logging spec ---
+logging:
+  level:
+    root: info

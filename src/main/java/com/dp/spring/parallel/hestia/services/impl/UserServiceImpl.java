@@ -3,20 +3,19 @@ package com.dp.spring.parallel.hestia.services.impl;
 import com.dp.spring.parallel.common.exceptions.UserNotFoundException;
 import com.dp.spring.parallel.common.exceptions.WrongPasswordException;
 import com.dp.spring.parallel.common.services.BusinessService;
-import com.dp.spring.parallel.hermes.services.notification.EmailNotificationService;
+import com.dp.spring.parallel.hermes.services.notification.impl.EmailNotificationService;
 import com.dp.spring.parallel.hermes.utils.EmailMessageParser;
 import com.dp.spring.parallel.hestia.api.dtos.ChangePasswordRequestDTO;
 import com.dp.spring.parallel.hestia.api.dtos.RegistrationRequestDTO;
 import com.dp.spring.parallel.hestia.api.dtos.UpdatePersonalDataRequestDTO;
 import com.dp.spring.parallel.hestia.database.entities.User;
 import com.dp.spring.parallel.hestia.database.enums.UserRole;
-import com.dp.spring.parallel.hestia.database.repositories.UserRepository;
 import com.dp.spring.parallel.hestia.services.RegistrationService;
 import com.dp.spring.parallel.hestia.services.UserService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 
@@ -29,8 +28,6 @@ public class UserServiceImpl extends BusinessService implements UserService {
     @Autowired
     protected EmailNotificationService emailNotificationService;
 
-    @Autowired
-    protected UserRepository userRepository;
     @Autowired
     protected PasswordEncoder passwordEncoder;
 
@@ -79,7 +76,7 @@ public class UserServiceImpl extends BusinessService implements UserService {
      */
     @Override
     public User user(final Integer id) {
-        return this.userRepository.findById(id)
+        return super.userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(UserRole.ANY.getRole(), id));
     }
 
@@ -100,7 +97,7 @@ public class UserServiceImpl extends BusinessService implements UserService {
         principal.setCity(updatedData.getCity());
         principal.setAddress(updatedData.getAddress());
 
-        this.userRepository.save(principal);
+        super.userRepository.save(principal);
     }
 
 
@@ -121,12 +118,12 @@ public class UserServiceImpl extends BusinessService implements UserService {
         }
 
         principal.setPassword(passwordEncoder.encode(changeRequest.getUpdated()));
-        this.userRepository.save(principal);
+        super.userRepository.save(principal);
 
         // Building message to confirm password changing
         final String message = this.emailNotificationService.buildMessage(
                 CHANGE_PASSWORD_NOTIFICATION_MESSAGE_PATH,
-                Map.of(EmailMessageParser.Keyword.FIRST_NAME, principal.getFirstName())
+                Map.of(EmailMessageParser.Placeholder.FIRST_NAME, principal.getFirstName())
         );
         // Sending email
         this.emailNotificationService.notify(

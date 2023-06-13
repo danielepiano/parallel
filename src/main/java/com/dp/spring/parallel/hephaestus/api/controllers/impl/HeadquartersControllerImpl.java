@@ -35,4 +35,9 @@ public class HeadquartersControllerImpl implements HeadquartersController {
                 })
                 .collect(toSet());
     }
+
+    @Override
+    public void toggleFavouriteHeadquarters(Integer headquartersId) {
+        this.headquartersService.toggleFavouriteHeadquarters(headquartersId);
+    }
 }

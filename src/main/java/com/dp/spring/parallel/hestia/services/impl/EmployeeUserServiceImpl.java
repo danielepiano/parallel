@@ -6,9 +6,9 @@ import com.dp.spring.parallel.hestia.database.entities.EmployeeUser;
 import com.dp.spring.parallel.hestia.database.repositories.EmployeeUserRepository;
 import com.dp.spring.parallel.hestia.services.EmployeeUserService;
 import com.dp.spring.parallel.hestia.services.registration_strategies.EmployeeRegistrationStrategy;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 

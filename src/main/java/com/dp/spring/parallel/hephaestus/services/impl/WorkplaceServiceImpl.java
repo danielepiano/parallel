@@ -12,11 +12,11 @@ import com.dp.spring.parallel.hephaestus.database.repositories.WorkplaceReposito
 import com.dp.spring.parallel.hephaestus.services.WorkplaceService;
 import com.dp.spring.parallel.hephaestus.services.WorkspaceService;
 import com.dp.spring.parallel.ponos.services.WorkplaceBookingService;
-import lombok.RequiredArgsConstructor;
+import jakarta.transaction.Transactional;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -26,12 +26,22 @@ import java.util.List;
  */
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class WorkplaceServiceImpl extends BusinessService implements WorkplaceService {
     private final WorkspaceService workspaceService;
     private final WorkplaceBookingService workplaceBookingService;
 
     private final WorkplaceRepository workplaceRepository;
+
+
+    public WorkplaceServiceImpl(
+            WorkspaceService workspaceService,
+            @Lazy WorkplaceBookingService workplaceBookingService,
+            WorkplaceRepository workplaceRepository
+    ) {
+        this.workspaceService = workspaceService;
+        this.workplaceBookingService = workplaceBookingService;
+        this.workplaceRepository = workplaceRepository;
+    }
 
 
     /**
@@ -150,6 +160,19 @@ public class WorkplaceServiceImpl extends BusinessService implements WorkplaceSe
         return this.workplaceRepository.countByWorkspaceHeadquarters(headquarters);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param headquarters the headquarters to count available and total workplaces of
+     * @param date         the date to check availability on
+     * @return the number of available workplaces and the number of total workplaces
+     */
+    @Override
+    public Pair<Long, Long> countAvailableOnTotalForHeadquarters(Headquarters headquarters, LocalDate date) {
+        final long bookedWorkplaces = this.workplaceRepository.countNotAvailableByWorkspaceHeadquartersAndBookingDate(headquarters, date);
+        final long totalWorkplaces = this.workplaceRepository.countByWorkspaceHeadquarters(headquarters);
+        return Pair.of(totalWorkplaces - bookedWorkplaces, totalWorkplaces);
+    }
 
     /**
      * {@inheritDoc}

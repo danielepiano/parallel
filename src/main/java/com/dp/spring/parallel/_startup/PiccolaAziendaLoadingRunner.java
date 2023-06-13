@@ -25,7 +25,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class EnelLoadingRunner implements CommandLineRunner {
+public class PiccolaAziendaLoadingRunner implements CommandLineRunner {
     private final CompanyRepository companyRepository;
     private final HeadquartersRepository headquartersRepository;
     private final WorkspaceRepository workspaceRepository;
@@ -38,53 +38,48 @@ public class EnelLoadingRunner implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) {
-        if (this.companyRepository.existsByName(enel().getName())) {
+        if (this.companyRepository.existsByName(piccolaazienda().getName())) {
             return;
         }
 
         // Company and related structure definition
-        var enel = this.companyRepository.save(enel());
-        var enelmilano = this.headquartersRepository.save(enelmilano(enel));
+        var piccolaazienda = this.companyRepository.save(piccolaazienda());
+        var piccolasede = this.headquartersRepository.save(piccolasede(piccolaazienda));
 
-        var openspace = this.workspaceRepository.save(ws_openspace(enelmilano));
-        this.workplaceRepository.saveAll(wp(openspace, WorkplaceType.DESK, "D", 30));
+        var openspace = this.workspaceRepository.save(ws_openspace(piccolasede));
+        this.workplaceRepository.saveAll(wp(openspace, WorkplaceType.DESK, "D", 4));
 
         // User definition
-        var cm1 = this.userRepository.save(cm1(enel));
-        var hqr1 = this.userRepository.save(hqr1(enelmilano));
+        var cm1 = this.userRepository.save(cm1(piccolaazienda));
+        var hqr1 = this.userRepository.save(hqr1(piccolasede));
     }
 
 
-    Company enel() {
+    Company piccolaazienda() {
         return new Company()
-                .setName("Enel")
-                .setCity("Milano")
-                .setAddress("Viale Regina Margherita, 125")
-                .setPhoneNumber("+39 0664511012")
-                .setDescription("Enel è una multinazionale dell'energia nata nel 1962. Oggi è la più grande azienda" +
-                        " elettrica d'Italia e serve oltre 69 milioni di clienti in tutto il mondo.")
-                .setWebsiteUrl("https://www.enel.it");
+                .setName("Piccola Azienda")
+                .setCity("Piccola Città")
+                .setAddress("Vialetto Piccolo, 1")
+                .setPhoneNumber("+39 1111111111")
+                .setDescription("Veramente una piccola azienda.");
     }
 
-    Headquarters enelmilano(Company enel) {
+    Headquarters piccolasede(Company piccolaazienda) {
         return new Headquarters()
-                .setCity("Milano")
-                .setAddress("Via Giosué Carducci, 1")
-                .setPhoneNumber("+39 0664511012")
-                .setDescription("Enel Milano Carducci è uno spazio accogliente, moderno, informale." +
-                        " Un posto in cui sentirti libero di esporre idee e creatività, far conoscere il tuo lavoro e" +
-                        " stringere rapporti con altri professionisti.")
-                .setCompany(enel);
+                .setCity("Piccola Città")
+                .setAddress("Vialetto Piccolo, 1")
+                .setPhoneNumber("+39 1111111111")
+                .setDescription("Veramente una piccola sede per una piccola azienda.")
+                .setCompany(piccolaazienda);
     }
 
-    Workspace ws_openspace(Headquarters enelmilano) {
+    Workspace ws_openspace(Headquarters piccolasede) {
         return new Workspace()
-                .setHeadquarters(enelmilano)
-                .setName("Open space")
-                .setDescription("Un posto in cui sentirti libero di esporre idee e creatività, far conoscere il tuo" +
-                        " lavoro e stringere rapporti con altri professionisti")
+                .setHeadquarters(piccolasede)
+                .setName("Piccolo open-space")
+                .setDescription("Un piccolo posto in cui sentirti piccolo.")
                 .setType(WorkspaceType.OPEN_SPACE)
-                .setFloor("P5");
+                .setFloor("P-1");
     }
 
     List<Workplace> wp(Workspace ws, WorkplaceType type, String prefix, int n) {
@@ -101,31 +96,31 @@ public class EnelLoadingRunner implements CommandLineRunner {
     }
 
 
-    CompanyManagerUser cm1(Company enel) {
+    CompanyManagerUser cm1(Company piccolaazienda) {
         return CompanyManagerUser.builder()
                 .firstName("Giuseppe")
                 .lastName("Bianchi")
                 .birthDate(LocalDate.of(1970, 1, 1))
-                .phoneNumber("+39 3341234567")
+                .phoneNumber("+39 3341111111")
                 .city("Pomezia")
-                .address("Via Giu di Lì, 73")
-                .email("g.bianchi@enel.org")
+                .address("Via Giu di Lì, 1")
+                .email("g.bianchi@piccolaazienda.pa")
                 .password(this.passwordEncoder.encode("companyManager"))
-                .company(enel)
+                .company(piccolaazienda)
                 .build();
     }
 
-    HeadquartersReceptionistUser hqr1(Headquarters enelmilano) {
+    HeadquartersReceptionistUser hqr1(Headquarters piccolasede) {
         return HeadquartersReceptionistUser.builder()
                 .firstName("Mario")
                 .lastName("Rossi")
                 .birthDate(LocalDate.of(1970, 1, 1))
-                .phoneNumber("+39 3331234567")
+                .phoneNumber("+39 3331111111")
                 .city("Latina")
-                .address("Via Da Qui, 75")
-                .email("m.rossi@nel.org")
+                .address("Via Da Qui, 1")
+                .email("m.rossi@piccolaazienda.pa")
                 .password(this.passwordEncoder.encode("receptionist"))
-                .headquarters(enelmilano)
+                .headquarters(piccolasede)
                 .build();
     }
 

@@ -1,5 +1,6 @@
 package com.dp.spring.parallel.hestia.database.entities;
 
+import com.dp.spring.parallel.hephaestus.database.entities.Headquarters;
 import com.dp.spring.parallel.hestia.database.enums.UserRole;
 import com.dp.spring.springcore.database.entities.SoftDeletableAuditedEntity;
 import jakarta.persistence.*;
@@ -14,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.List;
 
 import static com.dp.spring.springcore.database.entities.SoftDeletableAuditedEntity.SOFT_DELETE_CLAUSE;
 
@@ -59,6 +61,10 @@ public class User extends SoftDeletableAuditedEntity<Integer> implements UserDet
     @Column(nullable = false, insertable = false, updatable = false)
     @Enumerated(EnumType.STRING)
     protected UserRole role;
+
+
+    @ManyToMany(mappedBy = "observers", fetch = FetchType.EAGER)
+    private List<Headquarters> favoriteHeadquarters;
 
 
     @Override
@@ -111,4 +117,5 @@ public class User extends SoftDeletableAuditedEntity<Integer> implements UserDet
                 "active = " + active +
                 ")";
     }
+
 }

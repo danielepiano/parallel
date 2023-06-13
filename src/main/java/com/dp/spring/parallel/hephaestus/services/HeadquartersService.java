@@ -4,10 +4,12 @@ import com.dp.spring.parallel.hephaestus.api.dtos.CreateHeadquartersRequestDTO;
 import com.dp.spring.parallel.hephaestus.api.dtos.UpdateHeadquartersRequestDTO;
 import com.dp.spring.parallel.hephaestus.database.entities.Company;
 import com.dp.spring.parallel.hephaestus.database.entities.Headquarters;
+import com.dp.spring.parallel.hestia.database.entities.User;
+import com.dp.spring.springcore.observer.PublisherService;
 
 import java.util.Set;
 
-public interface HeadquartersService {
+public interface HeadquartersService extends PublisherService<User, Headquarters> {
 
     /**
      * Adding a headquarters.
@@ -65,5 +67,14 @@ public interface HeadquartersService {
      * @param company the company to delete the headquarters of
      */
     void removeAll(Company company);
+
+
+    /**
+     * Subscribing/unsubscribing the logged user to/from the headquarters, in order to make him aware of headquarters
+     * behaviours or change in state.
+     *
+     * @param headquartersId the id of the headquarters to subscribe/unsubscribe the principal to/from
+     */
+    void toggleFavouriteHeadquarters(Integer headquartersId);
 
 }

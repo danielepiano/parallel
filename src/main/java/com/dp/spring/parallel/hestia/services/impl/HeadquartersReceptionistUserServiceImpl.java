@@ -6,9 +6,9 @@ import com.dp.spring.parallel.hestia.database.entities.HeadquartersReceptionistU
 import com.dp.spring.parallel.hestia.database.repositories.HeadquartersReceptionistUserRepository;
 import com.dp.spring.parallel.hestia.services.HeadquartersReceptionistUserService;
 import com.dp.spring.parallel.hestia.services.registration_strategies.HeadquartersReceptionistRegistrationStrategy;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 

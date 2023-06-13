@@ -10,8 +10,10 @@ import com.dp.spring.parallel.hestia.database.entities.CompanyManagerUser;
 import com.dp.spring.parallel.hestia.database.entities.EmployeeUser;
 import com.dp.spring.parallel.hestia.database.entities.HeadquartersReceptionistUser;
 import com.dp.spring.parallel.hestia.database.entities.User;
+import com.dp.spring.parallel.hestia.database.repositories.UserRepository;
 import com.dp.spring.springcore.exceptions.BaseExceptionConstants;
 import com.dp.spring.springcore.exceptions.ResourceNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.security.access.AccessDeniedException;
@@ -24,6 +26,8 @@ import static java.util.Optional.ofNullable;
 
 @Service
 public abstract class BusinessService {
+    @Autowired
+    protected UserRepository userRepository;
     @Autowired
     protected CompanyRepository companyRepository;
     @Autowired
@@ -42,6 +46,7 @@ public abstract class BusinessService {
      * @param <X>                       the type of the exception to throw
      * @return the resource
      */
+    @Transactional
     public <E, ID, R extends CrudRepository<E, ID>, X extends ResourceNotFoundException>
     E getResourceOrThrow(final ID id, final R repository, final X resourceNotFoundException) {
         return repository.findById(id)
@@ -55,6 +60,7 @@ public abstract class BusinessService {
      * @param companyId the id of the company to get
      * @return the company
      */
+    @Transactional
     public Company getCompanyOrThrow(final Integer companyId) {
         return this.getResourceOrThrow(companyId, companyRepository, new CompanyNotFoundException(companyId));
     }
@@ -66,6 +72,7 @@ public abstract class BusinessService {
      * @param headquartersId the id of the headquarters to get
      * @return the headquarters
      */
+    @Transactional
     public Headquarters getHeadquartersOrThrow(final Integer headquartersId) {
         return this.getResourceOrThrow(headquartersId, headquartersRepository, new HeadquartersNotFoundException(headquartersId));
     }
@@ -126,9 +133,15 @@ public abstract class BusinessService {
     }
 
 
+    /**
+     * Retrieving the logged user.
+     * @return the logged user
+     */
+    @Transactional
     public User getPrincipalOrThrow() {
         return ofNullable(SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                 .map(User.class::cast)
+                .flatMap(principal -> this.userRepository.findById(principal.getId()))
                 .orElseThrow(() -> new AccessDeniedException(BaseExceptionConstants.ACCESS_DENIED.getDetail()));
     }
 

@@ -24,7 +24,6 @@ public class CompanyManagerUser extends User {
 
     private String jobPosition;
 
-
     @Override
     public String toString() {
         return getClass().getSimpleName() + "(" +

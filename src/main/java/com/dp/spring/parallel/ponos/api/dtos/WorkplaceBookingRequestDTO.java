@@ -9,6 +9,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -36,7 +37,7 @@ public class WorkplaceBookingRequestDTO {
     @Constraint(validatedBy = WorkplaceBookingDateValidator.WorkingDay.class)
     @Target(ElementType.FIELD)
     @Retention(RetentionPolicy.RUNTIME)
-    public @interface WorkingDayConstraint {
+    @interface WorkingDayConstraint {
         String message() default "non-working day, workplaces bookable only from Monday to Friday";
 
         Class<?>[] groups() default {};
@@ -51,7 +52,7 @@ public class WorkplaceBookingRequestDTO {
     @Constraint(validatedBy = WorkplaceBookingDateValidator.FutureDate.class)
     @Target(ElementType.FIELD)
     @Retention(RetentionPolicy.RUNTIME)
-    public @interface FutureDateConstraint {
+    @interface FutureDateConstraint {
         String message() default "cannot book on current date or before";
 
         Class<?>[] groups() default {};
@@ -59,17 +60,16 @@ public class WorkplaceBookingRequestDTO {
         Class<? extends Payload>[] payload() default {};
     }
 
-
     static class WorkplaceBookingDateValidator {
 
         /**
          * Validator for {@link WorkingDayConstraint}: checking if the booking date is between MON-FRI.
          */
+        @Slf4j
         static class WorkingDay implements ConstraintValidator<WorkingDayConstraint, LocalDate> {
-
             @Override
             public void initialize(WorkingDayConstraint constraint) {
-                System.out.println(constraint.message());
+                log.info("Workplace-booking costraint validation: {}", constraint.message());
             }
 
             @Override
@@ -85,11 +85,11 @@ public class WorkplaceBookingRequestDTO {
         /**
          * Validator for {@link FutureDateConstraint}: checking if the booking date is a future date.
          */
+        @Slf4j
         static class FutureDate implements ConstraintValidator<FutureDateConstraint, LocalDate> {
-
             @Override
             public void initialize(FutureDateConstraint constraint) {
-                System.out.println(constraint.message());
+                log.info("Workplace-booking costraint validation: {}", constraint.message());
             }
 
             @Override

@@ -101,10 +101,20 @@ public interface WorkplaceService {
 
 
     /**
-     * Counting available and total workplaces for a given workspace.
+     * Counting available (on a given date) and total workplaces for a given headquarters.
      *
-     * @param workspace the workspace to count available and total workplaces
-     * @param date the date to check availability on
+     * @param headquarters the headquarters to count available and total workplaces of
+     * @param date         the date to check availability on
+     * @return the number of available workplaces and the number of total workplaces
+     */
+    Pair<Long, Long> countAvailableOnTotalForHeadquarters(Headquarters headquarters, LocalDate date);
+
+
+    /**
+     * Counting available (on a given date) and total workplaces for a given workspace.
+     *
+     * @param workspace the workspace to count available and total workplaces of
+     * @param date      the date to check availability on
      * @return the number of available workplaces and the number of total workplaces
      */
     Pair<Long, Long> countAvailableOnTotal(Workspace workspace, LocalDate date);

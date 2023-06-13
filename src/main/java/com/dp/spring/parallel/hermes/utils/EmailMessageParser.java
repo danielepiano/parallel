@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class EmailMessageParser {
     @AllArgsConstructor
-    public enum Keyword {
+    public enum Placeholder {
         FIRST_NAME("firstName"),
         LAST_NAME("lastName"),
         EMAIL("email"),
@@ -19,8 +19,10 @@ public class EmailMessageParser {
         BOOKING_DATE("bookingDate"),
         WORKSPACE_NAME("workspaceName"),
         WORKSPACE_FLOOR("workspaceFloor"),
-        WORKPLACE_NAME("workplaceName");
+        WORKPLACE_NAME("workplaceName"),
 
+        AVAILABLE_WORKPLACES("availableWorkplaces"),
+        TOTAL_WORKPLACES("totalWorkplaces");
 
         private final String keyword;
 
@@ -47,8 +49,8 @@ public class EmailMessageParser {
      * @param keyValues pairs of keyword to be searched and values replacing them
      * @return the parsed message
      */
-    public static String parse(String message, final Map<Keyword, String> keyValues) {
-        for (final Map.Entry<Keyword, String> keyValue : keyValues.entrySet()) {
+    public static String parse(String message, final Map<Placeholder, String> keyValues) {
+        for (final Map.Entry<Placeholder, String> keyValue : keyValues.entrySet()) {
             message = message.replace(
                     keyValue.getKey().getTemplate(),
                     keyValue.getValue()

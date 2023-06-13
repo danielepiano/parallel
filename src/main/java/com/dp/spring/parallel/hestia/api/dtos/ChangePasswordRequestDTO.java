@@ -11,6 +11,7 @@ import jakarta.validation.constraints.Pattern;
 import lombok.Builder;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -31,7 +32,8 @@ public class ChangePasswordRequestDTO {
     @Pattern(
             regexp = RandomPasswordUtils.DEFAULT_PASSWORD_REGEX,
             message = "deve contenere almeno 8 caratteri, di cui almeno una lettera maiuscola, " +
-                    "una lettera minuscola, un numero, un carattere speciale tra @#$%^&+=!")
+                    "una lettera minuscola, un numero, un carattere speciale tra @#$%^&+=!"
+    )
     String updated;
 
     @NotBlank
@@ -45,7 +47,7 @@ public class ChangePasswordRequestDTO {
     @Constraint(validatedBy = PasswordMatchValidator.class)
     @Target(ElementType.TYPE)
     @Retention(RetentionPolicy.RUNTIME)
-    public @interface PasswordMatchConstraint {
+    @interface PasswordMatchConstraint {
         String message() default "passwords don't match";
 
         Class<?>[] groups() default {};
@@ -57,12 +59,11 @@ public class ChangePasswordRequestDTO {
      * Validator for {@link PasswordMatchConstraint}: given a {@link ChangePasswordRequestDTO}, checking if
      * the new password and the confirmation field match.
      */
-    public static class PasswordMatchValidator
-            implements ConstraintValidator<PasswordMatchConstraint, ChangePasswordRequestDTO> {
-
+    @Slf4j
+    static class PasswordMatchValidator implements ConstraintValidator<PasswordMatchConstraint, ChangePasswordRequestDTO> {
         @Override
         public void initialize(PasswordMatchConstraint constraint) {
-            System.out.println(constraint.message());
+            log.info("Password costraint validation: {}", constraint.message());
         }
 
         @Override

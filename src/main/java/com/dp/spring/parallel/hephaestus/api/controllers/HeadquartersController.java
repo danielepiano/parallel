@@ -1,11 +1,10 @@
 package com.dp.spring.parallel.hephaestus.api.controllers;
 
 import com.dp.spring.parallel.hephaestus.api.dtos.HeadquartersResponseDTO;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
 
@@ -22,4 +21,13 @@ public interface HeadquartersController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @Secured({ROLE_ADMIN_VALUE, ROLE_COMPANY_MANAGER_VALUE, ROLE_EMPLOYEE_VALUE})
     Set<HeadquartersResponseDTO> headquarters();
+
+
+    @PatchMapping(path = "/favs/{headquartersId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Secured({ROLE_COMPANY_MANAGER_VALUE, ROLE_EMPLOYEE_VALUE})
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void toggleFavouriteHeadquarters(
+            @PathVariable("headquartersId") Integer headquartersId
+    );
+
 }

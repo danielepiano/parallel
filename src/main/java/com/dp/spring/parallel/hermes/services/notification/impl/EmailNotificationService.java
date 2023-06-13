@@ -1,11 +1,13 @@
-package com.dp.spring.parallel.hermes.services.notification;
+package com.dp.spring.parallel.hermes.services.notification.impl;
 
 import com.dp.spring.parallel.common.utils.ResourcesUtils;
 import com.dp.spring.parallel.hermes.config.EmailConfig;
 import com.dp.spring.parallel.hermes.exceptions.FailureSendingEmail;
+import com.dp.spring.parallel.hermes.services.notification.NotificationService;
 import com.dp.spring.parallel.hermes.utils.EmailMessageParser;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -19,6 +21,7 @@ import java.util.Map;
  */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class EmailNotificationService implements NotificationService {
     private final JavaMailSender legacyMailSender;
 
@@ -36,6 +39,8 @@ public class EmailNotificationService implements NotificationService {
     @Async
     public void notify(Object who, String title, String message) {
         try {
+            log.info("Sending email to {}: {}", who.toString(), title);
+
             final MimeMessage legacyMessage = this.legacyMailSender.createMimeMessage();
             final MimeMessageHelper legacyMessageHelper = new MimeMessageHelper(legacyMessage, EmailConfig.DEFAULT_ENCODING);
             legacyMessageHelper.setFrom(EmailConfig.FROM);
@@ -44,6 +49,8 @@ public class EmailNotificationService implements NotificationService {
             legacyMessageHelper.setText(message, true);
 
             this.legacyMailSender.send(legacyMessage);
+
+            log.info("Email sent to {}: {}", who, title);
         } catch (Exception e) {
             e.printStackTrace();
             throw new FailureSendingEmail(e);
@@ -59,7 +66,7 @@ public class EmailNotificationService implements NotificationService {
      */
     public String buildMessage(
             final String templatePath,
-            final Map<EmailMessageParser.Keyword, String> parsingParams
+            final Map<EmailMessageParser.Placeholder, String> parsingParams
     ) {
         // Reading email message and http template from file
         final String rawMessage = ResourcesUtils.readFileAsString(templatePath);
