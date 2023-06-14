@@ -49,7 +49,7 @@ public class Headquarters extends SoftDeletableAuditedEntity<Integer> implements
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
-            name = "favorite_worker_headquarters",
+            name = "worker_favorite_headquarters",
             joinColumns = @JoinColumn(name = "headquarters_id"),
             inverseJoinColumns = @JoinColumn(name = "worker_id")
     )

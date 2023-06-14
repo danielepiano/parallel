@@ -7,6 +7,7 @@ import com.dp.spring.parallel.hephaestus.database.entities.Headquarters;
 import com.dp.spring.parallel.hestia.database.entities.User;
 import com.dp.spring.springcore.observer.PublisherService;
 
+import java.util.List;
 import java.util.Set;
 
 public interface HeadquartersService extends PublisherService<User, Headquarters> {
@@ -33,7 +34,13 @@ public interface HeadquartersService extends PublisherService<User, Headquarters
      *
      * @return the headquarters
      */
-    Set<Headquarters> headquarters();
+    List<Headquarters> headquarters();
+
+    /**
+     * Retrieving the logged user's favorite headquarters.
+     * @return the favorite headquarters
+     */
+    List<Headquarters> favoriteHeadquarters();
 
     /**
      * Retrieving the headquarters of a given company.

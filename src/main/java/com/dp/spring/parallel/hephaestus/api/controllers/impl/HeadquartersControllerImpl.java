@@ -8,9 +8,8 @@ import com.dp.spring.parallel.hephaestus.services.WorkplaceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Set;
-
-import static java.util.stream.Collectors.toSet;
+import java.util.List;
+import java.util.stream.Stream;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,13 +26,23 @@ public class HeadquartersControllerImpl implements HeadquartersController {
     }
 
     @Override
-    public Set<HeadquartersResponseDTO> headquarters() {
-        return this.headquartersService.headquarters().stream()
-                .map(headquarters -> {
-                    long totalWorkplaces = this.workplaceService.countForHeadquarters(headquarters);
-                    return HeadquartersResponseDTO.of(totalWorkplaces, headquarters);
-                })
-                .collect(toSet());
+    public List<HeadquartersResponseDTO> headquarters() {
+        List<Headquarters> favoriteHeadquarters = this.headquartersService.favoriteHeadquarters();
+        List<Headquarters> nonFavoriteHeadquarters = this.headquartersService.headquarters();
+        nonFavoriteHeadquarters.removeAll(favoriteHeadquarters);
+
+        return Stream.concat(
+                favoriteHeadquarters.stream()
+                        .map(headquarters -> {
+                            long totalWorkplaces = this.workplaceService.countForHeadquarters(headquarters);
+                            return HeadquartersResponseDTO.favorite(totalWorkplaces, headquarters);
+                        }),
+                nonFavoriteHeadquarters.stream()
+                        .map(headquarters -> {
+                            long totalWorkplaces = this.workplaceService.countForHeadquarters(headquarters);
+                            return HeadquartersResponseDTO.nonFavorite(totalWorkplaces, headquarters);
+                        })
+        ).toList();
     }
 
     @Override

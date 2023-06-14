@@ -6,7 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Set;
+import java.util.List;
 
 import static com.dp.spring.parallel.hestia.database.enums.UserRole.Constants.*;
 
@@ -20,7 +20,7 @@ public interface HeadquartersController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @Secured({ROLE_ADMIN_VALUE, ROLE_COMPANY_MANAGER_VALUE, ROLE_EMPLOYEE_VALUE})
-    Set<HeadquartersResponseDTO> headquarters();
+    List<HeadquartersResponseDTO> headquarters();
 
 
     @PatchMapping(path = "/favs/{headquartersId}", produces = MediaType.APPLICATION_JSON_VALUE)

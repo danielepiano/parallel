@@ -12,6 +12,7 @@ import com.dp.spring.parallel.hephaestus.services.HeadquartersService;
 import com.dp.spring.parallel.hephaestus.services.WorkspaceService;
 import com.dp.spring.parallel.hestia.database.entities.HeadquartersReceptionistUser;
 import com.dp.spring.parallel.hestia.database.entities.User;
+import com.dp.spring.parallel.hestia.database.enums.UserRole;
 import com.dp.spring.parallel.hestia.services.HeadquartersReceptionistUserService;
 import com.dp.spring.springcore.observer.ObserverService;
 import jakarta.transaction.Transactional;
@@ -19,7 +20,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * Headquarters operations service implementation.
@@ -78,8 +83,28 @@ public class HeadquartersServiceImpl extends BusinessService implements Headquar
      * @return the headquarters
      */
     @Override
-    public Set<Headquarters> headquarters() {
-        return Set.copyOf(super.headquartersRepository.findAll());
+    public List<Headquarters> headquarters() {
+        final User principal = super.getPrincipalOrThrow();
+
+        // If principal cannot have favorite headquarters, return all headquarters
+        if (!UserRole.COMPANY_MANAGER.equals(principal.getRole()) && !UserRole.EMPLOYEE.equals(principal.getRole())) {
+            return this.headquartersRepository.findAll();
+        }
+        // If principal can set favorite headquarters, firstly return the favorite ones, then the others
+        List<Headquarters> nonFavHeadquarters = this.headquartersRepository.findAll();
+        nonFavHeadquarters.removeAll(principal.getFavoriteHeadquarters());
+
+        return Stream.concat(principal.getFavoriteHeadquarters().stream(), nonFavHeadquarters.stream()).collect(toList());
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return the favorite headquarters
+     */
+    @Override
+    public List<Headquarters> favoriteHeadquarters() {
+        return super.getPrincipalOrThrow().getFavoriteHeadquarters();
     }
 
     /**
