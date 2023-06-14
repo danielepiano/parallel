@@ -1,6 +1,6 @@
-package com.dp.spring.parallel.ponos.api.dtos;
+package com.dp.spring.parallel.mnemosyne.api.dtos;
 
-import com.dp.spring.parallel.ponos.database.entities.WorkplaceBooking;
+import com.dp.spring.parallel.mnemosyne.database.entities.WorkplaceBooking;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Builder;
 import lombok.Value;

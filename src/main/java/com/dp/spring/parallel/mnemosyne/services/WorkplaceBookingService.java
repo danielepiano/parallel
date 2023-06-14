@@ -1,10 +1,10 @@
-package com.dp.spring.parallel.ponos.services;
+package com.dp.spring.parallel.mnemosyne.services;
 
 import com.dp.spring.parallel.hephaestus.database.entities.Headquarters;
 import com.dp.spring.parallel.hephaestus.database.entities.Workplace;
 import com.dp.spring.parallel.hestia.database.entities.User;
-import com.dp.spring.parallel.ponos.api.dtos.WorkplaceBookingRequestDTO;
-import com.dp.spring.parallel.ponos.database.entities.WorkplaceBooking;
+import com.dp.spring.parallel.mnemosyne.api.dtos.WorkplaceBookingRequestDTO;
+import com.dp.spring.parallel.mnemosyne.database.entities.WorkplaceBooking;
 
 import java.time.LocalDate;
 import java.util.List;

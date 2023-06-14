@@ -1,10 +1,10 @@
-package com.dp.spring.parallel.ponos.api.dtos;
+package com.dp.spring.parallel.mnemosyne.api.dtos;
 
 import com.dp.spring.parallel.hephaestus.database.entities.Company;
 import com.dp.spring.parallel.hephaestus.database.entities.Headquarters;
 import com.dp.spring.parallel.hephaestus.database.entities.Workplace;
 import com.dp.spring.parallel.hephaestus.database.entities.Workspace;
-import com.dp.spring.parallel.ponos.database.entities.WorkplaceBooking;
+import com.dp.spring.parallel.mnemosyne.database.entities.WorkplaceBooking;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Builder;
 import lombok.Value;

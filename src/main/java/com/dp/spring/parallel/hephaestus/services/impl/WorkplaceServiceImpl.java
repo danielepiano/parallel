@@ -11,7 +11,7 @@ import com.dp.spring.parallel.hephaestus.database.entities.Workspace;
 import com.dp.spring.parallel.hephaestus.database.repositories.WorkplaceRepository;
 import com.dp.spring.parallel.hephaestus.services.WorkplaceService;
 import com.dp.spring.parallel.hephaestus.services.WorkspaceService;
-import com.dp.spring.parallel.ponos.services.WorkplaceBookingService;
+import com.dp.spring.parallel.mnemosyne.services.WorkplaceBookingService;
 import jakarta.transaction.Transactional;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Sort;

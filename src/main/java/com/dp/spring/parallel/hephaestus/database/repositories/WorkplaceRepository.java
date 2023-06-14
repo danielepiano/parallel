@@ -27,13 +27,15 @@ public interface WorkplaceRepository extends SoftDeleteJpaRepository<Workplace, 
     long countByWorkspaceHeadquarters(Headquarters headquarters);
 
     @Query("select count(wp) from Workplace wp join WorkplaceBooking b on b.workplace = wp" +
-            " where b.bookingDate = ?2 and wp.workspace.headquarters = ?1")
+            " where b.bookingDate = ?2 and wp.workspace.headquarters = ?1" +
+            " and b.active = true and wp.active = true")
     long countNotAvailableByWorkspaceHeadquartersAndBookingDate(Headquarters headquarters, LocalDate bookingDate);
 
     long countByWorkspace(Workspace workspace);
 
     @Query("select count(wp) from Workplace wp join WorkplaceBooking b on b.workplace = wp" +
-            " where b.bookingDate = ?2 and wp.workspace = ?1")
+            " where b.bookingDate = ?2 and wp.workspace = ?1" +
+            " and b.active = true and wp.active = true")
     long countNotAvailableByWorkspaceAndBookingDate(Workspace workspace, LocalDate bookingDate);
 
 }

@@ -1,4 +1,4 @@
-package com.dp.spring.parallel.ponos.services.impl;
+package com.dp.spring.parallel.mnemosyne.services.impl;
 
 import com.dp.spring.parallel.common.exceptions.*;
 import com.dp.spring.parallel.common.services.BusinessService;
@@ -13,12 +13,12 @@ import com.dp.spring.parallel.hermes.services.notification.impl.EmailNotificatio
 import com.dp.spring.parallel.hermes.utils.EmailMessageParser;
 import com.dp.spring.parallel.hestia.database.entities.HeadquartersReceptionistUser;
 import com.dp.spring.parallel.hestia.database.entities.User;
-import com.dp.spring.parallel.ponos.api.dtos.WorkplaceBookingRequestDTO;
-import com.dp.spring.parallel.ponos.database.entities.WorkplaceBooking;
-import com.dp.spring.parallel.ponos.database.repositories.WorkplaceBookingRepository;
-import com.dp.spring.parallel.ponos.services.WorkplaceBookingService;
-import com.dp.spring.parallel.ponos.services.observer.HeadquartersWorkplaceBookingsObserverService;
-import com.dp.spring.parallel.ponos.services.observer.HeadquartersWorkplaceBookingsObserverService.Context;
+import com.dp.spring.parallel.mnemosyne.api.dtos.WorkplaceBookingRequestDTO;
+import com.dp.spring.parallel.mnemosyne.database.entities.WorkplaceBooking;
+import com.dp.spring.parallel.mnemosyne.database.repositories.WorkplaceBookingRepository;
+import com.dp.spring.parallel.mnemosyne.services.WorkplaceBookingService;
+import com.dp.spring.parallel.mnemosyne.services.observer.HeadquartersWorkplaceBookingsObserverService;
+import com.dp.spring.parallel.mnemosyne.services.observer.HeadquartersWorkplaceBookingsObserverService.Context;
 import com.dp.spring.springcore.exceptions.BaseExceptionConstants;
 import com.dp.spring.springcore.exceptions.ResourceNotFoundException;
 import jakarta.transaction.Transactional;

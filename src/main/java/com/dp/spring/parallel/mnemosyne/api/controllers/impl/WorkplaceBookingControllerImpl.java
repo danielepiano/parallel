@@ -1,11 +1,11 @@
-package com.dp.spring.parallel.ponos.api.controllers.impl;
+package com.dp.spring.parallel.mnemosyne.api.controllers.impl;
 
-import com.dp.spring.parallel.ponos.api.controllers.WorkplaceBookingController;
-import com.dp.spring.parallel.ponos.api.dtos.UserWorkplaceBookingDTO;
-import com.dp.spring.parallel.ponos.api.dtos.WorkplaceBookingDTO;
-import com.dp.spring.parallel.ponos.api.dtos.WorkplaceBookingRequestDTO;
-import com.dp.spring.parallel.ponos.database.entities.WorkplaceBooking;
-import com.dp.spring.parallel.ponos.services.WorkplaceBookingService;
+import com.dp.spring.parallel.mnemosyne.api.controllers.WorkplaceBookingController;
+import com.dp.spring.parallel.mnemosyne.api.dtos.UserWorkplaceBookingDTO;
+import com.dp.spring.parallel.mnemosyne.api.dtos.WorkplaceBookingDTO;
+import com.dp.spring.parallel.mnemosyne.api.dtos.WorkplaceBookingRequestDTO;
+import com.dp.spring.parallel.mnemosyne.database.entities.WorkplaceBooking;
+import com.dp.spring.parallel.mnemosyne.services.WorkplaceBookingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 

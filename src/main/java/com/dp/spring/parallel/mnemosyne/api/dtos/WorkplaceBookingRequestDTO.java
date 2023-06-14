@@ -1,4 +1,4 @@
-package com.dp.spring.parallel.ponos.api.dtos;
+package com.dp.spring.parallel.mnemosyne.api.dtos;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.Constraint;

@@ -1,4 +1,4 @@
-package com.dp.spring.parallel.ponos.database.entities;
+package com.dp.spring.parallel.mnemosyne.database.entities;
 
 import com.dp.spring.parallel.hephaestus.database.entities.Workplace;
 import com.dp.spring.parallel.hestia.database.entities.User;

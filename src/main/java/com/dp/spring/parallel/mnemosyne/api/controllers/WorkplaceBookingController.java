@@ -1,8 +1,8 @@
-package com.dp.spring.parallel.ponos.api.controllers;
+package com.dp.spring.parallel.mnemosyne.api.controllers;
 
-import com.dp.spring.parallel.ponos.api.dtos.UserWorkplaceBookingDTO;
-import com.dp.spring.parallel.ponos.api.dtos.WorkplaceBookingDTO;
-import com.dp.spring.parallel.ponos.api.dtos.WorkplaceBookingRequestDTO;
+import com.dp.spring.parallel.mnemosyne.api.dtos.UserWorkplaceBookingDTO;
+import com.dp.spring.parallel.mnemosyne.api.dtos.WorkplaceBookingDTO;
+import com.dp.spring.parallel.mnemosyne.api.dtos.WorkplaceBookingRequestDTO;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

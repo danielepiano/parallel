@@ -1,4 +1,4 @@
-package com.dp.spring.parallel.ponos.services.observer;
+package com.dp.spring.parallel.mnemosyne.services.observer;
 
 import com.dp.spring.parallel.hephaestus.database.entities.Headquarters;
 import com.dp.spring.parallel.hermes.services.notification.impl.EmailNotificationService;
