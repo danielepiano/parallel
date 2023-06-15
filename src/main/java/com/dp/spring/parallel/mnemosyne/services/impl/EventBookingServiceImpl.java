@@ -116,6 +116,16 @@ public class EventBookingServiceImpl extends BusinessService implements EventBoo
                 .forEach(eventBookingRepository::softDelete);
     }
 
+    /**
+     * {@inheritDoc}
+     * @param event the event to count the bookings of
+     * @return the number of bookings
+     */
+    @Override
+    public long count(Event event) {
+        return this.eventBookingRepository.countByEvent(event);
+    }
+
 
     /**
      * Checking if event is past.

@@ -4,10 +4,12 @@ import com.dp.spring.parallel.agora.database.entities.Event;
 import com.dp.spring.parallel.hestia.database.entities.User;
 import com.dp.spring.parallel.mnemosyne.database.entities.EventBooking;
 import com.dp.spring.springcore.database.repositories.SoftDeleteJpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface EventBookingRepository extends SoftDeleteJpaRepository<EventBooking, Integer> {
 
@@ -20,6 +22,9 @@ public interface EventBookingRepository extends SoftDeleteJpaRepository<EventBoo
     boolean existsByWorkerAndEvent(User worker, Event event);
 
     long countByEvent(Event event);
+
+    @Query("select b.worker from EventBooking b where b.event = ?1 and b.active = true")
+    Set<User> findAllWorkersBookedByEvent(Event event);
 
     /*
     List<WorkplaceBooking> findAllByWorkerAndBookingDateGreaterThanEqual(User worker, LocalDate fromDate, Sort sort);

@@ -30,12 +30,12 @@ public class UserEventBookingResponseDTO {
     LocalDate bookedOn;
 
 
-    public static UserEventBookingResponseDTO of(final Long availablePlaces, final EventBooking booking) {
+    public static UserEventBookingResponseDTO of(final Long eventAvailablePlaces, final EventBooking booking) {
         return UserEventBookingResponseDTO.builder()
                 .id(booking.getId())
                 .company(CompanyInfoDTO.of(booking.getEvent().getHeadquarters().getCompany()))
                 .headquarters(HeadquartersInfoDTO.of(booking.getEvent().getHeadquarters()))
-                .event(EventInfoDTO.of(availablePlaces, booking.getEvent()))
+                .event(EventInfoDTO.of(eventAvailablePlaces, booking.getEvent()))
                 .bookedOn(Instant.ofEpochMilli(booking.getCreatedDate()).atZone(ZoneId.systemDefault()).toLocalDate())
                 .build();
     }

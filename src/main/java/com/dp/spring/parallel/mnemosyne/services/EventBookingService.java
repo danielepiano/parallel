@@ -28,15 +28,6 @@ public interface EventBookingService {
             Integer eventId
     );
 
-    /** todo adeguare per calcolo disponibili ?? rimuovere ??
-     * Retrieving the workers already booked on given date and headquarters.
-     *
-     * @param date         the date
-     * @param headquarters the headquarters
-     * @return the workers already booked on the given date and headquarters
-     **/
-    //Set<User> workersOn(LocalDate date, Headquarters headquarters);
-
     /**
      * Cancelling a booking.
      *
@@ -57,5 +48,13 @@ public interface EventBookingService {
      * @param event the event to cancel the bookings of
      */
     void cancelAll(Event event);
+
+    /**
+     * Counting the number of bookings of a given event.
+     *
+     * @param event the event to count the bookings of
+     * @return the number of the bookings
+     */
+    long count(Event event);
 
 }

@@ -5,6 +5,8 @@ import com.dp.spring.parallel.agora.api.dto.CreateUpdateEventRequestDTO;
 import com.dp.spring.parallel.agora.api.dto.EventResponseDTO;
 import com.dp.spring.parallel.agora.database.entities.Event;
 import com.dp.spring.parallel.agora.services.EventService;
+import com.dp.spring.parallel.mnemosyne.services.EventBookingService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,9 +15,11 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Transactional
 public class EventControllerImpl implements EventsController {
 
     private final EventService eventService;
+    private final EventBookingService eventBookingService;
 
 
     @Override
@@ -27,16 +31,16 @@ public class EventControllerImpl implements EventsController {
     @Override
     public EventResponseDTO event(Integer headquartersId, Integer eventId) {
         final Event event = this.eventService.event(headquartersId, eventId);
-        // todo calc available
-        return EventResponseDTO.of(null, event);
+        final long availablePlaces = event.getMaxPlaces() - this.eventBookingService.count(event);
+        return EventResponseDTO.of(availablePlaces, event);
     }
 
     @Override
     public List<EventResponseDTO> events(Integer headquartersId) {
         return this.eventService.events(headquartersId).stream()
                 .map(event -> {
-                    // todo calc available
-                    return EventResponseDTO.of(null, event);
+                    final long availablePlaces = event.getMaxPlaces() - this.eventBookingService.count(event);
+                    return EventResponseDTO.of(availablePlaces, event);
                 }).toList();
     }
 
@@ -44,16 +48,16 @@ public class EventControllerImpl implements EventsController {
     public List<EventResponseDTO> events() {
         return this.eventService.eventsFromDate(LocalDate.now()).stream()
                 .map(event -> {
-                    // todo calc available
-                    return EventResponseDTO.of(null, event);
+                    final long availablePlaces = event.getMaxPlaces() - this.eventBookingService.count(event);
+                    return EventResponseDTO.of(availablePlaces, event);
                 }).toList();
     }
 
     @Override
     public EventResponseDTO updateEvent(Integer headquartersId, Integer eventId, CreateUpdateEventRequestDTO updateRequest) {
         final Event event = this.eventService.update(headquartersId, eventId, updateRequest);
-        // todo count available seats
-        return EventResponseDTO.of(null, event);
+        final long availablePlaces = event.getMaxPlaces() - this.eventBookingService.count(event);
+        return EventResponseDTO.of(availablePlaces, event);
     }
 
     @Override

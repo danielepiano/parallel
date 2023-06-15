@@ -24,8 +24,8 @@ public class EventBookingControllerImpl implements EventBookingController {
         return this.eventBookingService.eventBookingsFromDate(ofNullable(fromDate).orElse(LocalDate.now()))
                 .stream()
                 .map(booking -> {
-                    // todo calc available places
-                    return UserEventBookingResponseDTO.of(null, booking);
+                    final long eventAvailablePlaces = booking.getEvent().getMaxPlaces() - this.eventBookingService.count(booking.getEvent());
+                    return UserEventBookingResponseDTO.of(eventAvailablePlaces, booking);
                 })
                 .toList();
     }
