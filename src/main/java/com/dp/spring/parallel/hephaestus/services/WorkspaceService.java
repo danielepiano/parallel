@@ -34,7 +34,7 @@ public interface WorkspaceService {
     );
 
     /**
-     * Retrieving all the workspaces of the headquarters of given id;
+     * Retrieving all the workspaces of the headquarters of given id.
      *
      * @param headquartersId the id of the headquarters
      * @return the workspaces

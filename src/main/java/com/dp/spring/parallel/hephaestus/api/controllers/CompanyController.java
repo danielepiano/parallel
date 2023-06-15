@@ -1,6 +1,7 @@
 package com.dp.spring.parallel.hephaestus.api.controllers;
 
 import com.dp.spring.parallel.hephaestus.api.dtos.*;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
@@ -17,7 +18,7 @@ public interface CompanyController {
     @Secured(ROLE_ADMIN_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     CompanyResponseDTO add(
-            @RequestBody CreateCompanyRequestDTO toAddData
+            @Valid @RequestBody CreateCompanyRequestDTO toAddData
     );
 
     @GetMapping(path = "/{companyId}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -36,7 +37,7 @@ public interface CompanyController {
     @Secured({ROLE_ADMIN_VALUE, ROLE_COMPANY_MANAGER_VALUE})
     CompanyResponseDTO update(
             @PathVariable("companyId") Integer companyId,
-            @RequestBody UpdateCompanyRequestDTO updatedData
+            @Valid @RequestBody UpdateCompanyRequestDTO updatedData
     );
 
     @DeleteMapping(path = "/{companyId}")
@@ -52,7 +53,7 @@ public interface CompanyController {
     @ResponseStatus(HttpStatus.CREATED)
     CompanyHeadquartersResponseDTO addHeadquarters(
             @PathVariable("companyId") Integer companyId,
-            @RequestBody CreateHeadquartersRequestDTO toAddData
+            @Valid @RequestBody CreateHeadquartersRequestDTO toAddData
     );
 
     @GetMapping(path = "/{companyId}/headquarters", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -71,7 +72,7 @@ public interface CompanyController {
     CompanyHeadquartersResponseDTO update(
             @PathVariable("companyId") Integer companyId,
             @PathVariable("headquartersId") Integer headquartersId,
-            @RequestBody UpdateHeadquartersRequestDTO updatedData
+            @Valid @RequestBody UpdateHeadquartersRequestDTO updatedData
     );
 
     @DeleteMapping(path = "/{companyId}/headquarters/{headquartersId}")

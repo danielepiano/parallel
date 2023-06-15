@@ -2,12 +2,14 @@ package com.dp.spring.parallel.hephaestus.api.dtos;
 
 import com.dp.spring.parallel.hephaestus.database.entities.Company;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Value;
 
 @Builder
 @Value
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CompanyResponseDTO {
     Integer id;
 

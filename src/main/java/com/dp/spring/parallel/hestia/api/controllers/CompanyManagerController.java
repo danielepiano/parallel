@@ -1,6 +1,7 @@
 package com.dp.spring.parallel.hestia.api.controllers;
 
 import com.dp.spring.parallel.hestia.api.dtos.RegistrationRequestDTO;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
@@ -17,7 +18,7 @@ public interface CompanyManagerController {
     @ResponseStatus(HttpStatus.CREATED)
     void register(
             @PathVariable("companyId") Integer companyId,
-            @RequestBody RegistrationRequestDTO toRegister
+            @Valid @RequestBody RegistrationRequestDTO toRegister
     );
 
     @DeleteMapping(path = "/{userId}")

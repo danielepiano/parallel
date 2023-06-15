@@ -39,7 +39,7 @@ public class WorkplaceBooking extends SoftDeletableAuditedEntity<Integer> {
     private Workplace workplace;
 
     @Column(name = "booking_date", nullable = false)
-    protected LocalDate bookingDate;
+    private LocalDate bookingDate;
 
     @Column(name = "is_present", nullable = false, columnDefinition = "boolean default false")
     protected boolean present;

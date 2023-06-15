@@ -22,7 +22,13 @@ public class EmailMessageParser {
         WORKPLACE_NAME("workplaceName"),
 
         AVAILABLE_WORKPLACES("availableWorkplaces"),
-        TOTAL_WORKPLACES("totalWorkplaces");
+        TOTAL_WORKPLACES("totalWorkplaces"),
+
+        EVENT_DATE("eventDate"),
+        EVENT_START_TIME("eventStartTime"),
+        EVENT_END_TIME("eventEndTime"),
+        EVENT_NAME("eventName"),
+        EVENT_MAX_PLACES("eventMaxPlaces");
 
         private final String keyword;
 

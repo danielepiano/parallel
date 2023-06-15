@@ -1,5 +1,6 @@
 package com.dp.spring.parallel.hephaestus.services.impl;
 
+import com.dp.spring.parallel.agora.services.EventService;
 import com.dp.spring.parallel.common.exceptions.HeadquartersAlreadyExistsException;
 import com.dp.spring.parallel.common.exceptions.HeadquartersNotDeletableException;
 import com.dp.spring.parallel.common.exceptions.HeadquartersNotFoundException;
@@ -36,6 +37,7 @@ import static java.util.stream.Collectors.toList;
 public class HeadquartersServiceImpl extends BusinessService implements HeadquartersService {
     private final HeadquartersReceptionistUserService headquartersReceptionistUserService;
     private final WorkspaceService workspaceService;
+    private final EventService eventService;
 
 
     /**
@@ -241,6 +243,7 @@ public class HeadquartersServiceImpl extends BusinessService implements Headquar
             throw new HeadquartersNotDeletableException(toDelete.getId());
         }
         this.workspaceService.removeAll(toDelete);
+        this.eventService.removeAll(toDelete);
         super.headquartersRepository.softDelete(toDelete);
     }
 

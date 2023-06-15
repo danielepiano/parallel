@@ -1,8 +1,11 @@
-package com.dp.spring.parallel.hephaestus.database.entities;
+package com.dp.spring.parallel.agora.database.entities;
 
-import com.dp.spring.parallel.hephaestus.database.enums.WorkspaceType;
+import com.dp.spring.parallel.hephaestus.database.entities.Headquarters;
 import com.dp.spring.springcore.database.entities.SoftDeletableAuditedEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -10,7 +13,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.Where;
 
-import java.util.Set;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 import static com.dp.spring.springcore.database.entities.SoftDeletableAuditedEntity.SOFT_DELETE_CLAUSE;
 
@@ -19,10 +23,9 @@ import static com.dp.spring.springcore.database.entities.SoftDeletableAuditedEnt
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"name", "headquarters_id", "is_active"}))
 @Entity
 @Where(clause = SOFT_DELETE_CLAUSE)
-public class Workspace extends SoftDeletableAuditedEntity<Integer> {
+public class Event extends SoftDeletableAuditedEntity<Integer> {
 
     @ManyToOne
     @JoinColumn(name = "headquarters_id", nullable = false)
@@ -31,17 +34,22 @@ public class Workspace extends SoftDeletableAuditedEntity<Integer> {
     @Column(nullable = false)
     private String name;
 
-    private String description;
+    @Column(name = "event_date", nullable = false)
+    private LocalDate eventDate;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private WorkspaceType type;
+    @Column(name = "start_time", nullable = false)
+    private LocalTime startTime;
 
-    private String floor;
+    @Column(name = "end_time", nullable = false)
+    private LocalTime endTime;
+
+    @Column(name = "max_places", nullable = false)
+    private Integer maxPlaces;
 
 
+    /* @todo serve?
     @OneToMany(mappedBy = "workspace", fetch = FetchType.LAZY)
-    private Set<Workplace> workplaces;
+    private Set<EventBooking> bookings;*/
 
 
     @Override
@@ -50,9 +58,10 @@ public class Workspace extends SoftDeletableAuditedEntity<Integer> {
                 "id = " + id + ", " +
                 "headquartersId = " + headquarters.getId() + ", " +
                 "name = " + name + ", " +
-                "description = " + description + ", " +
-                "type = " + type + ", " +
-                "floor = " + floor +
+                "eventDate = " + eventDate + ", " +
+                "startTime = " + startTime + ", " +
+                "endTime = " + endTime + ", " +
+                "maxPlaces = " + maxPlaces +
                 ")";
     }
 }

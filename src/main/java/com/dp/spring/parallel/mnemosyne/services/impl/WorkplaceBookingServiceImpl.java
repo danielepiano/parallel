@@ -285,7 +285,7 @@ public class WorkplaceBookingServiceImpl extends BusinessService implements Work
         final float availablePercentage = 100f * availableOnTotalWorkplaces.getFirst() / availableOnTotalWorkplaces.getSecond();
 
         if (availablePercentage < 35) {
-            log.info("Workplaces running out: headquarters {} will be notified", headquarters.getId());
+            log.info("Workplaces running out: headquarters {} observers will be notified", headquarters.getId());
 
             final Context context = Context.builder()
                     .availableOnTotalWorkplaces(availableOnTotalWorkplaces)

@@ -2,6 +2,7 @@ package com.dp.spring.parallel.talos.api.controllers;
 
 import com.dp.spring.parallel.talos.api.dtos.AccessTokenDTO;
 import com.dp.spring.parallel.talos.api.dtos.LoginRequestDTO;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +15,6 @@ public interface AuthenticationController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     AccessTokenDTO authenticate(
-            @RequestBody LoginRequestDTO loginForm
+            @Valid @RequestBody LoginRequestDTO loginForm
     );
 }

@@ -3,6 +3,7 @@ package com.dp.spring.parallel.hephaestus.api.controllers;
 import com.dp.spring.parallel.hephaestus.api.dtos.CreateWorkspaceRequestDTO;
 import com.dp.spring.parallel.hephaestus.api.dtos.UpdateWorkspaceRequestDTO;
 import com.dp.spring.parallel.hephaestus.api.dtos.WorkspaceResponseDTO;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
@@ -22,7 +23,7 @@ public interface WorkspaceController {
     @ResponseStatus(HttpStatus.CREATED)
     WorkspaceResponseDTO addWorkspace(
             @PathVariable("headquartersId") Integer headquartersId,
-            @RequestBody CreateWorkspaceRequestDTO createRequest
+            @Valid @RequestBody CreateWorkspaceRequestDTO createRequest
     );
 
     @GetMapping(path = "/{workspaceId}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -42,7 +43,7 @@ public interface WorkspaceController {
     WorkspaceResponseDTO updateWorkspace(
             @PathVariable("headquartersId") Integer headquartersId,
             @PathVariable("workspaceId") Integer workspaceId,
-            @RequestBody UpdateWorkspaceRequestDTO updateRequest
+            @Valid @RequestBody UpdateWorkspaceRequestDTO updateRequest
     );
 
     @DeleteMapping(path = "/{workspaceId}", produces = MediaType.APPLICATION_JSON_VALUE)

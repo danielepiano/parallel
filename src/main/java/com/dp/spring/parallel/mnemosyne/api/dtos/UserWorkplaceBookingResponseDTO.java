@@ -6,6 +6,7 @@ import com.dp.spring.parallel.hephaestus.database.entities.Workplace;
 import com.dp.spring.parallel.hephaestus.database.entities.Workspace;
 import com.dp.spring.parallel.mnemosyne.database.entities.WorkplaceBooking;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
@@ -18,7 +19,8 @@ import java.time.ZoneId;
 @Builder
 @Value
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UserWorkplaceBookingDTO {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class UserWorkplaceBookingResponseDTO {
 
     CompanyInfoDTO company;
     HeadquartersInfoDTO headquarters;
@@ -29,8 +31,8 @@ public class UserWorkplaceBookingDTO {
     LocalDate bookedOn;
 
 
-    public static UserWorkplaceBookingDTO of(final WorkplaceBooking booking) {
-        return UserWorkplaceBookingDTO.builder()
+    public static UserWorkplaceBookingResponseDTO of(final WorkplaceBooking booking) {
+        return UserWorkplaceBookingResponseDTO.builder()
                 .workplace(WorkplaceInfoDTO.of(booking.getWorkplace()))
                 .workspace(WorkspaceInfoDTO.of(booking.getWorkplace().getWorkspace()))
                 .headquarters(HeadquartersInfoDTO.of(booking.getWorkplace().getWorkspace().getHeadquarters()))

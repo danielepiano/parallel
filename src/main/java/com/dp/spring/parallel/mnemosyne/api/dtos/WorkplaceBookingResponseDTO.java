@@ -2,6 +2,7 @@ package com.dp.spring.parallel.mnemosyne.api.dtos;
 
 import com.dp.spring.parallel.mnemosyne.database.entities.WorkplaceBooking;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
@@ -14,7 +15,8 @@ import java.time.ZoneId;
 @Builder
 @Value
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class WorkplaceBookingDTO {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class WorkplaceBookingResponseDTO {
 
     Integer workplaceId;
     LocalDate bookingDate;
@@ -22,8 +24,8 @@ public class WorkplaceBookingDTO {
     boolean present;
 
 
-    public static WorkplaceBookingDTO of(final WorkplaceBooking booking) {
-        return WorkplaceBookingDTO.builder()
+    public static WorkplaceBookingResponseDTO of(final WorkplaceBooking booking) {
+        return WorkplaceBookingResponseDTO.builder()
                 .workplaceId(booking.getWorkplace().getId())
                 .bookingDate(booking.getBookingDate())
                 .bookedOn(Instant.ofEpochMilli(booking.getCreatedDate()).atZone(ZoneId.systemDefault()).toLocalDate())

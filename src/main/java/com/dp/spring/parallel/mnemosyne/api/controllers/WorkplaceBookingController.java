@@ -1,8 +1,8 @@
 package com.dp.spring.parallel.mnemosyne.api.controllers;
 
-import com.dp.spring.parallel.mnemosyne.api.dtos.UserWorkplaceBookingDTO;
-import com.dp.spring.parallel.mnemosyne.api.dtos.WorkplaceBookingDTO;
+import com.dp.spring.parallel.mnemosyne.api.dtos.UserWorkplaceBookingResponseDTO;
 import com.dp.spring.parallel.mnemosyne.api.dtos.WorkplaceBookingRequestDTO;
+import com.dp.spring.parallel.mnemosyne.api.dtos.WorkplaceBookingResponseDTO;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,7 +19,7 @@ public interface WorkplaceBookingController {
 
     @GetMapping(path = "/bookings", produces = MediaType.APPLICATION_JSON_VALUE)
     @Secured({ROLE_COMPANY_MANAGER_VALUE, ROLE_EMPLOYEE_VALUE})
-    List<UserWorkplaceBookingDTO> userWorkplacesBookingsFromDate(
+    List<UserWorkplaceBookingResponseDTO> userWorkplacesBookingsFromDate(
             @RequestParam(name = "fromDate", required = false) LocalDate fromDate
     );
 
@@ -30,7 +30,7 @@ public interface WorkplaceBookingController {
     )
     @Secured({ROLE_COMPANY_MANAGER_VALUE, ROLE_EMPLOYEE_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
-    WorkplaceBookingDTO bookWorkplace(
+    WorkplaceBookingResponseDTO bookWorkplace(
             @PathVariable("workspaceId") Integer workspaceId,
             @PathVariable("workplaceId") Integer workplaceId,
             @Valid @RequestBody WorkplaceBookingRequestDTO bookRequest
@@ -41,7 +41,7 @@ public interface WorkplaceBookingController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     @Secured({ROLE_ADMIN_VALUE, ROLE_HEADQUARTERS_RECEPTIONIST_VALUE})
-    WorkplaceBookingDTO setParticipation(
+    WorkplaceBookingResponseDTO setParticipation(
             @PathVariable("workspaceId") Integer workspaceId,
             @PathVariable("workplaceId") Integer workplaceId,
             @PathVariable("bookingId") Integer bookingId

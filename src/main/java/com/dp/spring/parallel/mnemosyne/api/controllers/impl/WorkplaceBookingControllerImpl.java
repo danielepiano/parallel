@@ -1,9 +1,9 @@
 package com.dp.spring.parallel.mnemosyne.api.controllers.impl;
 
 import com.dp.spring.parallel.mnemosyne.api.controllers.WorkplaceBookingController;
-import com.dp.spring.parallel.mnemosyne.api.dtos.UserWorkplaceBookingDTO;
-import com.dp.spring.parallel.mnemosyne.api.dtos.WorkplaceBookingDTO;
+import com.dp.spring.parallel.mnemosyne.api.dtos.UserWorkplaceBookingResponseDTO;
 import com.dp.spring.parallel.mnemosyne.api.dtos.WorkplaceBookingRequestDTO;
+import com.dp.spring.parallel.mnemosyne.api.dtos.WorkplaceBookingResponseDTO;
 import com.dp.spring.parallel.mnemosyne.database.entities.WorkplaceBooking;
 import com.dp.spring.parallel.mnemosyne.services.WorkplaceBookingService;
 import lombok.RequiredArgsConstructor;
@@ -21,23 +21,23 @@ public class WorkplaceBookingControllerImpl implements WorkplaceBookingControlle
 
 
     @Override
-    public List<UserWorkplaceBookingDTO> userWorkplacesBookingsFromDate(LocalDate fromDate) {
+    public List<UserWorkplaceBookingResponseDTO> userWorkplacesBookingsFromDate(LocalDate fromDate) {
         return this.workplaceBookingService.workplaceBookingsFromDate(ofNullable(fromDate).orElse(LocalDate.now()))
                 .stream()
-                .map(UserWorkplaceBookingDTO::of)
+                .map(UserWorkplaceBookingResponseDTO::of)
                 .toList();
     }
 
     @Override
-    public WorkplaceBookingDTO bookWorkplace(Integer workspaceId, Integer workplaceId, WorkplaceBookingRequestDTO bookRequest) {
+    public WorkplaceBookingResponseDTO bookWorkplace(Integer workspaceId, Integer workplaceId, WorkplaceBookingRequestDTO bookRequest) {
         final WorkplaceBooking booking = this.workplaceBookingService.book(workspaceId, workplaceId, bookRequest);
-        return WorkplaceBookingDTO.of(booking);
+        return WorkplaceBookingResponseDTO.of(booking);
     }
 
     @Override
-    public WorkplaceBookingDTO setParticipation(Integer workspaceId, Integer workplaceId, Integer bookingId) {
+    public WorkplaceBookingResponseDTO setParticipation(Integer workspaceId, Integer workplaceId, Integer bookingId) {
         final WorkplaceBooking booking = this.workplaceBookingService.setParticipation(workspaceId, workplaceId, bookingId);
-        return WorkplaceBookingDTO.of(booking);
+        return WorkplaceBookingResponseDTO.of(booking);
     }
 
     @Override

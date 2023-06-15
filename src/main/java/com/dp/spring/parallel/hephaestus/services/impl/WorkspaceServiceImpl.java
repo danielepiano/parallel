@@ -114,7 +114,6 @@ public class WorkspaceServiceImpl extends BusinessService implements WorkspaceSe
     @Override
     public void remove(Integer headquartersId, Integer workspaceId) {
         final Headquarters headquarters = this.getAndCheckHeadquartersOrThrow(headquartersId);
-        super.checkPrincipalScopeOrThrow(headquarters.getCompany().getId());
         this.workspaceRepository.findByIdAndHeadquarters(workspaceId, headquarters)
                 .ifPresent(this::softDelete);
     }

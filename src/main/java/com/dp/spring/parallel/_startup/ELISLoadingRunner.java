@@ -11,7 +11,6 @@ import com.dp.spring.parallel.hephaestus.database.repositories.HeadquartersRepos
 import com.dp.spring.parallel.hephaestus.database.repositories.WorkplaceRepository;
 import com.dp.spring.parallel.hephaestus.database.repositories.WorkspaceRepository;
 import com.dp.spring.parallel.hestia.database.entities.CompanyManagerUser;
-import com.dp.spring.parallel.hestia.database.entities.EmployeeUser;
 import com.dp.spring.parallel.hestia.database.entities.HeadquartersReceptionistUser;
 import com.dp.spring.parallel.hestia.database.repositories.UserRepository;
 import jakarta.transaction.Transactional;
@@ -172,8 +171,8 @@ public class ELISLoadingRunner implements CommandLineRunner {
                 .build();
     }
 
-    EmployeeUser dev(Company elis) {
-        return EmployeeUser.builder()
+    CompanyManagerUser dev(Company elis) {
+        return CompanyManagerUser.builder()
                 .firstName("Developer")
                 .lastName("Dev")
                 .birthDate(LocalDate.of(2001, 1, 1))

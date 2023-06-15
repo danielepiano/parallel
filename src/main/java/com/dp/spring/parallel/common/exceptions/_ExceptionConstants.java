@@ -23,6 +23,7 @@ public enum _ExceptionConstants {
     WORKPLACE_BOOKING_ALREADY_EXISTS_FOR_WORKER("BAD-120", "WORKPLACE BOOKING ALREADY EXIST FOR WORKER", "Couldn't complete the operation: worker %s has already booked a workplace on date %s."),
     WORKPLACE_BOOKING_PARTICIPATION_NOT_SETTABLE("BAD-121", "WORKPLACE BOOKING PARTICIPATION NOT SETTABLE", "Couldn't complete the operation: participation only settable on booking date %s."),
     WORKPLACE_BOOKING_CANCELLATION_NOT_VALID("BAD-122", "WORKPLACE BOOKING CANCELLATION NOT VALID", "Couldn't complete the operation: cancellation only possible before booking date %s."),
+    EVENT_NOT_FOUND("BAD-118", "EVENT NOT FOUND", "Couldn't find event for id %s and headquarters %s."),
 
 
     FAILURE_SENDING_EMAIL("ISE-101", "FAILURE SENDING EMAIL", "The email has not been sent due to some error."),
