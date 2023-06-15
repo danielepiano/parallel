@@ -21,6 +21,7 @@ import java.time.LocalDate;
 public class UserResponseDTO {
 
     Integer id;
+    String email;
     String firstName;
     String lastName;
 
@@ -38,6 +39,7 @@ public class UserResponseDTO {
     public static UserResponseDTO of(final User user) {
         var builder = UserResponseDTO.builder()
                 .id(user.getId())
+                .email(user.getEmail())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .birthDate(user.getBirthDate())
