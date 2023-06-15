@@ -21,7 +21,7 @@ public class WorkplaceBookingControllerImpl implements WorkplaceBookingControlle
 
 
     @Override
-    public List<UserWorkplaceBookingResponseDTO> userWorkplacesBookingsFromDate(LocalDate fromDate) {
+    public List<UserWorkplaceBookingResponseDTO> userWorkplaceBookingsFromDate(LocalDate fromDate) {
         return this.workplaceBookingService.workplaceBookingsFromDate(ofNullable(fromDate).orElse(LocalDate.now()))
                 .stream()
                 .map(UserWorkplaceBookingResponseDTO::of)

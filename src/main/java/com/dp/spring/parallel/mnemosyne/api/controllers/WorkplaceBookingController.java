@@ -17,9 +17,9 @@ import static com.dp.spring.parallel.hestia.database.enums.UserRole.Constants.*;
 @RequestMapping("/api/v1")
 public interface WorkplaceBookingController {
 
-    @GetMapping(path = "/bookings", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/workplaces/bookings", produces = MediaType.APPLICATION_JSON_VALUE)
     @Secured({ROLE_COMPANY_MANAGER_VALUE, ROLE_EMPLOYEE_VALUE})
-    List<UserWorkplaceBookingResponseDTO> userWorkplacesBookingsFromDate(
+    List<UserWorkplaceBookingResponseDTO> userWorkplaceBookingsFromDate(
             @RequestParam(name = "fromDate", required = false) LocalDate fromDate
     );
 

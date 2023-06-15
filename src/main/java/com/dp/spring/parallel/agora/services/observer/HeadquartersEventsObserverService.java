@@ -45,7 +45,7 @@ public class HeadquartersEventsObserverService
                         EmailMessageParser.Placeholder.COMPANY_NAME, publisher.getCompany().getName(),
                         EmailMessageParser.Placeholder.HEADQUARTERS_CITY, publisher.getCity(),
                         EmailMessageParser.Placeholder.HEADQUARTERS_ADDRESS, publisher.getAddress(),
-                        EmailMessageParser.Placeholder.EVENT_DATE, context.getCreatedEvent().getEventDate().toString(),
+                        EmailMessageParser.Placeholder.EVENT_DATE, context.getCreatedEvent().getOnDate().toString(),
                         EmailMessageParser.Placeholder.EVENT_START_TIME, context.getCreatedEvent().getStartTime().toString(),
                         EmailMessageParser.Placeholder.EVENT_END_TIME, context.getCreatedEvent().getEndTime().toString(),
                         EmailMessageParser.Placeholder.EVENT_NAME, context.getCreatedEvent().getName(),

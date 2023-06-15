@@ -32,13 +32,13 @@ public class WorkplaceBookingRequestDTO {
 
     /**
      * Constraint for marking the {@link WorkplaceBookingRequestDTO} booking date.
-     * Constraint validated by {@link WorkplaceBookingDateValidator.WorkingDay}.
+     * Constraint validated by {@link BookingDateValidator.WorkingDay}.
      */
-    @Constraint(validatedBy = WorkplaceBookingDateValidator.WorkingDay.class)
+    @Constraint(validatedBy = BookingDateValidator.WorkingDay.class)
     @Target(ElementType.FIELD)
     @Retention(RetentionPolicy.RUNTIME)
     @interface WorkingDayConstraint {
-        String message() default "non-working day, workplaces bookable only from Monday to Friday";
+        String message() default "non-working day, bookings are allowed only from Monday to Friday";
 
         Class<?>[] groups() default {};
 
@@ -47,9 +47,9 @@ public class WorkplaceBookingRequestDTO {
 
     /**
      * Constraint for marking the {@link WorkplaceBookingRequestDTO} booking date.
-     * Constraint validated by {@link WorkplaceBookingDateValidator.FutureDate}.
+     * Constraint validated by {@link BookingDateValidator.FutureDate}.
      */
-    @Constraint(validatedBy = WorkplaceBookingDateValidator.FutureDate.class)
+    @Constraint(validatedBy = BookingDateValidator.FutureDate.class)
     @Target(ElementType.FIELD)
     @Retention(RetentionPolicy.RUNTIME)
     @interface FutureDateConstraint {
@@ -60,7 +60,7 @@ public class WorkplaceBookingRequestDTO {
         Class<? extends Payload>[] payload() default {};
     }
 
-    static class WorkplaceBookingDateValidator {
+    static class BookingDateValidator {
 
         /**
          * Validator for {@link WorkingDayConstraint}: checking if the booking date is between MON-FRI.
@@ -69,7 +69,7 @@ public class WorkplaceBookingRequestDTO {
         static class WorkingDay implements ConstraintValidator<WorkingDayConstraint, LocalDate> {
             @Override
             public void initialize(WorkingDayConstraint constraint) {
-                log.info("Workplace-booking costraint validation: {}", constraint.message());
+                log.info("Booking costraint validation: {}", constraint.message());
             }
 
             @Override
@@ -89,7 +89,7 @@ public class WorkplaceBookingRequestDTO {
         static class FutureDate implements ConstraintValidator<FutureDateConstraint, LocalDate> {
             @Override
             public void initialize(FutureDateConstraint constraint) {
-                log.info("Workplace-booking costraint validation: {}", constraint.message());
+                log.info("Booking costraint validation: {}", constraint.message());
             }
 
             @Override

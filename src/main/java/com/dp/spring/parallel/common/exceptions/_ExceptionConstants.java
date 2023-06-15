@@ -23,14 +23,15 @@ public enum _ExceptionConstants {
     WORKPLACE_BOOKING_ALREADY_EXISTS_FOR_WORKER("BAD-120", "WORKPLACE BOOKING ALREADY EXIST FOR WORKER", "Couldn't complete the operation: worker %s has already booked a workplace on date %s."),
     WORKPLACE_BOOKING_PARTICIPATION_NOT_SETTABLE("BAD-121", "WORKPLACE BOOKING PARTICIPATION NOT SETTABLE", "Couldn't complete the operation: participation only settable on booking date %s."),
     WORKPLACE_BOOKING_CANCELLATION_NOT_VALID("BAD-122", "WORKPLACE BOOKING CANCELLATION NOT VALID", "Couldn't complete the operation: cancellation only possible before booking date %s."),
-    EVENT_NOT_FOUND("BAD-118", "EVENT NOT FOUND", "Couldn't find event for id %s and headquarters %s."),
+    EVENT_NOT_FOUND("BAD-123", "EVENT NOT FOUND", "Couldn't find event for id %s and headquarters %s."),
+    EVENT_BOOKING_ALREADY_EXISTS_FOR_WORKER("BAD-124", "EVENT BOOKING ALREADY EXIST FOR WORKER", "Couldn't complete the operation: worker %s has already booked for the event %s."),
+    EVENT_NO_PLACES_AVAILABLE("BAD-125", "EVENT NO PLACES AVAILABLE", "Couldn't complete the operation: 0 out of %s places available for event %s."),
+    EVENT_NOT_BOOKABLE("BAD-126", "EVENT NOT BOOKABLE", "Couldn't complete the operation: event %s has passed."),
+    EVENT_BOOKING_NOT_FOUND("BAD-127", "EVENT BOOKING NOT FOUND", "Couldn't find booking for id %s and event %s."),
+    EVENT_BOOKING_CANCELLATION_NOT_VALID("BAD-128", "EVENT BOOKING CANCELLATION NOT VALID", "Couldn't complete the operation: cancellation only possible before booking date %s."),
 
+    FAILURE_SENDING_EMAIL("ISE-101", "FAILURE SENDING EMAIL", "The email has not been sent due to some error.");
 
-    FAILURE_SENDING_EMAIL("ISE-101", "FAILURE SENDING EMAIL", "The email has not been sent due to some error."),
-
-
-    DEVICE_NOT_FOUND("XXXX", "DEVICE NOT FOUND", "Couldn't find device for id %s."),
-    NODE_NOT_FOUND("XXXY", "NODE NOT FOUND", "Couldn't find node.");
 
     private final String code;
     private final String title;

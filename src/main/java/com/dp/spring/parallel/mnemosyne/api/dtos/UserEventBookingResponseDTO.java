@@ -1,10 +1,9 @@
 package com.dp.spring.parallel.mnemosyne.api.dtos;
 
+import com.dp.spring.parallel.agora.database.entities.Event;
 import com.dp.spring.parallel.hephaestus.database.entities.Company;
 import com.dp.spring.parallel.hephaestus.database.entities.Headquarters;
-import com.dp.spring.parallel.hephaestus.database.entities.Workplace;
-import com.dp.spring.parallel.hephaestus.database.entities.Workspace;
-import com.dp.spring.parallel.mnemosyne.database.entities.WorkplaceBooking;
+import com.dp.spring.parallel.mnemosyne.database.entities.EventBooking;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
@@ -13,6 +12,7 @@ import lombok.extern.jackson.Jacksonized;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.ZoneId;
 
 @Jacksonized
@@ -20,26 +20,22 @@ import java.time.ZoneId;
 @Value
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class UserWorkplaceBookingResponseDTO {
+public class UserEventBookingResponseDTO {
 
     Integer id;
     CompanyInfoDTO company;
     HeadquartersInfoDTO headquarters;
-    WorkspaceInfoDTO workspace;
-    WorkplaceInfoDTO workplace;
+    EventInfoDTO event;
 
-    LocalDate bookingDate;
     LocalDate bookedOn;
 
 
-    public static UserWorkplaceBookingResponseDTO of(final WorkplaceBooking booking) {
-        return UserWorkplaceBookingResponseDTO.builder()
+    public static UserEventBookingResponseDTO of(final Long availablePlaces, final EventBooking booking) {
+        return UserEventBookingResponseDTO.builder()
                 .id(booking.getId())
-                .workplace(WorkplaceInfoDTO.of(booking.getWorkplace()))
-                .workspace(WorkspaceInfoDTO.of(booking.getWorkplace().getWorkspace()))
-                .headquarters(HeadquartersInfoDTO.of(booking.getWorkplace().getWorkspace().getHeadquarters()))
-                .company(CompanyInfoDTO.of(booking.getWorkplace().getWorkspace().getHeadquarters().getCompany()))
-                .bookingDate(booking.getBookingDate())
+                .company(CompanyInfoDTO.of(booking.getEvent().getHeadquarters().getCompany()))
+                .headquarters(HeadquartersInfoDTO.of(booking.getEvent().getHeadquarters()))
+                .event(EventInfoDTO.of(availablePlaces, booking.getEvent()))
                 .bookedOn(Instant.ofEpochMilli(booking.getCreatedDate()).atZone(ZoneId.systemDefault()).toLocalDate())
                 .build();
     }
@@ -82,33 +78,27 @@ public class UserWorkplaceBookingResponseDTO {
     @Builder
     @Value
     @JsonIgnoreProperties(ignoreUnknown = true)
-    private static class WorkspaceInfoDTO {
+    private static class EventInfoDTO {
         Integer id;
         String name;
-        String floor;
+        LocalDate onDate;
+        LocalTime startTime;
+        LocalTime endTime;
 
-        static WorkspaceInfoDTO of(final Workspace workspace) {
-            return WorkspaceInfoDTO.builder()
-                    .id(workspace.getId())
-                    .name(workspace.getName())
-                    .floor(workspace.getFloor())
+        Long availablePlaces;
+        Long totalPlaces;
+
+        static EventInfoDTO of(final Long availablePlaces, final Event event) {
+            return EventInfoDTO.builder()
+                    .id(event.getId())
+                    .name(event.getName())
+                    .onDate(event.getOnDate())
+                    .startTime(event.getStartTime())
+                    .endTime(event.getEndTime())
+                    .availablePlaces(availablePlaces)
+                    .totalPlaces(event.getMaxPlaces().longValue())
                     .build();
         }
     }
 
-    @Jacksonized
-    @Builder
-    @Value
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    private static class WorkplaceInfoDTO {
-        Integer id;
-        String name;
-
-        static WorkplaceInfoDTO of(final Workplace workplace) {
-            return WorkplaceInfoDTO.builder()
-                    .id(workplace.getId())
-                    .name(workplace.getName())
-                    .build();
-        }
-    }
 }

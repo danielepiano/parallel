@@ -63,7 +63,7 @@ public class WorkplaceBookingServiceImpl extends BusinessService implements Work
      * {@inheritDoc}
      *
      * @param fromDate the date from which get the user bookings
-     * @return the user workplaces from the given date
+     * @return the user workplace bookings from the given date
      */
     @Override
     public List<WorkplaceBooking> workplaceBookingsFromDate(LocalDate fromDate) {
@@ -96,7 +96,7 @@ public class WorkplaceBookingServiceImpl extends BusinessService implements Work
                 .setBookingDate(bookRequest.getBookingDate());
         booking = this.workplaceBookingRepository.save(booking);
 
-        this.buildAndSendNotification(worker, booking);
+        this.buildAndSendNotification(booking);
 
         this.notifyHeadquartersObservers(bookRequest.getBookingDate(), workplace.getWorkspace().getHeadquarters());
 
@@ -176,7 +176,7 @@ public class WorkplaceBookingServiceImpl extends BusinessService implements Work
     /**
      * {@inheritDoc}
      *
-     * @param workplace the workplace to cancel the booking of
+     * @param workplace the workplace to cancel the bookings of
      */
     public void cancelAll(Workplace workplace) {
         // Get all the bookings for the workplace, and soft delete each of them
@@ -209,7 +209,7 @@ public class WorkplaceBookingServiceImpl extends BusinessService implements Work
      * @param workplace   the workplace to book
      */
     private void checkBookingDateConflicts(final LocalDate bookingDate, final User worker, final Workplace workplace) {
-        if (this.workplaceBookingRepository.countAllByWorkerAndBookingDate(getPrincipalOrThrow(), bookingDate) > 0) {
+        if (this.workplaceBookingRepository.countAllByWorkerAndBookingDate(worker, bookingDate) > 0) {
             throw new WorkplaceBookingAlreadyExistsForWorker(worker.getId(), bookingDate);
         }
         if (this.workplaceBookingRepository.countAllByWorkplaceAndBookingDate(workplace, bookingDate) > 0) {
@@ -246,14 +246,16 @@ public class WorkplaceBookingServiceImpl extends BusinessService implements Work
 
     /**
      * Building and sending notification message to confirm booking has been successful.
+     *
+     * @param booking the booking to notify for
      */
-    private void buildAndSendNotification(final User worker, final WorkplaceBooking booking) {
+    private void buildAndSendNotification(final WorkplaceBooking booking) {
         // Building message to confirm password changing
         final String message = this.emailNotificationService.buildMessage(
                 WORKPLACE_BOOKING_NOTIFICATION_MESSAGE_PATH,
                 Map.of(
-                        EmailMessageParser.Placeholder.FIRST_NAME, worker.getFirstName(),
-                        EmailMessageParser.Placeholder.LAST_NAME, worker.getLastName(),
+                        EmailMessageParser.Placeholder.FIRST_NAME, booking.getWorker().getFirstName(),
+                        EmailMessageParser.Placeholder.LAST_NAME, booking.getWorker().getLastName(),
                         EmailMessageParser.Placeholder.COMPANY_NAME, booking.getWorkplace().getWorkspace().getHeadquarters().getCompany().getName(),
                         EmailMessageParser.Placeholder.HEADQUARTERS_CITY, booking.getWorkplace().getWorkspace().getHeadquarters().getCity(),
                         EmailMessageParser.Placeholder.HEADQUARTERS_ADDRESS, booking.getWorkplace().getWorkspace().getHeadquarters().getAddress(),
@@ -265,7 +267,7 @@ public class WorkplaceBookingServiceImpl extends BusinessService implements Work
         );
         // Sending email
         this.emailNotificationService.notify(
-                worker.getEmail(),
+                booking.getWorker().getEmail(),
                 WORKPLACE_BOOKING_NOTIFICATION_TITLE,
                 message
         );

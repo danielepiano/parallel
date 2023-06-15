@@ -44,7 +44,7 @@ public class EventResponseDTO {
                 .name(event.getName())
                 .availablePlaces(availablePlaces)
                 .totalPlaces(event.getMaxPlaces().longValue())
-                .eventDate(event.getEventDate())
+                .eventDate(event.getOnDate())
                 .startTime(event.getStartTime())
                 .endTime(event.getEndTime())
                 .build();

@@ -18,6 +18,7 @@ import java.time.ZoneId;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class WorkplaceBookingResponseDTO {
 
+    Integer id;
     Integer workplaceId;
     LocalDate bookingDate;
     LocalDate bookedOn;
@@ -26,6 +27,7 @@ public class WorkplaceBookingResponseDTO {
 
     public static WorkplaceBookingResponseDTO of(final WorkplaceBooking booking) {
         return WorkplaceBookingResponseDTO.builder()
+                .id(booking.getId())
                 .workplaceId(booking.getWorkplace().getId())
                 .bookingDate(booking.getBookingDate())
                 .bookedOn(Instant.ofEpochMilli(booking.getCreatedDate()).atZone(ZoneId.systemDefault()).toLocalDate())

@@ -14,11 +14,11 @@ public interface EventRepository extends SoftDeleteJpaRepository<Event, Integer>
     Optional<Event> findByIdAndHeadquarters(Integer id, Headquarters headquarters);
 
     @Query("select e from Event e where e.active = true" +
-            " order by e.eventDate, e.startTime, e.endTime")
+            " order by e.onDate, e.startTime, e.endTime")
     List<Event> findAllByHeadquarters(Headquarters headquarters);
 
-    @Query("select e from Event e where e.eventDate > ?1 and e.active = true" +
-            " order by e.eventDate, e.startTime, e.endTime")
+    @Query("select e from Event e where e.onDate > ?1 and e.active = true" +
+            " order by e.onDate, e.startTime, e.endTime")
     List<Event> findAllByEventDateGreaterThanEqual(LocalDate fromDate);
 
 }

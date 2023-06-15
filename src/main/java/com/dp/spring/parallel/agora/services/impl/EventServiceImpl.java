@@ -6,10 +6,10 @@ import com.dp.spring.parallel.agora.database.repositories.EventRepository;
 import com.dp.spring.parallel.agora.services.EventService;
 import com.dp.spring.parallel.agora.services.observer.HeadquartersEventsObserverService;
 import com.dp.spring.parallel.common.exceptions.EventNotFoundException;
-import com.dp.spring.parallel.common.exceptions.WorkspaceNotFoundException;
 import com.dp.spring.parallel.common.services.BusinessService;
 import com.dp.spring.parallel.hephaestus.database.entities.Headquarters;
 import com.dp.spring.parallel.hephaestus.services.HeadquartersService;
+import com.dp.spring.parallel.mnemosyne.services.EventBookingService;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
@@ -27,6 +27,7 @@ import java.util.List;
 public class EventServiceImpl extends BusinessService implements EventService {
 
     private final HeadquartersService headquartersService;
+    private final EventBookingService eventBookingService;
 
     private final EventRepository eventRepository;
 
@@ -36,10 +37,12 @@ public class EventServiceImpl extends BusinessService implements EventService {
 
     public EventServiceImpl(
             @Lazy HeadquartersService headquartersService,
+            @Lazy EventBookingService eventBookingService,
             EventRepository eventRepository,
             HeadquartersEventsObserverService headquartersEventsObserverService
     ) {
         this.headquartersService = headquartersService;
+        this.eventBookingService = eventBookingService;
         this.eventRepository = eventRepository;
         this.headquartersEventsObserverService = headquartersEventsObserverService;
     }
@@ -59,7 +62,7 @@ public class EventServiceImpl extends BusinessService implements EventService {
         Event event = new Event();
         event.setHeadquarters(headquarters)
                 .setName(createRequest.getName())
-                .setEventDate(createRequest.getEventDate())
+                .setOnDate(createRequest.getEventDate())
                 .setStartTime(createRequest.getStartTime())
                 .setEndTime(createRequest.getEndTime())
                 .setMaxPlaces(createRequest.getMaxPlaces());
@@ -82,7 +85,7 @@ public class EventServiceImpl extends BusinessService implements EventService {
     public Event event(Integer headquartersId, Integer eventId) {
         final Headquarters headquarters = super.getHeadquartersOrThrow(headquartersId);
         return this.eventRepository.findByIdAndHeadquarters(eventId, headquarters)
-                .orElseThrow(() -> new WorkspaceNotFoundException(eventId, headquartersId));
+                .orElseThrow(() -> new EventNotFoundException(eventId, headquartersId));
     }
 
     /**
@@ -122,7 +125,7 @@ public class EventServiceImpl extends BusinessService implements EventService {
         final Event toUpdate = this.eventRepository.findByIdAndHeadquarters(eventId, headquarters)
                 .orElseThrow(() -> new EventNotFoundException(eventId, headquartersId))
                 .setName(updateRequest.getName())
-                .setEventDate(updateRequest.getEventDate())
+                .setOnDate(updateRequest.getEventDate())
                 .setStartTime(updateRequest.getStartTime())
                 .setEndTime(updateRequest.getEndTime())
                 .setMaxPlaces(updateRequest.getMaxPlaces());
@@ -170,12 +173,12 @@ public class EventServiceImpl extends BusinessService implements EventService {
 
     /**
      * Internal method to soft delete an event.<br>
-     * Before removing the workspace, removing all the related bookings.
+     * Before removing the event, deleting all related bookings.
      *
      * @param toDelete the event to be deleted
      */
     private void softDelete(final Event toDelete) {
-        // todo this.eventBookingService.removeAll(toDelete);
+        this.eventBookingService.cancelAll(toDelete);
         this.eventRepository.softDelete(toDelete);
     }
 

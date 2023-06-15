@@ -16,7 +16,7 @@ public interface WorkplaceBookingService {
      * Retrieving the logged user bookings from a given date.
      *
      * @param fromDate the date from which get the user bookings
-     * @return the user workplaces from the given date
+     * @return the user workplace bookings from the given date
      */
     List<WorkplaceBooking> workplaceBookingsFromDate(LocalDate fromDate);
 
@@ -74,7 +74,7 @@ public interface WorkplaceBookingService {
     /**
      * Cancelling all bookings for a given workplace.
      *
-     * @param workplace the workplace to cancel the booking of
+     * @param workplace the workplace to cancel the bookings of
      */
     void cancelAll(Workplace workplace);
 

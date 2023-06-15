@@ -233,7 +233,7 @@ public class HeadquartersServiceImpl extends BusinessService implements Headquar
     /**
      * Internal method to soft delete a headquarters.<br>
      * If any {@link HeadquartersReceptionistUser} still exists for the headquarters, it will not be deleted.<br>
-     * Before removing the headquarters, deleting all related workspaces.
+     * Before removing the headquarters, deleting all related workspaces and events.
      *
      * @param toDelete the resource to be deleted
      */
