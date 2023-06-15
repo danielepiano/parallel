@@ -3,6 +3,7 @@ package com.dp.spring.parallel.hestia.api.controllers.impl;
 import com.dp.spring.parallel.hestia.api.controllers.UserController;
 import com.dp.spring.parallel.hestia.api.dtos.ChangePasswordRequestDTO;
 import com.dp.spring.parallel.hestia.api.dtos.UpdatePersonalDataRequestDTO;
+import com.dp.spring.parallel.hestia.api.dtos.UserResponseDTO;
 import com.dp.spring.parallel.hestia.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -14,6 +15,10 @@ public class UserControllerImpl implements UserController {
     @Qualifier("userService")
     private final UserService userService;
 
+    @Override
+    public UserResponseDTO whoAmI() {
+        return UserResponseDTO.of(this.userService.whoAmI());
+    }
 
     @Override
     public void updatePersonalData(

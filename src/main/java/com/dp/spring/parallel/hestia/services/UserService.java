@@ -47,6 +47,13 @@ public interface UserService {
 
 
     /**
+     * Retrieving the logged in user.
+     *
+     * @return the principal
+     */
+    User whoAmI();
+
+    /**
      * Updating the authenticated user's personal data.
      *
      * @param updatedData the updated personal data

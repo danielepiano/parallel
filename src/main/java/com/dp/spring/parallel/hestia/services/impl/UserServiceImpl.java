@@ -80,6 +80,15 @@ public class UserServiceImpl extends BusinessService implements UserService {
                 .orElseThrow(() -> new UserNotFoundException(UserRole.ANY.getRole(), id));
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @return the principal
+     */
+    @Override
+    public User whoAmI() {
+        return super.getPrincipalOrThrow();
+    }
 
     /**
      * {@inheritDoc}
@@ -92,7 +101,6 @@ public class UserServiceImpl extends BusinessService implements UserService {
     ) {
         final User principal = super.getPrincipalOrThrow();
 
-        principal.setBirthDate(updatedData.getBirthDate());
         principal.setPhoneNumber(updatedData.getPhoneNumber());
         principal.setCity(updatedData.getCity());
         principal.setAddress(updatedData.getAddress());
