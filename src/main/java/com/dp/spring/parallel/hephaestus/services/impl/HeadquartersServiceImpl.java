@@ -280,4 +280,5 @@ public class HeadquartersServiceImpl extends BusinessService implements Headquar
             throw new HeadquartersAlreadyExistsException(city, address);
         }
     }
+
 }

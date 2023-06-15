@@ -5,6 +5,7 @@ import com.dp.spring.parallel.hephaestus.api.dtos.HeadquartersResponseDTO;
 import com.dp.spring.parallel.hephaestus.database.entities.Headquarters;
 import com.dp.spring.parallel.hephaestus.services.HeadquartersService;
 import com.dp.spring.parallel.hephaestus.services.WorkplaceService;
+import com.dp.spring.parallel.talos.services.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,12 +18,17 @@ public class HeadquartersControllerImpl implements HeadquartersController {
     private final HeadquartersService headquartersService;
     private final WorkplaceService workplaceService;
 
+    private final AuthenticationService authenticationService;
+
 
     @Override
     public HeadquartersResponseDTO headquarters(Integer headquartersId) {
         final Headquarters headquarters = this.headquartersService.headquarters(headquartersId);
         final long totalWorkplaces = this.workplaceService.countForHeadquarters(headquarters);
-        return HeadquartersResponseDTO.of(totalWorkplaces, headquarters);
+
+        return this.authenticationService.getPrincipalOrThrow().getFavoriteHeadquarters().stream().anyMatch(headquarters::equals)
+                ? HeadquartersResponseDTO.favorite(totalWorkplaces, headquarters)
+                : HeadquartersResponseDTO.nonFavorite(totalWorkplaces, headquarters);
     }
 
     @Override
@@ -49,4 +55,5 @@ public class HeadquartersControllerImpl implements HeadquartersController {
     public void toggleFavouriteHeadquarters(Integer headquartersId) {
         this.headquartersService.toggleFavouriteHeadquarters(headquartersId);
     }
+
 }

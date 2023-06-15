@@ -8,16 +8,21 @@ import com.dp.spring.parallel.talos.api.dtos.AccessTokenDTO;
 import com.dp.spring.parallel.talos.api.dtos.LoginRequestDTO;
 import com.dp.spring.parallel.talos.api.dtos.UserToken;
 import com.dp.spring.parallel.talos.database.enums.TokenType;
+import com.dp.spring.springcore.exceptions.BaseExceptionConstants;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+
+import static java.util.Optional.ofNullable;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +37,13 @@ public class AuthenticationService {
 
     private final ObjectMapper objectMapper;
 
+
+    public User getPrincipalOrThrow() {
+        return ofNullable(SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                .map(User.class::cast)
+                .flatMap(principal -> this.userRepository.findById(principal.getId()))
+                .orElseThrow(() -> new AccessDeniedException(BaseExceptionConstants.ACCESS_DENIED.getDetail()));
+    }
 
     /**
      * User authentication via username and password and JWT generation if login successful.
