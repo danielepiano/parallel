@@ -41,7 +41,7 @@ public interface WorkplaceService {
     );
 
     /**
-     * Retrieving all the workplaces of the headquarters and workspace of given ids;
+     * Retrieving all the workplaces of a given headquarters' workspace.
      *
      * @param headquartersId the id of the headquarters of the workspace
      * @param workspaceId    the id of the workspace
@@ -50,6 +50,20 @@ public interface WorkplaceService {
     List<Workplace> workplaces(
             Integer headquartersId,
             Integer workspaceId
+    );
+
+    /**
+     * Retrieving all the available workplaces of a given headquarters' workspace on a given date.
+     *
+     * @param headquartersId the id of the headquarters of the workspace
+     * @param workspaceId    the id of the workspace
+     * @param onDate         the date
+     * @return the available workplaces
+     */
+    List<Workplace> availableWorkplaces(
+            Integer headquartersId,
+            Integer workspaceId,
+            LocalDate onDate
     );
 
     /**

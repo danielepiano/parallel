@@ -9,6 +9,7 @@ import com.dp.spring.parallel.hephaestus.services.WorkplaceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -42,6 +43,17 @@ public class WorkplaceControllerImpl implements WorkplaceController {
             Integer workspaceId
     ) {
         return this.workplaceService.workplaces(headquartersId, workspaceId).stream()
+                .map(WorkplaceResponseDTO::of)
+                .toList();
+    }
+
+    @Override
+    public List<WorkplaceResponseDTO> availableWorkplaces(
+            Integer headquartersId,
+            Integer workspaceId,
+            LocalDate onDate
+    ) {
+        return this.workplaceService.availableWorkplaces(headquartersId, workspaceId, onDate).stream()
                 .map(WorkplaceResponseDTO::of)
                 .toList();
     }

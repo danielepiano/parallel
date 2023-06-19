@@ -77,7 +77,6 @@ public class WorkplaceServiceImpl extends BusinessService implements WorkplaceSe
      */
     @Override
     public Workplace workplace(Integer headquartersId, Integer workspaceId, Integer workplaceId) {
-        // All permission checks are included
         final Workspace workspace = this.workspaceService.workspace(headquartersId, workspaceId);
         return this.workplaceRepository.findByIdAndWorkspace(workplaceId, workspace)
                 .orElseThrow(() -> new WorkplaceNotFoundException(workplaceId, workspaceId));
@@ -92,9 +91,22 @@ public class WorkplaceServiceImpl extends BusinessService implements WorkplaceSe
      */
     @Override
     public List<Workplace> workplaces(Integer headquartersId, Integer workspaceId) {
-        // All permission checks are included
         final Workspace workspace = this.workspaceService.workspace(headquartersId, workspaceId);
         return this.workplaceRepository.findAllByWorkspace(workspace, Sort.by(Sort.Direction.ASC, "name"));
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param headquartersId the id of the headquarters of the workspace
+     * @param workspaceId    the id of the workspace
+     * @param onDate         the date
+     * @return the available workplaces
+     */
+    @Override
+    public List<Workplace> availableWorkplaces(Integer headquartersId, Integer workspaceId, LocalDate onDate) {
+        final Workspace workspace = this.workspaceService.workspace(headquartersId, workspaceId);
+        return this.workplaceRepository.findAllAvailableByWorkspaceAndBookingDate(workspace, onDate);
     }
 
     /**

@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static com.dp.spring.parallel.hestia.database.enums.UserRole.Constants.ROLE_ADMIN_VALUE;
@@ -38,6 +39,13 @@ public interface WorkplaceController {
     List<WorkplaceResponseDTO> workplaces(
             @PathVariable("headquartersId") Integer headquartersId,
             @PathVariable("workspaceId") Integer workspaceId
+    );
+
+    @GetMapping(path = "/available", produces = MediaType.APPLICATION_JSON_VALUE)
+    List<WorkplaceResponseDTO> availableWorkplaces(
+            @PathVariable("headquartersId") Integer headquartersId,
+            @PathVariable("workspaceId") Integer workspaceId,
+            @RequestParam("on") LocalDate onDate
     );
 
     @PutMapping(path = "/{workplaceId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

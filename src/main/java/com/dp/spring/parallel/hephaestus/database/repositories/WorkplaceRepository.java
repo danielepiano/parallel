@@ -20,6 +20,13 @@ public interface WorkplaceRepository extends SoftDeleteJpaRepository<Workplace, 
 
     List<Workplace> findAllByWorkspace(Workspace workspace, Sort sort);
 
+    @Query("select wp_av from Workplace wp_av where wp_av.workspace = ?1 " +
+            "and wp_av.id not in (" +
+            "select distinct wp.id from Workplace wp join WorkplaceBooking b on b.workplace = wp " +
+            "where b.bookingDate = ?2 and wp.workspace = ?1 and wp.active = true and wp.active = true " +
+            ") order by wp_av.name, wp_av.description asc")
+    List<Workplace> findAllAvailableByWorkspaceAndBookingDate(Workspace workspace, LocalDate bookingDate);
+
     boolean existsByNameAndWorkspace(String name, Workspace workspace);
 
     boolean existsByIdNotAndNameAndWorkspace(Integer id, String name, Workspace workspace);
