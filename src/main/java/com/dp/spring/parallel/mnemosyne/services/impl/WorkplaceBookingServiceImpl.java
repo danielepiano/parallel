@@ -60,6 +60,13 @@ public class WorkplaceBookingServiceImpl extends BusinessService implements Work
     private static final String WORKPLACE_BOOKING_NOTIFICATION_MESSAGE_PATH = "email/workplace-booking-template.html";
 
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param headquartersId the id of the headquarters
+     * @param onDate         the date
+     * @return the bookings on a given date
+     */
     @Override
     public List<WorkplaceBooking> workplaceBookingsOnDate(Integer headquartersId, LocalDate onDate) {
         final User principal = super.getPrincipalOrThrow();
@@ -68,7 +75,6 @@ public class WorkplaceBookingServiceImpl extends BusinessService implements Work
             throw new AccessDeniedException(BaseExceptionConstants.ACCESS_DENIED.getDetail());
         }
         final Headquarters headquarters = super.getHeadquartersOrThrow(headquartersId);
-        log.info("{} - {}", headquarters, onDate);
         return this.workplaceBookingRepository.findAllByHeadquartersAndBookingDate(headquarters, onDate);
     }
 

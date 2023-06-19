@@ -13,11 +13,14 @@ import com.dp.spring.parallel.hephaestus.database.repositories.HeadquartersRepos
 import com.dp.spring.parallel.hephaestus.database.repositories.WorkplaceRepository;
 import com.dp.spring.parallel.hephaestus.database.repositories.WorkspaceRepository;
 import com.dp.spring.parallel.hestia.database.entities.CompanyManagerUser;
+import com.dp.spring.parallel.hestia.database.entities.EmployeeUser;
 import com.dp.spring.parallel.hestia.database.entities.HeadquartersReceptionistUser;
 import com.dp.spring.parallel.hestia.database.entities.User;
 import com.dp.spring.parallel.hestia.database.repositories.UserRepository;
 import com.dp.spring.parallel.mnemosyne.database.entities.EventBooking;
+import com.dp.spring.parallel.mnemosyne.database.entities.WorkplaceBooking;
 import com.dp.spring.parallel.mnemosyne.database.repositories.EventBookingRepository;
+import com.dp.spring.parallel.mnemosyne.database.repositories.WorkplaceBookingRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
@@ -40,6 +43,7 @@ public class ELISLoadingRunner implements CommandLineRunner {
     private final UserRepository userRepository;
     private final EventRepository eventRepository;
     private final EventBookingRepository eventBookingRepository;
+    private final WorkplaceBookingRepository workplaceBookingRepository;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -56,8 +60,11 @@ public class ELISLoadingRunner implements CommandLineRunner {
 
         var agora = this.workspaceRepository.save(ws_agora(eih));
         this.workplaceRepository.saveAll(wp(agora, WorkplaceType.BOX, "BOX", 3));
-        this.workplaceRepository.saveAll(wp(agora, WorkplaceType.DESK, "D", 4));
-        this.workplaceRepository.saveAll(wp(agora, WorkplaceType.DESK, "SD", 1));
+        var wp1 = this.workplaceRepository.save(singleWp(agora, WorkplaceType.DESK, "D", 1));
+        var wp2 = this.workplaceRepository.save(singleWp(agora, WorkplaceType.DESK, "D", 2));
+        var wp3 = this.workplaceRepository.save(singleWp(agora, WorkplaceType.DESK, "D", 3));
+        var wp4 = this.workplaceRepository.save(singleWp(agora, WorkplaceType.DESK, "D", 4));
+        var wp5 = this.workplaceRepository.save(singleWp(agora, WorkplaceType.STANDING_DESK, "SD", 1));
 
         var palestra = this.workspaceRepository.save(ws_palestra(eih));
         this.workplaceRepository.saveAll(wp(palestra, WorkplaceType.DESK, "D", 20));
@@ -72,6 +79,11 @@ public class ELISLoadingRunner implements CommandLineRunner {
         var cm1 = this.userRepository.save(cm1(elis));
         var hqr1 = this.userRepository.save(hqr1(eih));
         var dev = this.userRepository.save(dev(elis));
+        var em1 = this.userRepository.save(em(elis, "Michele", "Leggieri"));
+        var em2 = this.userRepository.save(em(elis, "Maria", "Marinelli"));
+        var em3 = this.userRepository.save(em(elis, "Gino", "Lavatrice"));
+        var em4 = this.userRepository.save(em(elis, "Federico", "Martinis"));
+        var em5 = this.userRepository.save(em(elis, "Giancarlo", "Giancarlo"));
 
         // Events definition
         var enricov = this.eventRepository.save(enricov(eih));
@@ -82,6 +94,13 @@ public class ELISLoadingRunner implements CommandLineRunner {
         var eb2 = this.eventBookingRepository.save(eb(enricov, dev));
         var eb3 = this.eventBookingRepository.save(eb(aperitivo, cm1));
         var eb4 = this.eventBookingRepository.save(eb(aperitivo, dev));
+
+        // Workplace bookings definition
+        var wpb1 = this.workplaceBookingRepository.save(wpb(wp1, em1, false));
+        var wpb2 = this.workplaceBookingRepository.save(wpb(wp2, em2, false));
+        var wpb3 = this.workplaceBookingRepository.save(wpb(wp3, em3, true));
+        var wpb4 = this.workplaceBookingRepository.save(wpb(wp4, em4, false));
+        var wpb5 = this.workplaceBookingRepository.save(wpb(wp5, em5, false));
     }
 
 
@@ -160,6 +179,13 @@ public class ELISLoadingRunner implements CommandLineRunner {
         return wp;
     }
 
+    Workplace singleWp(Workspace ws, WorkplaceType type, String prefix, int offset) {
+        return new Workplace()
+                .setWorkspace(ws)
+                .setName(prefix + "-" + offset)
+                .setType(type);
+    }
+
 
     CompanyManagerUser cm1(Company elis) {
         return CompanyManagerUser.builder()
@@ -186,6 +212,20 @@ public class ELISLoadingRunner implements CommandLineRunner {
                 .email("m.rossi@elis.org")
                 .password(this.passwordEncoder.encode("receptionist"))
                 .headquarters(eih)
+                .build();
+    }
+
+    EmployeeUser em(Company elis, String firstName, String lastName) {
+        return EmployeeUser.builder()
+                .firstName(firstName)
+                .lastName(lastName)
+                .birthDate(LocalDate.of(1970, 1, 1))
+                .phoneNumber("+39 3330000002")
+                .city("Paese random")
+                .address("Via random, 12")
+                .email(firstName.toLowerCase().charAt(0) + "." + lastName.toLowerCase() + "@elis.org")
+                .password(this.passwordEncoder.encode(firstName.toLowerCase() + lastName.toLowerCase()))
+                .company(elis)
                 .build();
     }
 
@@ -229,6 +269,15 @@ public class ELISLoadingRunner implements CommandLineRunner {
         return new EventBooking()
                 .setEvent(event)
                 .setWorker(worker);
+    }
+
+
+    WorkplaceBooking wpb(Workplace wp, User worker, boolean present) {
+        return new WorkplaceBooking()
+                .setWorkplace(wp)
+                .setWorker(worker)
+                .setBookingDate(LocalDate.now())
+                .setPresent(present);
     }
 
 }

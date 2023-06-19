@@ -18,7 +18,7 @@ public interface WorkplaceBookingRepository extends SoftDeleteJpaRepository<Work
     List<WorkplaceBooking> findAllByWorkerAndBookingDateGreaterThanEqual(User worker, LocalDate fromDate, Sort sort);
 
     @Query("select b from WorkplaceBooking b where b.workplace.workspace.headquarters = ?1 and b.bookingDate = ?2" +
-            " and b.active = true order by b.present desc, b.worker.firstName asc, b.worker.lastName asc")
+            " and b.active = true order by b.present asc, b.worker.firstName asc, b.worker.lastName asc")
     List<WorkplaceBooking> findAllByHeadquartersAndBookingDate(Headquarters headquarters, LocalDate bookingDate);
 
     Optional<WorkplaceBooking> findByIdAndWorkplace(Integer id, Workplace workplace);

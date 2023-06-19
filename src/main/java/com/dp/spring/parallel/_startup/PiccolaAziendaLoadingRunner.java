@@ -13,11 +13,14 @@ import com.dp.spring.parallel.hephaestus.database.repositories.HeadquartersRepos
 import com.dp.spring.parallel.hephaestus.database.repositories.WorkplaceRepository;
 import com.dp.spring.parallel.hephaestus.database.repositories.WorkspaceRepository;
 import com.dp.spring.parallel.hestia.database.entities.CompanyManagerUser;
+import com.dp.spring.parallel.hestia.database.entities.EmployeeUser;
 import com.dp.spring.parallel.hestia.database.entities.HeadquartersReceptionistUser;
 import com.dp.spring.parallel.hestia.database.entities.User;
 import com.dp.spring.parallel.hestia.database.repositories.UserRepository;
 import com.dp.spring.parallel.mnemosyne.database.entities.EventBooking;
+import com.dp.spring.parallel.mnemosyne.database.entities.WorkplaceBooking;
 import com.dp.spring.parallel.mnemosyne.database.repositories.EventBookingRepository;
+import com.dp.spring.parallel.mnemosyne.database.repositories.WorkplaceBookingRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
@@ -26,8 +29,6 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.LinkedList;
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -38,6 +39,7 @@ public class PiccolaAziendaLoadingRunner implements CommandLineRunner {
     private final WorkplaceRepository workplaceRepository;
     private final EventRepository eventRepository;
     private final EventBookingRepository eventBookingRepository;
+    private final WorkplaceBookingRepository workplaceBookingRepository;
 
     private final UserRepository userRepository;
 
@@ -55,17 +57,28 @@ public class PiccolaAziendaLoadingRunner implements CommandLineRunner {
         var piccolasede = this.headquartersRepository.save(piccolasede(piccolaazienda));
 
         var openspace = this.workspaceRepository.save(ws_openspace(piccolasede));
-        this.workplaceRepository.saveAll(wp(openspace, WorkplaceType.DESK, "D", 4));
+        var wp1 = this.workplaceRepository.save(wp(openspace, WorkplaceType.DESK, "D", 1));
+        var wp2 = this.workplaceRepository.save(wp(openspace, WorkplaceType.DESK, "D", 2));
+        var wp3 = this.workplaceRepository.save(wp(openspace, WorkplaceType.DESK, "D", 3));
+        var wp4 = this.workplaceRepository.save(wp(openspace, WorkplaceType.DESK, "D", 4));
 
         // User definition
         var cm1 = this.userRepository.save(cm1(piccolaazienda));
         var hqr1 = this.userRepository.save(hqr1(piccolasede));
+        var em1 = this.userRepository.save(em1(piccolaazienda));
 
         // Events definition
         var piccoloevento = this.eventRepository.save(piccoloevento(piccolasede));
 
         // Event bookings definition
         var eb1 = this.eventBookingRepository.save(eb(piccoloevento, cm1));
+
+        // Workplace bookings definition
+        var wpb1 = this.workplaceBookingRepository.save(wpb(wp1, cm1));
+        var wpb2 = this.workplaceBookingRepository.save(wpb(wp2, em1));
+
+        var wpb3 = this.workplaceBookingRepository.save(wpb03072023(wp1, cm1));
+        var wpb4 = this.workplaceBookingRepository.save(wpb03072023(wp2, em1));
     }
 
 
@@ -96,17 +109,11 @@ public class PiccolaAziendaLoadingRunner implements CommandLineRunner {
                 .setFloor("P-1");
     }
 
-    List<Workplace> wp(Workspace ws, WorkplaceType type, String prefix, int n) {
-        List<Workplace> wp = new LinkedList<>();
-
-        for (int i = 0; i < n; i++) {
-            wp.add(new Workplace()
-                    .setWorkspace(ws)
-                    .setName(prefix + "-" + i)
-                    .setType(type)
-            );
-        }
-        return wp;
+    Workplace wp(Workspace ws, WorkplaceType type, String prefix, int offset) {
+        return new Workplace()
+                .setWorkspace(ws)
+                .setName(prefix + "-" + offset)
+                .setType(type);
     }
 
 
@@ -138,6 +145,20 @@ public class PiccolaAziendaLoadingRunner implements CommandLineRunner {
                 .build();
     }
 
+    EmployeeUser em1(Company piccolaazienda) {
+        return EmployeeUser.builder()
+                .firstName("Piccolo")
+                .lastName("Utente")
+                .birthDate(LocalDate.of(2001, 1, 1))
+                .phoneNumber("+39 3331111111")
+                .city("Piccola città")
+                .address("Via Piccola, 1")
+                .email("p.utente@piccolaazienda.pa")
+                .password(this.passwordEncoder.encode("piccolapwd"))
+                .company(piccolaazienda)
+                .build();
+    }
+
 
     Event piccoloevento(Headquarters piccolasede) {
         return new Event()
@@ -155,5 +176,19 @@ public class PiccolaAziendaLoadingRunner implements CommandLineRunner {
                 .setWorker(worker);
     }
 
+
+    WorkplaceBooking wpb(Workplace wp, User worker) {
+        return new WorkplaceBooking()
+                .setWorkplace(wp)
+                .setWorker(worker)
+                .setBookingDate(LocalDate.now());
+    }
+
+    WorkplaceBooking wpb03072023(Workplace wp, User worker) {
+        return new WorkplaceBooking()
+                .setWorkplace(wp)
+                .setWorker(worker)
+                .setBookingDate(LocalDate.of(2023, 7, 3));
+    }
 
 }
