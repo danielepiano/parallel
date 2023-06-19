@@ -5,8 +5,8 @@ import com.dp.spring.springcore.model.error.Error;
 
 import java.time.LocalDate;
 
-public class WorkplaceNotAvailableForBooking extends ConflictingResourceException {
-    public WorkplaceNotAvailableForBooking(final Integer workplaceId, final LocalDate bookingDate) {
+public class WorkplaceNotAvailableForBookingException extends ConflictingResourceException {
+    public WorkplaceNotAvailableForBookingException(final Integer workplaceId, final LocalDate bookingDate) {
         super(new Error(
                         _ExceptionConstants.WORKPLACE_NOT_AVAILABLE_FOR_BOOKING.getCode(),
                         _ExceptionConstants.WORKPLACE_NOT_AVAILABLE_FOR_BOOKING.getTitle(),
@@ -15,7 +15,7 @@ public class WorkplaceNotAvailableForBooking extends ConflictingResourceExceptio
         );
     }
 
-    public WorkplaceNotAvailableForBooking(final Integer workplaceId, final LocalDate bookingDate, final Throwable cause) {
+    public WorkplaceNotAvailableForBookingException(final Integer workplaceId, final LocalDate bookingDate, final Throwable cause) {
         super(new Error(
                         _ExceptionConstants.WORKPLACE_NOT_AVAILABLE_FOR_BOOKING.getCode(),
                         _ExceptionConstants.WORKPLACE_NOT_AVAILABLE_FOR_BOOKING.getTitle(),

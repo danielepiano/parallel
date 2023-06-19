@@ -37,7 +37,16 @@ public class UserResponseDTO {
 
 
     public static UserResponseDTO of(final User user) {
-        var builder = UserResponseDTO.builder()
+        return switch (user.getRole()) {
+            case COMPANY_MANAGER -> of((CompanyManagerUser) user);
+            case HEADQUARTERS_RECEPTIONIST -> of((HeadquartersReceptionistUser) user);
+            case EMPLOYEE -> of((EmployeeUser) user);
+            default -> base(user);
+        };
+    }
+
+    public static UserResponseDTO base(final User user) {
+        return UserResponseDTO.builder()
                 .id(user.getId())
                 .email(user.getEmail())
                 .firstName(user.getFirstName())
@@ -46,19 +55,54 @@ public class UserResponseDTO {
                 .phoneNumber(user.getPhoneNumber())
                 .city(user.getCity())
                 .address(user.getAddress())
-                .role(user.getRole());
-        return withRoleDetails(user, builder).build();
+                .role(user.getRole())
+                .build();
     }
 
-    private static UserResponseDTOBuilder withRoleDetails(final User user, final UserResponseDTOBuilder builder) {
-        return switch (user.getRole()) {
-            case COMPANY_MANAGER -> builder.scopeId(((CompanyManagerUser) user).getCompany().getId())
-                    .jobPosition(((CompanyManagerUser) user).getJobPosition());
-            case HEADQUARTERS_RECEPTIONIST ->
-                    builder.scopeId(((HeadquartersReceptionistUser) user).getHeadquarters().getId());
-            case EMPLOYEE -> builder.scopeId(((EmployeeUser) user).getCompany().getId())
-                    .jobPosition(((EmployeeUser) user).getJobPosition());
-            default -> builder;
-        };
+    public static UserResponseDTO of(final CompanyManagerUser user) {
+        return UserResponseDTO.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .birthDate(user.getBirthDate())
+                .phoneNumber(user.getPhoneNumber())
+                .city(user.getCity())
+                .address(user.getAddress())
+                .role(user.getRole())
+                .scopeId(user.getCompany().getId())
+                .jobPosition(user.getJobPosition())
+                .build();
+    }
+
+    public static UserResponseDTO of(final HeadquartersReceptionistUser user) {
+        return UserResponseDTO.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .birthDate(user.getBirthDate())
+                .phoneNumber(user.getPhoneNumber())
+                .city(user.getCity())
+                .address(user.getAddress())
+                .role(user.getRole())
+                .scopeId(user.getHeadquarters().getId())
+                .build();
+    }
+
+    public static UserResponseDTO of(final EmployeeUser user) {
+        return UserResponseDTO.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .birthDate(user.getBirthDate())
+                .phoneNumber(user.getPhoneNumber())
+                .city(user.getCity())
+                .address(user.getAddress())
+                .role(user.getRole())
+                .scopeId(user.getCompany().getId())
+                .jobPosition(user.getJobPosition())
+                .build();
     }
 }

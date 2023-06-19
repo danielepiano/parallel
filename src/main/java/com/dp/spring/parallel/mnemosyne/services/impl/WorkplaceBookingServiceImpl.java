@@ -13,6 +13,7 @@ import com.dp.spring.parallel.hermes.services.notification.impl.EmailNotificatio
 import com.dp.spring.parallel.hermes.utils.EmailMessageParser;
 import com.dp.spring.parallel.hestia.database.entities.HeadquartersReceptionistUser;
 import com.dp.spring.parallel.hestia.database.entities.User;
+import com.dp.spring.parallel.hestia.database.enums.UserRole;
 import com.dp.spring.parallel.mnemosyne.api.dtos.WorkplaceBookingRequestDTO;
 import com.dp.spring.parallel.mnemosyne.database.entities.WorkplaceBooking;
 import com.dp.spring.parallel.mnemosyne.database.repositories.WorkplaceBookingRepository;
@@ -58,6 +59,18 @@ public class WorkplaceBookingServiceImpl extends BusinessService implements Work
     private static final String WORKPLACE_BOOKING_NOTIFICATION_TITLE = "Prenotazione effettuata con successo!";
     private static final String WORKPLACE_BOOKING_NOTIFICATION_MESSAGE_PATH = "email/workplace-booking-template.html";
 
+
+    @Override
+    public List<WorkplaceBooking> workplaceBookingsOnDate(Integer headquartersId, LocalDate onDate) {
+        final User principal = super.getPrincipalOrThrow();
+        if (UserRole.HEADQUARTERS_RECEPTIONIST.equals(principal.getRole()) &&
+                !headquartersId.equals(((HeadquartersReceptionistUser) principal).getHeadquarters().getId())) {
+            throw new AccessDeniedException(BaseExceptionConstants.ACCESS_DENIED.getDetail());
+        }
+        final Headquarters headquarters = super.getHeadquartersOrThrow(headquartersId);
+        log.info("{} - {}", headquarters, onDate);
+        return this.workplaceBookingRepository.findAllByHeadquartersAndBookingDate(headquarters, onDate);
+    }
 
     /**
      * {@inheritDoc}
@@ -138,7 +151,7 @@ public class WorkplaceBookingServiceImpl extends BusinessService implements Work
                 (HeadquartersReceptionistUser) super.getPrincipalOrThrow()
         );
 
-        final WorkplaceBooking booking = this.workplaceBookingRepository.findByIdAndWorkplace(workplaceId, workplace)
+        final WorkplaceBooking booking = this.workplaceBookingRepository.findByIdAndWorkplace(bookingId, workplace)
                 .orElseThrow(() -> new WorkplaceBookingNotFoundException(bookingId, workplaceId));
 
         this.checkParticipationMarkingDateOrThrow(booking);
@@ -210,10 +223,10 @@ public class WorkplaceBookingServiceImpl extends BusinessService implements Work
      */
     private void checkBookingDateConflicts(final LocalDate bookingDate, final User worker, final Workplace workplace) {
         if (this.workplaceBookingRepository.countAllByWorkerAndBookingDate(worker, bookingDate) > 0) {
-            throw new WorkplaceBookingAlreadyExistsForWorker(worker.getId(), bookingDate);
+            throw new WorkplaceBookingAlreadyExistsForWorkerException(worker.getId(), bookingDate);
         }
         if (this.workplaceBookingRepository.countAllByWorkplaceAndBookingDate(workplace, bookingDate) > 0) {
-            throw new WorkplaceNotAvailableForBooking(workplace.getId(), bookingDate);
+            throw new WorkplaceNotAvailableForBookingException(workplace.getId(), bookingDate);
         }
     }
 

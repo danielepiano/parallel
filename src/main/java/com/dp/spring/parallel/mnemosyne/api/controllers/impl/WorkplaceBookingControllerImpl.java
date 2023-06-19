@@ -1,6 +1,7 @@
 package com.dp.spring.parallel.mnemosyne.api.controllers.impl;
 
 import com.dp.spring.parallel.mnemosyne.api.controllers.WorkplaceBookingController;
+import com.dp.spring.parallel.mnemosyne.api.dtos.CurrentDayWorkplaceBookingResponseDTO;
 import com.dp.spring.parallel.mnemosyne.api.dtos.UserWorkplaceBookingResponseDTO;
 import com.dp.spring.parallel.mnemosyne.api.dtos.WorkplaceBookingRequestDTO;
 import com.dp.spring.parallel.mnemosyne.api.dtos.WorkplaceBookingResponseDTO;
@@ -19,6 +20,14 @@ import static java.util.Optional.ofNullable;
 public class WorkplaceBookingControllerImpl implements WorkplaceBookingController {
     private final WorkplaceBookingService workplaceBookingService;
 
+
+    @Override
+    public List<CurrentDayWorkplaceBookingResponseDTO> currentDayWorkplaceBookings(Integer headquartersId) {
+        return this.workplaceBookingService.workplaceBookingsOnDate(headquartersId, LocalDate.now())
+                .stream()
+                .map(CurrentDayWorkplaceBookingResponseDTO::of)
+                .toList();
+    }
 
     @Override
     public List<UserWorkplaceBookingResponseDTO> userWorkplaceBookingsFromDate(LocalDate fromDate) {

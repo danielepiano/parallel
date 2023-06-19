@@ -160,7 +160,7 @@ public class EventServiceImpl extends BusinessService implements EventService {
 
 
     /**
-     * Checking if the give headquarters is under the principal control. In case, returning the headquarters.
+     * Checking if the given headquarters is under the principal control. In case, returning the headquarters.
      *
      * @param headquartersId the id of the headquarters to get and check
      * @return the headquarters

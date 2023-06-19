@@ -13,6 +13,18 @@ import java.util.Set;
 public interface WorkplaceBookingService {
 
     /**
+     * Retrieving all the bookings for the given date.
+     *
+     * @param headquartersId the id of the headquarters
+     * @param onDate         the date
+     * @return the bookings on current day
+     */
+    List<WorkplaceBooking> workplaceBookingsOnDate(
+            Integer headquartersId,
+            LocalDate onDate
+    );
+
+    /**
      * Retrieving the logged user bookings from a given date.
      *
      * @param fromDate the date from which get the user bookings

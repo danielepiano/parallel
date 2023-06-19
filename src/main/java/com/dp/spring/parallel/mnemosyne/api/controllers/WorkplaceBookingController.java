@@ -1,5 +1,6 @@
 package com.dp.spring.parallel.mnemosyne.api.controllers;
 
+import com.dp.spring.parallel.mnemosyne.api.dtos.CurrentDayWorkplaceBookingResponseDTO;
 import com.dp.spring.parallel.mnemosyne.api.dtos.UserWorkplaceBookingResponseDTO;
 import com.dp.spring.parallel.mnemosyne.api.dtos.WorkplaceBookingRequestDTO;
 import com.dp.spring.parallel.mnemosyne.api.dtos.WorkplaceBookingResponseDTO;
@@ -16,6 +17,12 @@ import static com.dp.spring.parallel.hestia.database.enums.UserRole.Constants.*;
 
 @RequestMapping("/api/v1")
 public interface WorkplaceBookingController {
+
+    @GetMapping(path = "/headquarters/{headquartersId}/workplaces/bookings/current-day", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Secured({ROLE_ADMIN_VALUE, ROLE_HEADQUARTERS_RECEPTIONIST_VALUE})
+    List<CurrentDayWorkplaceBookingResponseDTO> currentDayWorkplaceBookings(
+            @PathVariable("headquartersId") Integer headquartersId
+    );
 
     @GetMapping(path = "/workplaces/bookings", produces = MediaType.APPLICATION_JSON_VALUE)
     @Secured({ROLE_COMPANY_MANAGER_VALUE, ROLE_EMPLOYEE_VALUE})
