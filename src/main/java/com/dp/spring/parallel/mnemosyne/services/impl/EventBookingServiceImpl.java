@@ -118,12 +118,13 @@ public class EventBookingServiceImpl extends BusinessService implements EventBoo
 
     /**
      * {@inheritDoc}
+     *
      * @param event the event to count the bookings of
-     * @return the number of bookings
+     * @return the number of the available places
      */
     @Override
-    public long count(Event event) {
-        return this.eventBookingRepository.countByEvent(event);
+    public long countAvailablePlaces(Event event) {
+        return event.getMaxPlaces() - this.eventBookingRepository.countByEvent(event);
     }
 
 

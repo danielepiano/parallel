@@ -50,11 +50,11 @@ public interface EventBookingService {
     void cancelAll(Event event);
 
     /**
-     * Counting the number of bookings of a given event.
+     * Counting the number of available places for a given event.
      *
-     * @param event the event to count the bookings of
-     * @return the number of the bookings
+     * @param event the event to count the available places of
+     * @return the number of the available places
      */
-    long count(Event event);
+    long countAvailablePlaces(Event event);
 
 }

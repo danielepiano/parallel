@@ -1,5 +1,7 @@
 package com.dp.spring.parallel._startup;
 
+import com.dp.spring.parallel.agora.database.entities.Event;
+import com.dp.spring.parallel.agora.database.repositories.EventRepository;
 import com.dp.spring.parallel.hephaestus.database.entities.Company;
 import com.dp.spring.parallel.hephaestus.database.entities.Headquarters;
 import com.dp.spring.parallel.hephaestus.database.entities.Workplace;
@@ -12,7 +14,10 @@ import com.dp.spring.parallel.hephaestus.database.repositories.WorkplaceReposito
 import com.dp.spring.parallel.hephaestus.database.repositories.WorkspaceRepository;
 import com.dp.spring.parallel.hestia.database.entities.CompanyManagerUser;
 import com.dp.spring.parallel.hestia.database.entities.HeadquartersReceptionistUser;
+import com.dp.spring.parallel.hestia.database.entities.User;
 import com.dp.spring.parallel.hestia.database.repositories.UserRepository;
+import com.dp.spring.parallel.mnemosyne.database.entities.EventBooking;
+import com.dp.spring.parallel.mnemosyne.database.repositories.EventBookingRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
@@ -20,6 +25,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -32,6 +38,8 @@ public class ELISLoadingRunner implements CommandLineRunner {
     private final WorkplaceRepository workplaceRepository;
 
     private final UserRepository userRepository;
+    private final EventRepository eventRepository;
+    private final EventBookingRepository eventBookingRepository;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -64,6 +72,16 @@ public class ELISLoadingRunner implements CommandLineRunner {
         var cm1 = this.userRepository.save(cm1(elis));
         var hqr1 = this.userRepository.save(hqr1(eih));
         var dev = this.userRepository.save(dev(elis));
+
+        // Events definition
+        var enricov = this.eventRepository.save(enricov(eih));
+        var aperitivo = this.eventRepository.save(aperitivo(eih));
+
+        // Event bookings definition
+        var eb1 = this.eventBookingRepository.save(eb(enricov, cm1));
+        var eb2 = this.eventBookingRepository.save(eb(enricov, dev));
+        var eb3 = this.eventBookingRepository.save(eb(aperitivo, cm1));
+        var eb4 = this.eventBookingRepository.save(eb(aperitivo, dev));
     }
 
 
@@ -184,6 +202,33 @@ public class ELISLoadingRunner implements CommandLineRunner {
                 .company(elis)
                 .jobPosition("Laurendo in Ing. Informatica")
                 .build();
+    }
+
+
+    Event enricov(Headquarters eih) {
+        return new Event()
+                .setHeadquarters(eih)
+                .setName("Sull'Enrico V")
+                .setOnDate(LocalDate.of(2023, 7, 3))
+                .setStartTime(LocalTime.of(9, 30))
+                .setEndTime(LocalTime.of(12, 30))
+                .setMaxPlaces(20);
+    }
+
+    Event aperitivo(Headquarters eih) {
+        return new Event()
+                .setHeadquarters(eih)
+                .setName("Oltre l'aperitivo")
+                .setOnDate(LocalDate.of(2023, 7, 7))
+                .setStartTime(LocalTime.of(17, 30))
+                .setEndTime(LocalTime.of(19, 30))
+                .setMaxPlaces(15);
+    }
+
+    EventBooking eb(Event event, User worker) {
+        return new EventBooking()
+                .setEvent(event)
+                .setWorker(worker);
     }
 
 }

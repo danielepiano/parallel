@@ -46,7 +46,7 @@ public class Event extends SoftDeletableAuditedEntity<Integer> {
     private Integer maxPlaces;
 
 
-    @OneToMany(mappedBy = "event", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "event", fetch = FetchType.EAGER)
     private Set<EventBooking> bookings;
 
 

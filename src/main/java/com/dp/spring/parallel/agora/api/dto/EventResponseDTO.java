@@ -31,12 +31,14 @@ public class EventResponseDTO {
     Long availablePlaces;
     Long totalPlaces;
 
+    Boolean alreadyBooked;
+
 
     public static EventResponseDTO of(final Event event) {
-        return EventResponseDTO.of(null, event);
+        return EventResponseDTO.of(null, null, event);
     }
 
-    public static EventResponseDTO of(final Long availablePlaces, final Event event) {
+    public static EventResponseDTO of(final Boolean alreadyBooked, final Long availablePlaces, final Event event) {
         return EventResponseDTO.builder()
                 .id(event.getId())
                 .company(CompanyInfoDTO.of(event.getHeadquarters().getCompany()))
@@ -47,6 +49,7 @@ public class EventResponseDTO {
                 .eventDate(event.getOnDate())
                 .startTime(event.getStartTime())
                 .endTime(event.getEndTime())
+                .alreadyBooked(alreadyBooked)
                 .build();
     }
 
