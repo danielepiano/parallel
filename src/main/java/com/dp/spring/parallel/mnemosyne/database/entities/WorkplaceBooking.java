@@ -6,12 +6,12 @@ import com.dp.spring.springcore.database.entities.SoftDeletableAuditedEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.Where;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 import static com.dp.spring.springcore.database.entities.SoftDeletableAuditedEntity.SOFT_DELETE_CLAUSE;
 
@@ -19,7 +19,6 @@ import static com.dp.spring.springcore.database.entities.SoftDeletableAuditedEnt
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-@EqualsAndHashCode(callSuper = true)
 @Table(uniqueConstraints = {
         // Worker can't book more than one workplace for the same date.
         @UniqueConstraint(columnNames = {"worker_id", "booking_date", "is_active", "last_modified_date"}),
@@ -54,5 +53,23 @@ public class WorkplaceBooking extends SoftDeletableAuditedEntity<Integer> {
                 "bookingDate = " + bookingDate + ", " +
                 "present = " + present +
                 ")";
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        WorkplaceBooking booking = (WorkplaceBooking) o;
+        return Objects.equals(id, booking.getId()) &&
+                Objects.equals(worker.getId(), booking.worker.getId()) &&
+                Objects.equals(workplace.getId(), booking.workplace.getId()) &&
+                Objects.equals(bookingDate, booking.getBookingDate()) &&
+                Objects.equals(present, booking.isPresent());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, worker.getId(), workplace.getId(), bookingDate, present);
     }
 }
