@@ -61,11 +61,11 @@ public class WorkplaceBooking extends SoftDeletableAuditedEntity<Integer> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         WorkplaceBooking booking = (WorkplaceBooking) o;
-        return Objects.equals(id, booking.getId()) &&
+        return Objects.equals(id, booking.id) &&
                 Objects.equals(worker.getId(), booking.worker.getId()) &&
                 Objects.equals(workplace.getId(), booking.workplace.getId()) &&
-                Objects.equals(bookingDate, booking.getBookingDate()) &&
-                Objects.equals(present, booking.isPresent());
+                Objects.equals(bookingDate, booking.bookingDate) &&
+                Objects.equals(present, booking.present);
     }
 
     @Override

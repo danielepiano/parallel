@@ -6,13 +6,13 @@ import com.dp.spring.springcore.database.entities.SoftDeletableAuditedEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.Where;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Objects;
 import java.util.Set;
 
 import static com.dp.spring.springcore.database.entities.SoftDeletableAuditedEntity.SOFT_DELETE_CLAUSE;
@@ -21,7 +21,6 @@ import static com.dp.spring.springcore.database.entities.SoftDeletableAuditedEnt
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Where(clause = SOFT_DELETE_CLAUSE)
 public class Event extends SoftDeletableAuditedEntity<Integer> {
@@ -61,5 +60,24 @@ public class Event extends SoftDeletableAuditedEntity<Integer> {
                 "endTime = " + endTime + ", " +
                 "maxPlaces = " + maxPlaces +
                 ")";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Event event = (Event) o;
+        return Objects.equals(id, event.id) &&
+                Objects.equals(headquarters, event.headquarters) &&
+                Objects.equals(name, event.name) &&
+                Objects.equals(onDate, event.onDate) &&
+                Objects.equals(startTime, event.startTime) &&
+                Objects.equals(endTime, event.endTime) &&
+                Objects.equals(maxPlaces, event.maxPlaces);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, headquarters, name, onDate, startTime, endTime, maxPlaces);
     }
 }

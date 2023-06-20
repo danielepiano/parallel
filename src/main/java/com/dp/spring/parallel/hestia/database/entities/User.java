@@ -6,7 +6,6 @@ import com.dp.spring.springcore.database.entities.SoftDeletableAuditedEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Where;
@@ -16,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 import static com.dp.spring.springcore.database.entities.SoftDeletableAuditedEntity.SOFT_DELETE_CLAUSE;
 
@@ -23,7 +23,6 @@ import static com.dp.spring.springcore.database.entities.SoftDeletableAuditedEnt
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Where(clause = SOFT_DELETE_CLAUSE)
 @Inheritance
@@ -118,4 +117,26 @@ public class User extends SoftDeletableAuditedEntity<Integer> implements UserDet
                 ")";
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id) &&
+                Objects.equals(firstName, user.firstName) &&
+                Objects.equals(lastName, user.lastName) &&
+                Objects.equals(birthDate, user.birthDate) &&
+                Objects.equals(phoneNumber, user.phoneNumber) &&
+                Objects.equals(city, user.city) &&
+                Objects.equals(address, user.address) &&
+                Objects.equals(email, user.email) &&
+                Objects.equals(password, user.password) &&
+                role == user.role;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, firstName, lastName, birthDate, phoneNumber, city, address, email, password, role);
+    }
 }
