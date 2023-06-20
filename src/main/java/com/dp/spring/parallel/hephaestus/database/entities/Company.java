@@ -20,7 +20,7 @@ import static com.dp.spring.springcore.database.entities.SoftDeletableAuditedEnt
 @AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"name", "city", "address", "is_active"}))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"name", "city", "address", "is_active", "last_modified_date"}))
 @Entity
 @Where(clause = SOFT_DELETE_CLAUSE)
 public class Company extends SoftDeletableAuditedEntity<Integer> {

@@ -22,9 +22,9 @@ import static com.dp.spring.springcore.database.entities.SoftDeletableAuditedEnt
 @EqualsAndHashCode(callSuper = true)
 @Table(uniqueConstraints = {
         // Worker can't book more than one workplace for the same date.
-        @UniqueConstraint(columnNames = {"worker_id", "booking_date", "is_active"}),
+        @UniqueConstraint(columnNames = {"worker_id", "booking_date", "is_active", "last_modified_date"}),
         // Workplace can't be booked more than once on a specific date.
-        @UniqueConstraint(columnNames = {"workplace_id", "booking_date", "is_active"})
+        @UniqueConstraint(columnNames = {"workplace_id", "booking_date", "is_active", "last_modified_date"})
 })
 @Entity
 @Where(clause = SOFT_DELETE_CLAUSE)
