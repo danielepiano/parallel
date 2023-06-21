@@ -1,6 +1,6 @@
 package com.dp.spring.parallel.hestia.utils;
 
-import com.dp.spring.springcore.exceptions.UnsupportedCallToPrivateConstructor;
+import com.dp.spring.springcore.exceptions.UnsupportedCallToPrivateConstructorException;
 import org.apache.commons.lang3.RandomStringUtils;
 
 /**
@@ -19,7 +19,7 @@ public class RandomPasswordUtils {
             LOWERCASE_ALPHABET + UPPERCASE_ALPHABET + DIGITS + SPECIAL_CHARACTERS;
 
     private RandomPasswordUtils() {
-        throw new UnsupportedCallToPrivateConstructor();
+        throw new UnsupportedCallToPrivateConstructorException();
     }
 
     public static String generateRandomPassword() {

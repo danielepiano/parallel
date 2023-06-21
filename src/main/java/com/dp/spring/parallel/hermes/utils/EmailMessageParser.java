@@ -1,6 +1,6 @@
 package com.dp.spring.parallel.hermes.utils;
 
-import com.dp.spring.springcore.exceptions.UnsupportedCallToPrivateConstructor;
+import com.dp.spring.springcore.exceptions.UnsupportedCallToPrivateConstructorException;
 import lombok.AllArgsConstructor;
 
 import java.util.Map;
@@ -43,7 +43,7 @@ public class EmailMessageParser {
 
 
     private EmailMessageParser() {
-        throw new UnsupportedCallToPrivateConstructor();
+        throw new UnsupportedCallToPrivateConstructorException();
     }
 
     /**

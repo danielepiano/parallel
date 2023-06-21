@@ -1,6 +1,6 @@
 package com.dp.spring.parallel.common.utils;
 
-import com.dp.spring.springcore.exceptions.UnsupportedCallToPrivateConstructor;
+import com.dp.spring.springcore.exceptions.UnsupportedCallToPrivateConstructorException;
 import org.springframework.util.ResourceUtils;
 
 import java.io.File;
@@ -9,7 +9,7 @@ import java.nio.file.Files;
 
 public class ResourcesUtils {
     private ResourcesUtils() {
-        throw new UnsupportedCallToPrivateConstructor();
+        throw new UnsupportedCallToPrivateConstructorException();
     }
 
     public static String readFileAsString(final String pathFromClasspath) {
