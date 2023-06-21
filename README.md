@@ -6,7 +6,7 @@ Management for enhanced coworking spaces: palestre relazionali.
 * Docker v. >= 20.10.23
 
 ### Setup
-1. Run database _parallel-db_
+1. Run database _parallel-db_*
 ```
    $ docker run -d --name "parallel-db" -p 5432:5432 \
     --env "POSTGRES_DB=parallel" \
@@ -14,7 +14,7 @@ Management for enhanced coworking spaces: palestre relazionali.
     --env "POSTGRES_PASSWORD=parallel" \
     postgres
 ```
-2. Run mail server _parallel-ms
+2. Run mail server _parallel-ms_*
 ```
    $ docker run -d --name "parallel-ms" -p 1080:1080 -p 1025:1025 maildev/maildev
 ```
@@ -35,3 +35,6 @@ Management for enhanced coworking spaces: palestre relazionali.
    /path/to/.../be/parallel $ mvn clean install
 ```
 7. Run _parallel_ on desired IDE
+
+<br>
+* If you change ports or environment variables, remember to update the _**application.yml**_ file in _parallel/src/main/resources_
