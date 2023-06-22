@@ -45,13 +45,26 @@ public class EnelLoadingRunner implements CommandLineRunner {
         // Company and related structure definition
         var enel = this.companyRepository.save(enel());
         var enelmilano = this.headquartersRepository.save(enelmilano(enel));
+        var meetingroommilano1 = this.workspaceRepository.save(ws_meetingroom(1, enelmilano));
+        this.workplaceRepository.saveAll(wp(meetingroommilano1, WorkplaceType.DESK, "D", 5));
+        var meetingroommilano2 = this.workspaceRepository.save(ws_meetingroom(2, enelmilano));
+        this.workplaceRepository.saveAll(wp(meetingroommilano2, WorkplaceType.DESK, "D", 5));
+        var openspacemilano = this.workspaceRepository.save(ws_openspace(enelmilano));
+        this.workplaceRepository.saveAll(wp(openspacemilano, WorkplaceType.DESK, "D", 20));
 
-        var openspace = this.workspaceRepository.save(ws_openspace(enelmilano));
-        this.workplaceRepository.saveAll(wp(openspace, WorkplaceType.DESK, "D", 30));
+        var enelnapoli = this.headquartersRepository.save(enelnapoli(enel));
+        var meetingroomnapoli1 = this.workspaceRepository.save(ws_meetingroom(1, enelnapoli));
+        this.workplaceRepository.saveAll(wp(meetingroomnapoli1, WorkplaceType.DESK, "D", 5));
+        var meetingroomnapoli2 = this.workspaceRepository.save(ws_meetingroom(2, enelnapoli));
+        this.workplaceRepository.saveAll(wp(meetingroomnapoli2, WorkplaceType.DESK, "D", 5));
+        var openspacenapoli = this.workspaceRepository.save(ws_openspace(enelnapoli));
+        this.workplaceRepository.saveAll(wp(openspacenapoli, WorkplaceType.DESK, "D", 20));
 
         // User definition
         var cm1 = this.userRepository.save(cm1(enel));
-        var hqr1 = this.userRepository.save(hqr1(enelmilano));
+        var hqrmilano = this.userRepository.save(hqrmilano(enelmilano));
+        var hqrnapoli = this.userRepository.save(hqrnapoli(enelmilano));
+
     }
 
 
@@ -77,6 +90,17 @@ public class EnelLoadingRunner implements CommandLineRunner {
                 .setCompany(enel);
     }
 
+    Headquarters enelnapoli(Company enel) {
+        return new Headquarters()
+                .setCity("Napoli")
+                .setAddress("Via Galileo Ferraris, 59")
+                .setPhoneNumber("+39 0664511012")
+                .setDescription("Enel Napoli Ferraris è uno spazio accogliente, moderno, informale." +
+                        " Un posto in cui sentirti libero di esporre idee e creatività, far conoscere il tuo lavoro" +
+                        " e stringere rapporti con altri professionisti.")
+                .setCompany(enel);
+    }
+
     Workspace ws_openspace(Headquarters enelmilano) {
         return new Workspace()
                 .setHeadquarters(enelmilano)
@@ -84,6 +108,14 @@ public class EnelLoadingRunner implements CommandLineRunner {
                 .setDescription("Un posto in cui sentirti libero di esporre idee e creatività, far conoscere il tuo" +
                         " lavoro e stringere rapporti con altri professionisti")
                 .setType(WorkspaceType.OPEN_SPACE)
+                .setFloor("P5");
+    }
+
+    Workspace ws_meetingroom(int offset, Headquarters hq) {
+        return new Workspace()
+                .setHeadquarters(hq)
+                .setName("Meeting room " + offset)
+                .setType(WorkspaceType.MEETING_ROOM)
                 .setFloor("P5");
     }
 
@@ -115,17 +147,31 @@ public class EnelLoadingRunner implements CommandLineRunner {
                 .build();
     }
 
-    HeadquartersReceptionistUser hqr1(Headquarters enelmilano) {
+    HeadquartersReceptionistUser hqrmilano(Headquarters enelmilano) {
         return HeadquartersReceptionistUser.builder()
                 .firstName("Mario")
                 .lastName("Rossi")
                 .birthDate(LocalDate.of(1970, 1, 1))
                 .phoneNumber("+39 3331234567")
-                .city("Latina")
+                .city("Lodi")
                 .address("Via Da Qui, 75")
-                .email("m.rossi@nel.org")
+                .email("m.rossi@enel.org")
                 .password(this.passwordEncoder.encode("receptionist"))
                 .headquarters(enelmilano)
+                .build();
+    }
+
+    HeadquartersReceptionistUser hqrnapoli(Headquarters enelnapoli) {
+        return HeadquartersReceptionistUser.builder()
+                .firstName("Maria")
+                .lastName("Rossina")
+                .birthDate(LocalDate.of(1970, 1, 1))
+                .phoneNumber("+39 3331234567")
+                .city("Caserta")
+                .address("Via Da Qui, 10")
+                .email("m.rossina@enel.org")
+                .password(this.passwordEncoder.encode("receptionist"))
+                .headquarters(enelnapoli)
                 .build();
     }
 
