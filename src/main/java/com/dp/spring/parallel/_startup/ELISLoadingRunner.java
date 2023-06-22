@@ -81,7 +81,7 @@ public class ELISLoadingRunner implements CommandLineRunner {
         var dev = this.userRepository.save(dev(elis));
         var em1 = this.userRepository.save(em(elis, "Michele", "Leggieri"));
         var em2 = this.userRepository.save(em(elis, "Maria", "Marinelli"));
-        var em3 = this.userRepository.save(em(elis, "Gino", "Lavatrice"));
+        var em3 = this.userRepository.save(em(elis, "Adele", "Mussari"));
         var em4 = this.userRepository.save(em(elis, "Federico", "Martinis"));
         var em5 = this.userRepository.save(em(elis, "Giancarlo", "Giancarlo"));
 

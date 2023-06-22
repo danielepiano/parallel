@@ -29,7 +29,7 @@ public class TokenDetailsService {
     }
 
     /**
-     * Revokation of each token for a specified user.
+     * Revocation of each token for a specified user.
      *
      * @param user the user whose token need to be revoked
      */

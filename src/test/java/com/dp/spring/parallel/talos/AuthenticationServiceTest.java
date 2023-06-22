@@ -25,6 +25,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 
 import java.util.Optional;
 
+import static java.util.Optional.empty;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -103,7 +104,7 @@ class AuthenticationServiceTest {
 
     // userRepository.findByEmail
     void mockUserNotFound_on_userRepository_findByEmail() {
-        doReturn(Optional.empty())
+        doReturn(empty())
                 .when(userRepository)
                 .findByEmail(anyString());
     }
