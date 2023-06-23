@@ -39,7 +39,7 @@ public class CompanyManagerUserServiceImpl extends UserServiceImpl implements Co
             RegistrationRequestDTO toRegister
     ) {
         this.companyService.checkExistence(companyId);
-        super.checkPrincipalScopeOrThrow(companyId);
+        checkPrincipalScopeOrThrow(companyId);
         super.register(companyId, toRegister, companyManagerRegistrationStrategy);
     }
 
@@ -66,7 +66,7 @@ public class CompanyManagerUserServiceImpl extends UserServiceImpl implements Co
             Integer companyManagerId
     ) {
         this.companyService.checkExistence(companyId);
-        super.checkPrincipalScopeOrThrow(companyId);
+        checkPrincipalScopeOrThrow(companyId);
         this.companyManagerUserRepository.softDeleteById(companyManagerId);
     }
 

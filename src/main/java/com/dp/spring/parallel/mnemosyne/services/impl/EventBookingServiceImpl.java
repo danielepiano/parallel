@@ -51,7 +51,7 @@ public class EventBookingServiceImpl extends BusinessService implements EventBoo
      */
     @Override
     public List<EventBooking> eventBookingsFromDate(LocalDate fromDate) {
-        final User worker = super.getPrincipalOrThrow();
+        final User worker = getPrincipalOrThrow();
         return this.eventBookingRepository.findAllByWorkerAndEventOnDateGreaterThanEqualOrderByEventOnDate(worker, fromDate);
     }
 
@@ -65,7 +65,7 @@ public class EventBookingServiceImpl extends BusinessService implements EventBoo
     @Override
     public EventBooking book(Integer headquartersId, Integer eventId) {
         final Event event = this.eventService.event(headquartersId, eventId);
-        final User worker = super.getPrincipalOrThrow();
+        final User worker = getPrincipalOrThrow();
 
         this.checkBookingPerformableOrThrow(worker, event);
 
@@ -92,7 +92,7 @@ public class EventBookingServiceImpl extends BusinessService implements EventBoo
     public void cancel(Integer headquartersId, Integer eventId, Integer bookingId) {
         try {
             final Event event = this.eventService.event(headquartersId, eventId);
-            final User worker = super.getPrincipalOrThrow();
+            final User worker = getPrincipalOrThrow();
 
             final EventBooking booking = this.eventBookingRepository.findByIdAndEvent(bookingId, event)
                     .orElseThrow(() -> new EventBookingNotFoundException(eventId, headquartersId));

@@ -167,7 +167,7 @@ public class EventServiceImpl extends BusinessService implements EventService {
      */
     Headquarters getAndCheckHeadquartersOrThrow(final Integer headquartersId) {
         final Headquarters headquarters = this.headquartersService.headquarters(headquartersId);
-        super.checkPrincipalScopeOrThrow(headquarters.getCompany().getId());
+        checkPrincipalScopeOrThrow(headquarters.getCompany().getId());
         return headquarters;
     }
 

@@ -69,7 +69,7 @@ public class HeadquartersServiceImpl extends BusinessService implements Headquar
     @Override
     public Headquarters add(Integer companyId, CreateHeadquartersRequestDTO toAddData) {
         final Company company = this.companyService.company(companyId);
-        super.checkPrincipalScopeOrThrow(companyId);
+        checkPrincipalScopeOrThrow(companyId);
 
         this.checkHeadquartersUniquenessOrThrow(toAddData.getCity(), toAddData.getAddress(), company);
 
@@ -102,7 +102,7 @@ public class HeadquartersServiceImpl extends BusinessService implements Headquar
      */
     @Override
     public List<Headquarters> headquarters() {
-        final User principal = super.getPrincipalOrThrow();
+        final User principal = getPrincipalOrThrow();
 
         // If principal cannot have favorite headquarters, return all headquarters
         if (!UserRole.COMPANY_MANAGER.equals(principal.getRole()) && !UserRole.EMPLOYEE.equals(principal.getRole())) {
@@ -122,7 +122,7 @@ public class HeadquartersServiceImpl extends BusinessService implements Headquar
      */
     @Override
     public List<Headquarters> favoriteHeadquarters() {
-        return super.getPrincipalOrThrow().getFavoriteHeadquarters();
+        return getPrincipalOrThrow().getFavoriteHeadquarters();
     }
 
     /**
@@ -149,7 +149,7 @@ public class HeadquartersServiceImpl extends BusinessService implements Headquar
     @Override
     public Headquarters update(Integer companyId, Integer headquartersId, UpdateHeadquartersRequestDTO updatedData) {
         final Headquarters toUpdate = this.getHeadquartersOrThrow(headquartersId, companyId);
-        super.checkPrincipalScopeOrThrow(companyId);
+        checkPrincipalScopeOrThrow(companyId);
 
         this.checkHeadquartersUniquenessOrThrow(headquartersId, updatedData.getCity(), updatedData.getAddress(), toUpdate.getCompany());
 
@@ -170,7 +170,7 @@ public class HeadquartersServiceImpl extends BusinessService implements Headquar
     @Override
     public void remove(Integer companyId, Integer headquartersId) {
         final Headquarters toDelete = this.getHeadquartersOrThrow(headquartersId, companyId);
-        super.checkPrincipalScopeOrThrow(companyId);
+        checkPrincipalScopeOrThrow(companyId);
 
         this.softDelete(toDelete);
     }
@@ -196,7 +196,7 @@ public class HeadquartersServiceImpl extends BusinessService implements Headquar
     @Override
     public void toggleFavouriteHeadquarters(Integer headquartersId) {
         final Headquarters headquarters = this.headquarters(headquartersId);
-        final User worker = super.getPrincipalOrThrow();
+        final User worker = getPrincipalOrThrow();
 
         if (headquarters.getObservers().stream().anyMatch(worker::equals)) {
             this.removeObserver(worker, headquarters);

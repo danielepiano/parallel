@@ -41,7 +41,7 @@ public class HeadquartersReceptionistUserServiceImpl extends UserServiceImpl imp
             RegistrationRequestDTO toRegister
     ) {
         this.headquartersService.checkExistence(companyId, headquartersId);
-        super.checkPrincipalScopeOrThrow(companyId);
+        checkPrincipalScopeOrThrow(companyId);
         super.register(headquartersId, toRegister, headquartersReceptionistRegistrationStrategy);
     }
 
@@ -70,7 +70,7 @@ public class HeadquartersReceptionistUserServiceImpl extends UserServiceImpl imp
             Integer userId
     ) {
         this.headquartersService.checkExistence(companyId, headquartersId);
-        super.checkPrincipalScopeOrThrow(companyId);
+        checkPrincipalScopeOrThrow(companyId);
         this.headquartersReceptionistUserRepository.softDeleteById(userId);
     }
 

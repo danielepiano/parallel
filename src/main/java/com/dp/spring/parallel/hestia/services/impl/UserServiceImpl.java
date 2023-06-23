@@ -91,7 +91,7 @@ public class UserServiceImpl extends BusinessService implements UserService {
      */
     @Override
     public User whoAmI() {
-        return super.getPrincipalOrThrow();
+        return getPrincipalOrThrow();
     }
 
     /**
@@ -103,7 +103,7 @@ public class UserServiceImpl extends BusinessService implements UserService {
     public void updatePersonalData(
             final UpdatePersonalDataRequestDTO updatedData
     ) {
-        final User principal = super.getPrincipalOrThrow();
+        final User principal = getPrincipalOrThrow();
 
         principal.setPhoneNumber(updatedData.getPhoneNumber());
         principal.setCity(updatedData.getCity());
@@ -122,7 +122,7 @@ public class UserServiceImpl extends BusinessService implements UserService {
     public void changePassword(
             final ChangePasswordRequestDTO changeRequest
     ) {
-        final User principal = super.getPrincipalOrThrow();
+        final User principal = getPrincipalOrThrow();
 
         // Checking if current password specified is actually the authenticated user's password
         if (!this.passwordEncoder.matches(changeRequest.getCurrent(), principal.getPassword())) {

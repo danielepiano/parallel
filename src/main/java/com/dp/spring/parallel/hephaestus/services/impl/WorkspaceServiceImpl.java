@@ -153,7 +153,7 @@ public class WorkspaceServiceImpl extends BusinessService implements WorkspaceSe
      */
     Headquarters getAndCheckHeadquartersOrThrow(final Integer headquartersId) {
         final Headquarters headquarters = this.headquartersService.headquarters(headquartersId);
-        super.checkPrincipalScopeOrThrow(headquarters.getCompany().getId());
+        checkPrincipalScopeOrThrow(headquarters.getCompany().getId());
         return headquarters;
     }
 

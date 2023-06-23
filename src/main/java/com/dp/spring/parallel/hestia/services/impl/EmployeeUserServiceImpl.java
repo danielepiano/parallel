@@ -39,7 +39,7 @@ public class EmployeeUserServiceImpl extends UserServiceImpl implements Employee
             final RegistrationRequestDTO toRegister
     ) {
         this.companyService.checkExistence(companyId);
-        super.checkPrincipalScopeOrThrow(companyId);
+        checkPrincipalScopeOrThrow(companyId);
         super.register(companyId, toRegister, employeeRegistrationStrategy);
     }
 
@@ -74,7 +74,7 @@ public class EmployeeUserServiceImpl extends UserServiceImpl implements Employee
             final Integer userId
     ) {
         this.companyService.checkExistence(companyId);
-        super.checkPrincipalScopeOrThrow(companyId);
+        checkPrincipalScopeOrThrow(companyId);
         this.employeeUserRepository.softDeleteById(userId);
     }
 }

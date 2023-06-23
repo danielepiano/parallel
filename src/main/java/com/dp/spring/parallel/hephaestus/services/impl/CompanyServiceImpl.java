@@ -72,7 +72,7 @@ public class CompanyServiceImpl extends BusinessService implements CompanyServic
      */
     @Override
     public Company company(Integer companyId) {
-        return getCompanyOrThrow(companyId);
+        return this.getCompanyOrThrow(companyId);
     }
 
     /**
@@ -94,8 +94,8 @@ public class CompanyServiceImpl extends BusinessService implements CompanyServic
      */
     @Override
     public Company update(Integer companyId, UpdateCompanyRequestDTO updatedData) {
-        final Company toUpdate = getCompanyOrThrow(companyId);
-        super.checkPrincipalScopeOrThrow(companyId);
+        final Company toUpdate = this.getCompanyOrThrow(companyId);
+        checkPrincipalScopeOrThrow(companyId);
 
         this.checkCompanyUniquenessOrThrow(companyId, updatedData.getName(), updatedData.getCity(), updatedData.getAddress());
 
@@ -119,7 +119,7 @@ public class CompanyServiceImpl extends BusinessService implements CompanyServic
     @Override
     public void remove(Integer companyId) {
         final Company toDelete = this.getCompanyOrThrow(companyId);
-        super.checkPrincipalScopeOrThrow(companyId);
+        checkPrincipalScopeOrThrow(companyId);
 
         // The set of Company Managers must be empty
         if (!this.companyManagerUserService.companyManagersFor(toDelete).isEmpty()) {

@@ -71,7 +71,7 @@ public class WorkplaceBookingServiceImpl extends BusinessService implements Work
      */
     @Override
     public List<WorkplaceBooking> workplaceBookingsOnDate(Integer headquartersId, LocalDate onDate) {
-        final User principal = super.getPrincipalOrThrow();
+        final User principal = getPrincipalOrThrow();
         if (UserRole.HEADQUARTERS_RECEPTIONIST.equals(principal.getRole()) &&
                 !headquartersId.equals(((HeadquartersReceptionistUser) principal).getHeadquarters().getId())) {
             throw new AccessDeniedException(BaseExceptionConstants.ACCESS_DENIED.getDetail());
@@ -88,7 +88,7 @@ public class WorkplaceBookingServiceImpl extends BusinessService implements Work
      */
     @Override
     public List<WorkplaceBooking> workplaceBookingsFromDate(LocalDate fromDate) {
-        final User worker = super.getPrincipalOrThrow();
+        final User worker = getPrincipalOrThrow();
         return this.workplaceBookingRepository.findAllByWorkerAndBookingDateGreaterThanEqual(worker, fromDate, Sort.by(Sort.Direction.ASC, "bookingDate"));
     }
 
@@ -107,7 +107,7 @@ public class WorkplaceBookingServiceImpl extends BusinessService implements Work
     @Override
     public WorkplaceBooking book(Integer workspaceId, Integer workplaceId, WorkplaceBookingRequestDTO bookRequest) {
         final Workplace workplace = this.getWorkplaceOrThrow(workspaceId, workplaceId);
-        final User worker = super.getPrincipalOrThrow();
+        final User worker = getPrincipalOrThrow();
 
         this.checkBookingDateConflicts(bookRequest.getBookingDate(), worker, workplace);
 
@@ -156,7 +156,7 @@ public class WorkplaceBookingServiceImpl extends BusinessService implements Work
         // Check receptionist permission to access workplace
         super.checkHeadquartersReceptionistPrincipalScopeOrThrow(
                 workplace.getWorkspace().getHeadquarters().getCompany().getId(),
-                (HeadquartersReceptionistUser) super.getPrincipalOrThrow()
+                (HeadquartersReceptionistUser) getPrincipalOrThrow()
         );
 
         final WorkplaceBooking booking = this.workplaceBookingRepository.findByIdAndWorkplace(bookingId, workplace)
@@ -182,7 +182,7 @@ public class WorkplaceBookingServiceImpl extends BusinessService implements Work
     public void cancel(Integer workspaceId, Integer workplaceId, Integer bookingId) {
         try {
             final Workplace workplace = this.getWorkplaceOrThrow(workspaceId, workplaceId);
-            final User worker = super.getPrincipalOrThrow();
+            final User worker = getPrincipalOrThrow();
 
             final WorkplaceBooking booking = this.workplaceBookingRepository.findByIdAndWorkplace(bookingId, workplace)
                     .orElseThrow(() -> new WorkplaceBookingNotFoundException(bookingId, workplaceId));
