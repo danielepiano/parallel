@@ -9,7 +9,7 @@ public class EventFixture {
 
     public static Event get() {
         return new Event()
-                .setHeadquarters(HeadquartersFixture.get())
+                .setHeadquarters(HeadquartersFixture.getWithObservers())
                 .setName("event")
                 .setOnDate(LocalDate.now())
                 .setStartTime(LocalTime.now())
