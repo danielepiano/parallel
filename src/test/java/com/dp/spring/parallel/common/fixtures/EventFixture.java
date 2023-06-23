@@ -11,7 +11,17 @@ public class EventFixture {
         return new Event()
                 .setHeadquarters(HeadquartersFixture.getWithObservers())
                 .setName("event")
-                .setOnDate(LocalDate.now())
+                .setOnDate(LocalDate.now().plusDays(2))
+                .setStartTime(LocalTime.now())
+                .setEndTime(LocalTime.now().plusHours(2))
+                .setMaxPlaces(30);
+    }
+
+    public static Event getPast() {
+        return new Event()
+                .setHeadquarters(HeadquartersFixture.getWithObservers())
+                .setName("event")
+                .setOnDate(LocalDate.now().minusYears(3))
                 .setStartTime(LocalTime.now())
                 .setEndTime(LocalTime.now().plusHours(2))
                 .setMaxPlaces(30);

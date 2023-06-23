@@ -53,7 +53,7 @@ public class UserFixture {
         List<Headquarters> favHq = new ArrayList<>();
         favHq.add(HeadquartersFixture.get());
         return EmployeeUser.builder()
-                .id(2)
+                .id(3)
                 .firstName("employee")
                 .lastName("employee")
                 .email("employee")
@@ -71,7 +71,7 @@ public class UserFixture {
 
     public static HeadquartersReceptionistUser getHeadquartersReceptionist() {
         return HeadquartersReceptionistUser.builder()
-                .id(2)
+                .id(4)
                 .firstName("employee")
                 .lastName("employee")
                 .email("employee")
