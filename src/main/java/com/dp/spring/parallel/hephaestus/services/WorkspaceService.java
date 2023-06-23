@@ -22,6 +22,16 @@ public interface WorkspaceService {
     );
 
     /**
+     * Retrieving a workspace given its id.
+     *
+     * @param workspaceId the id of the workspace
+     * @return the workspace
+     */
+    Workspace workspace(
+            Integer workspaceId
+    );
+
+    /**
      * Retrieving a workspace given its id and the id of its headquarters.
      *
      * @param headquartersId the id of the headquarters

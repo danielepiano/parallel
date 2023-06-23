@@ -1,6 +1,7 @@
 package com.dp.spring.parallel.hestia.services.impl;
 
 import com.dp.spring.parallel.hephaestus.database.entities.Company;
+import com.dp.spring.parallel.hephaestus.services.CompanyService;
 import com.dp.spring.parallel.hestia.api.dtos.RegistrationRequestDTO;
 import com.dp.spring.parallel.hestia.database.entities.CompanyManagerUser;
 import com.dp.spring.parallel.hestia.database.repositories.CompanyManagerUserRepository;
@@ -20,6 +21,9 @@ import java.util.Set;
 @Transactional
 public class CompanyManagerUserServiceImpl extends UserServiceImpl implements CompanyManagerUserService {
     private final CompanyManagerRegistrationStrategy companyManagerRegistrationStrategy;
+
+    private final CompanyService companyService;
+
     private final CompanyManagerUserRepository companyManagerUserRepository;
 
 
@@ -34,8 +38,8 @@ public class CompanyManagerUserServiceImpl extends UserServiceImpl implements Co
             Integer companyId,
             RegistrationRequestDTO toRegister
     ) {
-        checkCompanyExistenceOrThrow(companyId);
-        checkPrincipalScopeOrThrow(companyId);
+        this.companyService.checkExistence(companyId);
+        super.checkPrincipalScopeOrThrow(companyId);
         super.register(companyId, toRegister, companyManagerRegistrationStrategy);
     }
 
@@ -61,8 +65,9 @@ public class CompanyManagerUserServiceImpl extends UserServiceImpl implements Co
             Integer companyId,
             Integer companyManagerId
     ) {
-        checkCompanyExistenceOrThrow(companyId);
-        checkPrincipalScopeOrThrow(companyId);
+        this.companyService.checkExistence(companyId);
+        super.checkPrincipalScopeOrThrow(companyId);
         this.companyManagerUserRepository.softDeleteById(companyManagerId);
     }
+
 }

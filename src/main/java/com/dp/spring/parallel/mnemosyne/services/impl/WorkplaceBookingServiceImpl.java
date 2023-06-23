@@ -9,6 +9,7 @@ import com.dp.spring.parallel.hephaestus.database.repositories.WorkplaceReposito
 import com.dp.spring.parallel.hephaestus.database.repositories.WorkspaceRepository;
 import com.dp.spring.parallel.hephaestus.services.HeadquartersService;
 import com.dp.spring.parallel.hephaestus.services.WorkplaceService;
+import com.dp.spring.parallel.hephaestus.services.WorkspaceService;
 import com.dp.spring.parallel.hermes.services.notification.impl.EmailNotificationService;
 import com.dp.spring.parallel.hermes.utils.EmailMessageParser;
 import com.dp.spring.parallel.hestia.database.entities.HeadquartersReceptionistUser;
@@ -47,6 +48,7 @@ public class WorkplaceBookingServiceImpl extends BusinessService implements Work
     private final EmailNotificationService emailNotificationService;
     private final HeadquartersService headquartersService;
     private final WorkplaceService workplaceService;
+    private final WorkspaceService workspaceService;
 
     private final WorkspaceRepository workspaceRepository;
     private final WorkplaceRepository workplaceRepository;
@@ -74,7 +76,7 @@ public class WorkplaceBookingServiceImpl extends BusinessService implements Work
                 !headquartersId.equals(((HeadquartersReceptionistUser) principal).getHeadquarters().getId())) {
             throw new AccessDeniedException(BaseExceptionConstants.ACCESS_DENIED.getDetail());
         }
-        final Headquarters headquarters = super.getHeadquartersOrThrow(headquartersId);
+        final Headquarters headquarters = this.headquartersService.headquarters(headquartersId);
         return this.workplaceBookingRepository.findAllByHeadquartersAndBookingDate(headquarters, onDate);
     }
 
@@ -212,9 +214,7 @@ public class WorkplaceBookingServiceImpl extends BusinessService implements Work
      * @return the workplace
      */
     private Workplace getWorkplaceOrThrow(final Integer workspaceId, final Integer workplaceId) {
-        final Workspace workspace = super.getResourceOrThrow(
-                workspaceId, workspaceRepository, new WorkspaceNotFoundException(workspaceId, null)
-        );
+        final Workspace workspace = this.workspaceService.workspace(workspaceId);
         return this.workplaceRepository.findByIdAndWorkspace(workplaceId, workspace)
                 .orElseThrow(() -> new WorkplaceNotFoundException(workplaceId, workspaceId));
     }

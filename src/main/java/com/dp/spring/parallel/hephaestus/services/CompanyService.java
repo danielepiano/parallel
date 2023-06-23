@@ -47,4 +47,12 @@ public interface CompanyService {
      * @param companyId the id of the company to delete
      */
     void remove(Integer companyId);
+
+
+    /**
+     * Checking existence of a company by its id.
+     *
+     * @param companyId the id of the company
+     */
+    void checkExistence(Integer companyId);
 }

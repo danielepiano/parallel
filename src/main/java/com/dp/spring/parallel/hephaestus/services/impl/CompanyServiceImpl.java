@@ -2,17 +2,19 @@ package com.dp.spring.parallel.hephaestus.services.impl;
 
 import com.dp.spring.parallel.common.exceptions.CompanyAlreadyExistsException;
 import com.dp.spring.parallel.common.exceptions.CompanyNotDeletableException;
+import com.dp.spring.parallel.common.exceptions.CompanyNotFoundException;
 import com.dp.spring.parallel.common.services.BusinessService;
 import com.dp.spring.parallel.hephaestus.api.dtos.CreateCompanyRequestDTO;
 import com.dp.spring.parallel.hephaestus.api.dtos.UpdateCompanyRequestDTO;
 import com.dp.spring.parallel.hephaestus.database.entities.Company;
+import com.dp.spring.parallel.hephaestus.database.repositories.CompanyRepository;
 import com.dp.spring.parallel.hephaestus.services.CompanyService;
 import com.dp.spring.parallel.hephaestus.services.HeadquartersService;
 import com.dp.spring.parallel.hestia.database.entities.CompanyManagerUser;
 import com.dp.spring.parallel.hestia.services.CompanyManagerUserService;
 import com.dp.spring.parallel.hestia.services.EmployeeUserService;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -22,11 +24,23 @@ import java.util.Set;
  */
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class CompanyServiceImpl extends BusinessService implements CompanyService {
     private final HeadquartersService headquartersService;
     private final CompanyManagerUserService companyManagerUserService;
     private final EmployeeUserService employeeUserService;
+
+    private final CompanyRepository companyRepository;
+
+    public CompanyServiceImpl(
+            HeadquartersService headquartersService,
+            @Lazy CompanyManagerUserService companyManagerUserService,
+            @Lazy EmployeeUserService employeeUserService,
+            CompanyRepository companyRepository) {
+        this.headquartersService = headquartersService;
+        this.companyManagerUserService = companyManagerUserService;
+        this.employeeUserService = employeeUserService;
+        this.companyRepository = companyRepository;
+    }
 
 
     /**
@@ -47,7 +61,7 @@ public class CompanyServiceImpl extends BusinessService implements CompanyServic
                 .setDescription(toAddData.getDescription())
                 .setWebsiteUrl(toAddData.getWebsiteUrl());
 
-        return super.companyRepository.save(toAdd);
+        return companyRepository.save(toAdd);
     }
 
     /**
@@ -58,7 +72,7 @@ public class CompanyServiceImpl extends BusinessService implements CompanyServic
      */
     @Override
     public Company company(Integer companyId) {
-        return super.getCompanyOrThrow(companyId);
+        return getCompanyOrThrow(companyId);
     }
 
     /**
@@ -68,7 +82,7 @@ public class CompanyServiceImpl extends BusinessService implements CompanyServic
      */
     @Override
     public Set<Company> companies() {
-        return Set.copyOf(super.companyRepository.findAll());
+        return Set.copyOf(companyRepository.findAll());
     }
 
     /**
@@ -80,7 +94,7 @@ public class CompanyServiceImpl extends BusinessService implements CompanyServic
      */
     @Override
     public Company update(Integer companyId, UpdateCompanyRequestDTO updatedData) {
-        final Company toUpdate = super.getCompanyOrThrow(companyId);
+        final Company toUpdate = getCompanyOrThrow(companyId);
         super.checkPrincipalScopeOrThrow(companyId);
 
         this.checkCompanyUniquenessOrThrow(companyId, updatedData.getName(), updatedData.getCity(), updatedData.getAddress());
@@ -92,7 +106,7 @@ public class CompanyServiceImpl extends BusinessService implements CompanyServic
         toUpdate.setDescription(updatedData.getDescription());
         toUpdate.setWebsiteUrl(updatedData.getWebsiteUrl());
 
-        return super.companyRepository.save(toUpdate);
+        return this.companyRepository.save(toUpdate);
     }
 
     /**
@@ -104,7 +118,7 @@ public class CompanyServiceImpl extends BusinessService implements CompanyServic
      */
     @Override
     public void remove(Integer companyId) {
-        final Company toDelete = super.getCompanyOrThrow(companyId);
+        final Company toDelete = this.getCompanyOrThrow(companyId);
         super.checkPrincipalScopeOrThrow(companyId);
 
         // The set of Company Managers must be empty
@@ -115,9 +129,31 @@ public class CompanyServiceImpl extends BusinessService implements CompanyServic
         this.headquartersService.removeAll(toDelete);
         this.employeeUserService.disableEmployeesFor(toDelete);
 
-        super.companyRepository.softDelete(toDelete);
+        this.companyRepository.softDelete(toDelete);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param companyId the id of the company
+     */
+    @Override
+    public void checkExistence(Integer companyId) {
+        if (!companyRepository.existsById(companyId)) {
+            throw new CompanyNotFoundException(companyId);
+        }
+    }
+
+    /**
+     * Getting a company by only its id, otherwise returning a {@link CompanyNotFoundException}.
+     *
+     * @param companyId the id of the company
+     * @return the company
+     */
+    private Company getCompanyOrThrow(final Integer companyId) {
+        return companyRepository.findById(companyId)
+                .orElseThrow(() -> new CompanyNotFoundException(companyId));
+    }
 
     /**
      * On creation, checking the company uniqueness amongst all companies.
@@ -127,7 +163,7 @@ public class CompanyServiceImpl extends BusinessService implements CompanyServic
      * @param address the address of the company
      */
     private void checkCompanyUniquenessOrThrow(final String name, final String city, final String address) {
-        if (super.companyRepository.existsByNameAndCityAndAddress(name, city, address)) {
+        if (companyRepository.existsByNameAndCityAndAddress(name, city, address)) {
             throw new CompanyAlreadyExistsException(name, city, address);
         }
     }
@@ -147,7 +183,7 @@ public class CompanyServiceImpl extends BusinessService implements CompanyServic
             final String address
     ) {
         // The company to update itself should be ignored, when searching for uniqueness constraint !
-        if (super.companyRepository.existsByIdNotAndNameAndCityAndAddress(companyId, name, city, address)) {
+        if (this.companyRepository.existsByIdNotAndNameAndCityAndAddress(companyId, name, city, address)) {
             throw new CompanyAlreadyExistsException(name, city, address);
         }
     }

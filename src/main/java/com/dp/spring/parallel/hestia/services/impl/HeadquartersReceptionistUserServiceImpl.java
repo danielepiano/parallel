@@ -1,6 +1,7 @@
 package com.dp.spring.parallel.hestia.services.impl;
 
 import com.dp.spring.parallel.hephaestus.database.entities.Headquarters;
+import com.dp.spring.parallel.hephaestus.services.HeadquartersService;
 import com.dp.spring.parallel.hestia.api.dtos.RegistrationRequestDTO;
 import com.dp.spring.parallel.hestia.database.entities.HeadquartersReceptionistUser;
 import com.dp.spring.parallel.hestia.database.repositories.HeadquartersReceptionistUserRepository;
@@ -20,6 +21,9 @@ import java.util.Set;
 @Transactional
 public class HeadquartersReceptionistUserServiceImpl extends UserServiceImpl implements HeadquartersReceptionistUserService {
     private final HeadquartersReceptionistRegistrationStrategy headquartersReceptionistRegistrationStrategy;
+
+    private final HeadquartersService headquartersService;
+
     private final HeadquartersReceptionistUserRepository headquartersReceptionistUserRepository;
 
 
@@ -36,8 +40,8 @@ public class HeadquartersReceptionistUserServiceImpl extends UserServiceImpl imp
             Integer headquartersId,
             RegistrationRequestDTO toRegister
     ) {
-        checkHeadquartersExistenceOrThrow(headquartersId, companyId);
-        checkPrincipalScopeOrThrow(companyId);
+        this.headquartersService.checkExistence(companyId, headquartersId);
+        super.checkPrincipalScopeOrThrow(companyId);
         super.register(headquartersId, toRegister, headquartersReceptionistRegistrationStrategy);
     }
 
@@ -65,8 +69,9 @@ public class HeadquartersReceptionistUserServiceImpl extends UserServiceImpl imp
             Integer headquartersId,
             Integer userId
     ) {
-        checkHeadquartersExistenceOrThrow(headquartersId, companyId);
-        checkPrincipalScopeOrThrow(companyId);
+        this.headquartersService.checkExistence(companyId, headquartersId);
+        super.checkPrincipalScopeOrThrow(companyId);
         this.headquartersReceptionistUserRepository.softDeleteById(userId);
     }
+
 }

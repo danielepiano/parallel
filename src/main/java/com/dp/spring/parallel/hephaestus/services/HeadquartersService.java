@@ -38,6 +38,7 @@ public interface HeadquartersService extends PublisherService<User, Headquarters
 
     /**
      * Retrieving the logged user's favorite headquarters.
+     *
      * @return the favorite headquarters
      */
     List<Headquarters> favoriteHeadquarters();
@@ -83,5 +84,14 @@ public interface HeadquartersService extends PublisherService<User, Headquarters
      * @param headquartersId the id of the headquarters to subscribe/unsubscribe the principal to/from
      */
     void toggleFavouriteHeadquarters(Integer headquartersId);
+
+
+    /**
+     * Checking existence of a headquarters by its id and the id of the related company.
+     *
+     * @param companyId      the id of the company
+     * @param headquartersId the id of the headquarters
+     */
+    void checkExistence(Integer companyId, Integer headquartersId);
 
 }

@@ -8,6 +8,7 @@ import com.dp.spring.parallel.hephaestus.api.dtos.UpdateWorkspaceRequestDTO;
 import com.dp.spring.parallel.hephaestus.database.entities.Headquarters;
 import com.dp.spring.parallel.hephaestus.database.entities.Workspace;
 import com.dp.spring.parallel.hephaestus.database.repositories.WorkspaceRepository;
+import com.dp.spring.parallel.hephaestus.services.HeadquartersService;
 import com.dp.spring.parallel.hephaestus.services.WorkplaceService;
 import com.dp.spring.parallel.hephaestus.services.WorkspaceService;
 import jakarta.transaction.Transactional;
@@ -24,12 +25,14 @@ import java.util.List;
 @Transactional
 public class WorkspaceServiceImpl extends BusinessService implements WorkspaceService {
     private final WorkplaceService workplaceService;
+    private final HeadquartersService headquartersService;
 
     private final WorkspaceRepository workspaceRepository;
 
 
-    public WorkspaceServiceImpl(@Lazy WorkplaceService workplaceService, WorkspaceRepository workspaceRepository) {
+    public WorkspaceServiceImpl(@Lazy WorkplaceService workplaceService, HeadquartersService headquartersService, WorkspaceRepository workspaceRepository) {
         this.workplaceService = workplaceService;
+        this.headquartersService = headquartersService;
         this.workspaceRepository = workspaceRepository;
     }
 
@@ -59,13 +62,25 @@ public class WorkspaceServiceImpl extends BusinessService implements WorkspaceSe
     /**
      * {@inheritDoc}
      *
+     * @param workspaceId the id of the workspace
+     * @return the workspace
+     */
+    @Override
+    public Workspace workspace(Integer workspaceId) {
+        return this.workspaceRepository.findById(workspaceId)
+                .orElseThrow(() -> new WorkspaceNotFoundException(workspaceId, null));
+    }
+
+    /**
+     * {@inheritDoc}
+     *
      * @param headquartersId the id of the headquarters
      * @param workspaceId    the id of the workspace
      * @return the workspace
      */
     @Override
     public Workspace workspace(Integer headquartersId, Integer workspaceId) {
-        final Headquarters headquarters = super.getHeadquartersOrThrow(headquartersId);
+        final Headquarters headquarters = this.headquartersService.headquarters(headquartersId);
         return this.workspaceRepository.findByIdAndHeadquarters(workspaceId, headquarters)
                 .orElseThrow(() -> new WorkspaceNotFoundException(workspaceId, headquartersId));
     }
@@ -78,7 +93,7 @@ public class WorkspaceServiceImpl extends BusinessService implements WorkspaceSe
      */
     @Override
     public List<Workspace> workspaces(Integer headquartersId) {
-        final Headquarters headquarters = super.getHeadquartersOrThrow(headquartersId);
+        final Headquarters headquarters = this.headquartersService.headquarters(headquartersId);
         return this.workspaceRepository.findAllByHeadquarters(headquarters, Sort.by(Sort.Direction.ASC, "floor", "name"));
     }
 
@@ -137,7 +152,7 @@ public class WorkspaceServiceImpl extends BusinessService implements WorkspaceSe
      * @return the headquarters
      */
     Headquarters getAndCheckHeadquartersOrThrow(final Integer headquartersId) {
-        final Headquarters headquarters = super.getHeadquartersOrThrow(headquartersId);
+        final Headquarters headquarters = this.headquartersService.headquarters(headquartersId);
         super.checkPrincipalScopeOrThrow(headquarters.getCompany().getId());
         return headquarters;
     }

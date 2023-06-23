@@ -9,6 +9,8 @@ import com.dp.spring.parallel.hephaestus.api.dtos.CreateHeadquartersRequestDTO;
 import com.dp.spring.parallel.hephaestus.api.dtos.UpdateHeadquartersRequestDTO;
 import com.dp.spring.parallel.hephaestus.database.entities.Company;
 import com.dp.spring.parallel.hephaestus.database.entities.Headquarters;
+import com.dp.spring.parallel.hephaestus.database.repositories.HeadquartersRepository;
+import com.dp.spring.parallel.hephaestus.services.CompanyService;
 import com.dp.spring.parallel.hephaestus.services.HeadquartersService;
 import com.dp.spring.parallel.hephaestus.services.WorkspaceService;
 import com.dp.spring.parallel.hestia.database.entities.HeadquartersReceptionistUser;
@@ -17,8 +19,8 @@ import com.dp.spring.parallel.hestia.database.enums.UserRole;
 import com.dp.spring.parallel.hestia.services.HeadquartersReceptionistUserService;
 import com.dp.spring.springcore.observer.ObserverService;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,12 +34,29 @@ import static java.util.stream.Collectors.toList;
  */
 @Service
 @Transactional
-@RequiredArgsConstructor
 @Slf4j
 public class HeadquartersServiceImpl extends BusinessService implements HeadquartersService {
     private final HeadquartersReceptionistUserService headquartersReceptionistUserService;
+    private final CompanyService companyService;
     private final WorkspaceService workspaceService;
     private final EventService eventService;
+
+    private final HeadquartersRepository headquartersRepository;
+
+
+    public HeadquartersServiceImpl(
+            @Lazy HeadquartersReceptionistUserService headquartersReceptionistUserService,
+            @Lazy CompanyService companyService,
+            @Lazy WorkspaceService workspaceService,
+            EventService eventService,
+            HeadquartersRepository headquartersRepository
+    ) {
+        this.headquartersReceptionistUserService = headquartersReceptionistUserService;
+        this.companyService = companyService;
+        this.workspaceService = workspaceService;
+        this.eventService = eventService;
+        this.headquartersRepository = headquartersRepository;
+    }
 
 
     /**
@@ -49,7 +68,7 @@ public class HeadquartersServiceImpl extends BusinessService implements Headquar
      */
     @Override
     public Headquarters add(Integer companyId, CreateHeadquartersRequestDTO toAddData) {
-        final Company company = super.getCompanyOrThrow(companyId);
+        final Company company = this.companyService.company(companyId);
         super.checkPrincipalScopeOrThrow(companyId);
 
         this.checkHeadquartersUniquenessOrThrow(toAddData.getCity(), toAddData.getAddress(), company);
@@ -61,7 +80,7 @@ public class HeadquartersServiceImpl extends BusinessService implements Headquar
                 .setDescription(toAddData.getDescription())
                 .setCompany(company);
 
-        return super.headquartersRepository.save(toAdd);
+        return this.headquartersRepository.save(toAdd);
     }
 
     /**
@@ -72,11 +91,8 @@ public class HeadquartersServiceImpl extends BusinessService implements Headquar
      */
     @Override
     public Headquarters headquarters(Integer headquartersId) {
-        return super.getResourceOrThrow(
-                headquartersId,
-                super.headquartersRepository,
-                new HeadquartersNotFoundException(headquartersId)
-        );
+        return this.headquartersRepository.findById(headquartersId)
+                .orElseThrow(() -> new HeadquartersNotFoundException(headquartersId));
     }
 
     /**
@@ -117,7 +133,9 @@ public class HeadquartersServiceImpl extends BusinessService implements Headquar
      */
     @Override
     public Set<Headquarters> companyHeadquarters(Integer companyId) {
-        return super.headquartersRepository.findAllByCompany(super.getCompanyOrThrow(companyId));
+        return this.headquartersRepository.findAllByCompany(
+                this.companyService.company(companyId)
+        );
     }
 
     /**
@@ -130,7 +148,7 @@ public class HeadquartersServiceImpl extends BusinessService implements Headquar
      */
     @Override
     public Headquarters update(Integer companyId, Integer headquartersId, UpdateHeadquartersRequestDTO updatedData) {
-        final Headquarters toUpdate = super.getHeadquartersOrThrow(headquartersId, companyId);
+        final Headquarters toUpdate = this.getHeadquartersOrThrow(headquartersId, companyId);
         super.checkPrincipalScopeOrThrow(companyId);
 
         this.checkHeadquartersUniquenessOrThrow(headquartersId, updatedData.getCity(), updatedData.getAddress(), toUpdate.getCompany());
@@ -140,7 +158,7 @@ public class HeadquartersServiceImpl extends BusinessService implements Headquar
         toUpdate.setPhoneNumber(updatedData.getPhoneNumber());
         toUpdate.setDescription(updatedData.getDescription());
 
-        return super.headquartersRepository.save(toUpdate);
+        return this.headquartersRepository.save(toUpdate);
     }
 
     /**
@@ -151,7 +169,7 @@ public class HeadquartersServiceImpl extends BusinessService implements Headquar
      */
     @Override
     public void remove(Integer companyId, Integer headquartersId) {
-        final Headquarters toDelete = super.getHeadquartersOrThrow(headquartersId, companyId);
+        final Headquarters toDelete = this.getHeadquartersOrThrow(headquartersId, companyId);
         super.checkPrincipalScopeOrThrow(companyId);
 
         this.softDelete(toDelete);
@@ -165,7 +183,7 @@ public class HeadquartersServiceImpl extends BusinessService implements Headquar
     @Override
     public void removeAll(Company company) {
         // Get all the headquarters for the company, and soft delete each of them
-        super.headquartersRepository.findAllByCompany(company)
+        this.headquartersRepository.findAllByCompany(company)
                 .forEach(this::softDelete);
     }
 
@@ -177,7 +195,7 @@ public class HeadquartersServiceImpl extends BusinessService implements Headquar
      */
     @Override
     public void toggleFavouriteHeadquarters(Integer headquartersId) {
-        final Headquarters headquarters = super.getHeadquartersOrThrow(headquartersId);
+        final Headquarters headquarters = this.headquarters(headquartersId);
         final User worker = super.getPrincipalOrThrow();
 
         if (headquarters.getObservers().stream().anyMatch(worker::equals)) {
@@ -231,6 +249,32 @@ public class HeadquartersServiceImpl extends BusinessService implements Headquar
     }
 
     /**
+     * {@inheritDoc}
+     *
+     * @param headquartersId the id of the company
+     * @param headquartersId the id of the headquarters
+     */
+    @Override
+    public void checkExistence(Integer companyId, Integer headquartersId) {
+        if (!this.headquartersRepository.existsByIdAndCompanyId(headquartersId, companyId)) {
+            throw new HeadquartersNotFoundException(headquartersId);
+        }
+    }
+
+    /**
+     * Getting a headquarters by its id and the id of the related company,
+     * otherwise returning a {@link HeadquartersNotFoundException}.
+     *
+     * @param headquartersId the id of the headquarters to get
+     * @param companyId      the company id of the headquarters to get
+     * @return the company
+     */
+    private Headquarters getHeadquartersOrThrow(final Integer headquartersId, final Integer companyId) {
+        return headquartersRepository.findByIdAndCompany(headquartersId, this.companyService.company(companyId))
+                .orElseThrow(() -> new HeadquartersNotFoundException(headquartersId));
+    }
+
+    /**
      * Internal method to soft delete a headquarters.<br>
      * If any {@link HeadquartersReceptionistUser} still exists for the headquarters, it will not be deleted.<br>
      * Before removing the headquarters, deleting all related workspaces and events.
@@ -244,7 +288,7 @@ public class HeadquartersServiceImpl extends BusinessService implements Headquar
         }
         this.workspaceService.removeAll(toDelete);
         this.eventService.removeAll(toDelete);
-        super.headquartersRepository.softDelete(toDelete);
+        this.headquartersRepository.softDelete(toDelete);
     }
 
 

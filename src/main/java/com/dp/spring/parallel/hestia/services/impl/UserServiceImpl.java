@@ -10,6 +10,7 @@ import com.dp.spring.parallel.hestia.api.dtos.RegistrationRequestDTO;
 import com.dp.spring.parallel.hestia.api.dtos.UpdatePersonalDataRequestDTO;
 import com.dp.spring.parallel.hestia.database.entities.User;
 import com.dp.spring.parallel.hestia.database.enums.UserRole;
+import com.dp.spring.parallel.hestia.database.repositories.UserRepository;
 import com.dp.spring.parallel.hestia.services.RegistrationService;
 import com.dp.spring.parallel.hestia.services.UserService;
 import jakarta.transaction.Transactional;
@@ -27,6 +28,9 @@ import java.util.Map;
 public class UserServiceImpl extends BusinessService implements UserService {
     @Autowired
     protected EmailNotificationService emailNotificationService;
+
+    @Autowired
+    protected UserRepository userRepository;
 
     @Autowired
     protected PasswordEncoder passwordEncoder;
@@ -76,7 +80,7 @@ public class UserServiceImpl extends BusinessService implements UserService {
      */
     @Override
     public User user(final Integer id) {
-        return super.userRepository.findById(id)
+        return this.userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(UserRole.ANY.getRole(), id));
     }
 
@@ -105,7 +109,7 @@ public class UserServiceImpl extends BusinessService implements UserService {
         principal.setCity(updatedData.getCity());
         principal.setAddress(updatedData.getAddress());
 
-        super.userRepository.save(principal);
+        this.userRepository.save(principal);
     }
 
 
@@ -126,7 +130,7 @@ public class UserServiceImpl extends BusinessService implements UserService {
         }
 
         principal.setPassword(passwordEncoder.encode(changeRequest.getUpdated()));
-        super.userRepository.save(principal);
+        this.userRepository.save(principal);
 
         // Building message to confirm password changing
         final String message = this.emailNotificationService.buildMessage(

@@ -83,7 +83,7 @@ public class EventServiceImpl extends BusinessService implements EventService {
      */
     @Override
     public Event event(Integer headquartersId, Integer eventId) {
-        final Headquarters headquarters = super.getHeadquartersOrThrow(headquartersId);
+        final Headquarters headquarters = this.headquartersService.headquarters(headquartersId);
         return this.eventRepository.findByIdAndHeadquarters(eventId, headquarters)
                 .orElseThrow(() -> new EventNotFoundException(eventId, headquartersId));
     }
@@ -96,7 +96,7 @@ public class EventServiceImpl extends BusinessService implements EventService {
      */
     @Override
     public List<Event> events(Integer headquartersId) {
-        final Headquarters headquarters = super.getHeadquartersOrThrow(headquartersId);
+        final Headquarters headquarters = this.headquartersService.headquarters(headquartersId);
         return this.eventRepository.findAllByHeadquarters(headquarters);
     }
 
@@ -166,7 +166,7 @@ public class EventServiceImpl extends BusinessService implements EventService {
      * @return the headquarters
      */
     Headquarters getAndCheckHeadquartersOrThrow(final Integer headquartersId) {
-        final Headquarters headquarters = super.getHeadquartersOrThrow(headquartersId);
+        final Headquarters headquarters = this.headquartersService.headquarters(headquartersId);
         super.checkPrincipalScopeOrThrow(headquarters.getCompany().getId());
         return headquarters;
     }
