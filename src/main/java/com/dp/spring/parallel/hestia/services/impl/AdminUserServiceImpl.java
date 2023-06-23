@@ -29,7 +29,7 @@ public class AdminUserServiceImpl extends UserServiceImpl implements AdminUserSe
      */
     @Override
     public void register(RegistrationRequestDTO toRegister) {
-        super.register(toRegister, adminRegistrationStrategy);
+        register(toRegister, adminRegistrationStrategy);
     }
 
     /**

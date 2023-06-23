@@ -1,22 +1,36 @@
 package com.dp.spring.parallel.hestia.services.registration_strategies;
 
-import com.dp.spring.parallel.common.exceptions.CompanyNotFoundException;
 import com.dp.spring.parallel.hephaestus.database.entities.Company;
-import com.dp.spring.parallel.hephaestus.database.repositories.CompanyRepository;
+import com.dp.spring.parallel.hephaestus.services.CompanyService;
+import com.dp.spring.parallel.hermes.services.notification.impl.EmailNotificationService;
 import com.dp.spring.parallel.hestia.api.dtos.RegistrationRequestDTO;
 import com.dp.spring.parallel.hestia.database.entities.EmployeeUser;
+import com.dp.spring.parallel.hestia.database.repositories.UserRepository;
 import com.dp.spring.parallel.hestia.services.RegistrationService;
-import lombok.RequiredArgsConstructor;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
  * Implementation of {@link EmployeeUser} registration, following {@link RegistrationService} pattern.
  */
 @Service
-@RequiredArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class EmployeeRegistrationStrategy extends RegistrationService<EmployeeUser> {
-    private final CompanyRepository companyRepository;
+    private CompanyService companyService;
 
+
+    public EmployeeRegistrationStrategy(
+            @Autowired EmailNotificationService emailNotificationService,
+            @Autowired UserRepository userRepository,
+            @Autowired PasswordEncoder passwordEncoder,
+            CompanyService companyService
+    ) {
+        super(emailNotificationService, userRepository, passwordEncoder);
+        this.companyService = companyService;
+    }
 
     @Override
     protected EmployeeUser buildUser(
@@ -24,8 +38,7 @@ public class EmployeeRegistrationStrategy extends RegistrationService<EmployeeUs
             final Integer scopeId,
             final RegistrationRequestDTO dto
     ) {
-        final Company company = this.companyRepository.findById(scopeId)
-                .orElseThrow(() -> new CompanyNotFoundException(scopeId));
+        final Company company = this.companyService.company(scopeId);
 
         return EmployeeUser.builder()
                 .firstName(dto.getFirstName())

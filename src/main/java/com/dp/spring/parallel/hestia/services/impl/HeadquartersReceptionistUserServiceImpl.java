@@ -42,7 +42,7 @@ public class HeadquartersReceptionistUserServiceImpl extends UserServiceImpl imp
     ) {
         this.headquartersService.checkExistence(companyId, headquartersId);
         checkPrincipalScopeOrThrow(companyId);
-        super.register(headquartersId, toRegister, headquartersReceptionistRegistrationStrategy);
+        register(headquartersId, toRegister, headquartersReceptionistRegistrationStrategy);
     }
 
     /**

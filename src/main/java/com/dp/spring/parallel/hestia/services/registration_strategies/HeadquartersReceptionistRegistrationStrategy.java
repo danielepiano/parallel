@@ -1,24 +1,38 @@
 package com.dp.spring.parallel.hestia.services.registration_strategies;
 
-import com.dp.spring.parallel.common.exceptions.HeadquartersNotFoundException;
 import com.dp.spring.parallel.hephaestus.database.entities.Headquarters;
-import com.dp.spring.parallel.hephaestus.database.repositories.HeadquartersRepository;
+import com.dp.spring.parallel.hephaestus.services.HeadquartersService;
+import com.dp.spring.parallel.hermes.services.notification.impl.EmailNotificationService;
 import com.dp.spring.parallel.hestia.api.dtos.RegistrationRequestDTO;
 import com.dp.spring.parallel.hestia.database.entities.HeadquartersReceptionistUser;
+import com.dp.spring.parallel.hestia.database.repositories.UserRepository;
 import com.dp.spring.parallel.hestia.services.RegistrationService;
-import lombok.RequiredArgsConstructor;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
  * Implementation of {@link HeadquartersReceptionistUser} registration, following {@link RegistrationService} pattern.
  */
 @Service
-@RequiredArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HeadquartersReceptionistRegistrationStrategy extends RegistrationService<HeadquartersReceptionistUser> {
-    private final HeadquartersRepository headquartersRepository;
+    private HeadquartersService headquartersService;
 
     private static final String NOTIFICATION_MESSAGE_PATH = "email/headquarters-receptionist-first-access-credentials-template.html";
 
+
+    public HeadquartersReceptionistRegistrationStrategy(
+            @Autowired EmailNotificationService emailNotificationService,
+            @Autowired UserRepository userRepository,
+            @Autowired PasswordEncoder passwordEncoder,
+            @Autowired HeadquartersService headquartersService
+    ) {
+        super(emailNotificationService, userRepository, passwordEncoder);
+        this.headquartersService = headquartersService;
+    }
 
     @Override
     protected HeadquartersReceptionistUser buildUser(
@@ -26,8 +40,7 @@ public class HeadquartersReceptionistRegistrationStrategy extends RegistrationSe
             final Integer scopeId,
             final RegistrationRequestDTO dto
     ) {
-        final Headquarters headquarters = this.headquartersRepository.findById(scopeId)
-                .orElseThrow(() -> new HeadquartersNotFoundException(scopeId));
+        final Headquarters headquarters = this.headquartersService.headquarters(scopeId);
 
         return HeadquartersReceptionistUser.builder()
                 .firstName(dto.getFirstName())

@@ -40,7 +40,7 @@ public class CompanyManagerUserServiceImpl extends UserServiceImpl implements Co
     ) {
         this.companyService.checkExistence(companyId);
         checkPrincipalScopeOrThrow(companyId);
-        super.register(companyId, toRegister, companyManagerRegistrationStrategy);
+        register(companyId, toRegister, companyManagerRegistrationStrategy);
     }
 
     /**

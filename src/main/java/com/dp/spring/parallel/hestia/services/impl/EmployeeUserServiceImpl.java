@@ -40,7 +40,7 @@ public class EmployeeUserServiceImpl extends UserServiceImpl implements Employee
     ) {
         this.companyService.checkExistence(companyId);
         checkPrincipalScopeOrThrow(companyId);
-        super.register(companyId, toRegister, employeeRegistrationStrategy);
+        register(companyId, toRegister, employeeRegistrationStrategy);
     }
 
     /**

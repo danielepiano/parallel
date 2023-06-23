@@ -1,8 +1,11 @@
 package com.dp.spring.parallel.hestia.services.registration_strategies;
 
+import com.dp.spring.parallel.hermes.services.notification.impl.EmailNotificationService;
 import com.dp.spring.parallel.hestia.api.dtos.RegistrationRequestDTO;
 import com.dp.spring.parallel.hestia.database.entities.AdminUser;
+import com.dp.spring.parallel.hestia.database.repositories.UserRepository;
 import com.dp.spring.parallel.hestia.services.RegistrationService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -11,6 +14,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class AdminRegistrationStrategy extends RegistrationService<AdminUser> {
     private static final String NOTIFICATION_MESSAGE_PATH = "email/admin-first-access-credentials-template.html";
+
+
+    public AdminRegistrationStrategy(EmailNotificationService emailNotificationService, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        super(emailNotificationService, userRepository, passwordEncoder);
+    }
+
 
     @Override
     protected AdminUser buildUser(final String encodedPassword, final Integer scopeId, final RegistrationRequestDTO dto) {

@@ -6,6 +6,7 @@ import com.dp.spring.parallel.hestia.database.entities.CompanyManagerUser;
 import com.dp.spring.parallel.hestia.database.entities.EmployeeUser;
 import com.dp.spring.parallel.hestia.database.entities.HeadquartersReceptionistUser;
 import com.dp.spring.parallel.hestia.database.enums.UserRole;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class UserFixture {
                 .firstName("admin")
                 .lastName("admin")
                 .email("admin")
+                .password(new BCryptPasswordEncoder().encode("password"))
                 .birthDate(LocalDate.now())
                 .phoneNumber("number")
                 .city("city")
@@ -35,6 +37,7 @@ public class UserFixture {
                 .firstName("company-manager")
                 .lastName("company-manager")
                 .email("company-manager")
+                .password(new BCryptPasswordEncoder().encode("password"))
                 .birthDate(LocalDate.now())
                 .phoneNumber("number")
                 .city("city")
@@ -54,6 +57,7 @@ public class UserFixture {
                 .firstName("employee")
                 .lastName("employee")
                 .email("employee")
+                .password(new BCryptPasswordEncoder().encode("password"))
                 .birthDate(LocalDate.now())
                 .phoneNumber("number")
                 .city("city")
@@ -71,6 +75,7 @@ public class UserFixture {
                 .firstName("employee")
                 .lastName("employee")
                 .email("employee")
+                .password(new BCryptPasswordEncoder().encode("password"))
                 .birthDate(LocalDate.now())
                 .phoneNumber("number")
                 .city("city")

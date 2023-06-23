@@ -8,6 +8,8 @@ import com.dp.spring.parallel.hestia.database.entities.User;
 import com.dp.spring.parallel.hestia.database.repositories.UserRepository;
 import com.dp.spring.parallel.hestia.utils.RandomPasswordUtils;
 import jakarta.transaction.Transactional;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,18 +25,27 @@ import static com.dp.spring.parallel.hermes.utils.EmailMessageParser.Placeholder
  */
 @Service
 @Transactional
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class RegistrationService<T extends User> {
-    @Autowired
     protected EmailNotificationService emailNotificationService;
 
-    @Autowired
     protected UserRepository userRepository;
 
-    @Autowired
     protected PasswordEncoder passwordEncoder;
 
     private static final String DEFAULT_NOTIFICATION_TITLE = "Benvenuto in Parallel, " + FIRST_NAME.getTemplate() + "!";
     private static final String DEFAULT_NOTIFICATION_MESSAGE_PATH = "email/default-first-access-credentials-template.html";
+
+
+    protected RegistrationService(
+            EmailNotificationService emailNotificationService,
+            UserRepository userRepository,
+            PasswordEncoder passwordEncoder
+    ) {
+        this.emailNotificationService = emailNotificationService;
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
 
     /**
