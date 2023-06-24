@@ -64,7 +64,7 @@ class EventBookingServiceTest {
 
 
     @Test
-    void eventBookingsFromDate() {
+    void eventBookingsFromDate_shouldWork() {
         LocalDate fromDate = LocalDate.now().minusYears(3);
 
         mockGetPrincipal(UserFixture.getCompanyManager());
@@ -234,7 +234,7 @@ class EventBookingServiceTest {
     }
 
     @Test
-    void countAvailablePlaces_should() {
+    void countAvailablePlaces_shouldWork() {
         Event event = EventFixture.get();
 
         doReturn(2L)
@@ -244,7 +244,6 @@ class EventBookingServiceTest {
         var available = eventBookingService.countAvailablePlaces(event);
 
         assertEquals(event.getMaxPlaces() - 2L, available, "inconsistent subtraction");
-
     }
 
 }

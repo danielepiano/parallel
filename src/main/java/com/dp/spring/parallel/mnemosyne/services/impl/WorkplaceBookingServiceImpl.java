@@ -72,8 +72,7 @@ public class WorkplaceBookingServiceImpl extends BusinessService implements Work
     @Override
     public List<WorkplaceBooking> workplaceBookingsOnDate(Integer headquartersId, LocalDate onDate) {
         final User principal = getPrincipalOrThrow();
-        if (UserRole.HEADQUARTERS_RECEPTIONIST.equals(principal.getRole()) &&
-                !headquartersId.equals(((HeadquartersReceptionistUser) principal).getHeadquarters().getId())) {
+        if (!headquartersId.equals(((HeadquartersReceptionistUser) principal).getHeadquarters().getId())) {
             throw new AccessDeniedException(BaseExceptionConstants.ACCESS_DENIED.getDetail());
         }
         final Headquarters headquarters = this.headquartersService.headquarters(headquartersId);
@@ -154,7 +153,7 @@ public class WorkplaceBookingServiceImpl extends BusinessService implements Work
         final Workplace workplace = this.getWorkplaceOrThrow(workspaceId, workplaceId);
 
         // Check receptionist permission to access workplace
-        super.checkHeadquartersReceptionistPrincipalScopeOrThrow(
+        checkHeadquartersReceptionistPrincipalScopeOrThrow(
                 workplace.getWorkspace().getHeadquarters().getCompany().getId(),
                 (HeadquartersReceptionistUser) getPrincipalOrThrow()
         );

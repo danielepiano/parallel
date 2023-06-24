@@ -62,7 +62,7 @@ public class UserFixture {
                 .phoneNumber("number")
                 .city("city")
                 .address("address")
-                .role(UserRole.COMPANY_MANAGER)
+                .role(UserRole.EMPLOYEE)
                 .company(CompanyFixture.get())
                 .jobPosition("employee")
                 .favoriteHeadquarters(favHq)
@@ -72,15 +72,15 @@ public class UserFixture {
     public static HeadquartersReceptionistUser getHeadquartersReceptionist() {
         return HeadquartersReceptionistUser.builder()
                 .id(4)
-                .firstName("employee")
-                .lastName("employee")
-                .email("employee")
+                .firstName("receptionist")
+                .lastName("receptionist")
+                .email("receptionist")
                 .password(new BCryptPasswordEncoder().encode("password"))
                 .birthDate(LocalDate.now())
                 .phoneNumber("number")
                 .city("city")
                 .address("address")
-                .role(UserRole.COMPANY_MANAGER)
+                .role(UserRole.HEADQUARTERS_RECEPTIONIST)
                 .headquarters(HeadquartersFixture.get())
                 .build();
     }

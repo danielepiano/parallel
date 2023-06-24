@@ -19,7 +19,7 @@ import static com.dp.spring.parallel.hestia.database.enums.UserRole.Constants.*;
 public interface WorkplaceBookingController {
 
     @GetMapping(path = "/headquarters/{headquartersId}/workplaces/bookings/current-day", produces = MediaType.APPLICATION_JSON_VALUE)
-    @Secured({ROLE_ADMIN_VALUE, ROLE_HEADQUARTERS_RECEPTIONIST_VALUE})
+    @Secured(ROLE_HEADQUARTERS_RECEPTIONIST_VALUE)
     List<CurrentDayWorkplaceBookingResponseDTO> currentDayWorkplaceBookings(
             @PathVariable("headquartersId") Integer headquartersId
     );
