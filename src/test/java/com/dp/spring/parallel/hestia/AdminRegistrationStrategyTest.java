@@ -1,8 +1,6 @@
 package com.dp.spring.parallel.hestia;
 
-import com.dp.spring.parallel.agora.services.observer.HeadquartersEventsObserverService;
 import com.dp.spring.parallel.common.exceptions.EmailAlreadyExistsException;
-import com.dp.spring.parallel.common.fixtures.HeadquartersFixture;
 import com.dp.spring.parallel.common.fixtures.UserFixture;
 import com.dp.spring.parallel.hermes.services.notification.impl.EmailNotificationService;
 import com.dp.spring.parallel.hestia.api.dtos.RegistrationRequestDTO;
