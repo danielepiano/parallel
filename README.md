@@ -1,6 +1,8 @@
 # parallel
 Management for enhanced coworking spaces: palestre relazionali.
 
+Project for **Software Engineering** course @ **Politecnico di Milano**.
+
 ### Requirements
 * Java v. >= 17.0.5
 * Docker v. >= 20.10.23
@@ -37,4 +39,4 @@ Management for enhanced coworking spaces: palestre relazionali.
 7. Run _parallel_ on desired IDE
 
 <br>
-* If you change ports or environment variables, remember to update the _**application.yml**_ file in _parallel/src/main/resources_
+* If you change ports or environment variables, remember to update the **application.yml** file in _parallel/src/main/resources_
